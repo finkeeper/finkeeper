@@ -1,0 +1,112 @@
+<?php
+namespace common\models;
+
+use Yii;
+use yii\db\ActiveRecord;
+use yii\data\ActiveDataProvider;
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
+
+/**
+ * ReferralsProgramm model
+ *
+ * @property integer $id_prog
+ * @property integer $ref_type
+ * @property integer $points
+ * @property integer $used
+ * @property integer $deleted
+ * @property string $deleted_date
+ * @property string $creation_date
+ * @property integer $id_bot
+ * @property string $description
+ * @property integer $type_points 1 - num; 2 - proc
+ */
+class ReferralsProgramm extends ActiveRecord
+{
+    const STATUS_NOT_DELETED = 0;
+	const STATUS_DELETED = 1;
+	
+	/**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%referrals_programm}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+				'class' => '\yii\behaviors\TimestampBehavior' ,
+				'attributes' => [
+					ActiveRecord::EVENT_BEFORE_INSERT => ['creation_date'],
+					ActiveRecord::EVENT_BEFORE_DELETE => ['deleted_date'],
+				] ,
+				'value' => new \yii\db\Expression ('NOW()'),
+			] ,
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+			[['id_prog', 'ref_type', 'points', 'used', 'deleted', 'id_bot', 'type_points'], 'integer'],
+			[['creation_date', 'deleted_date'], 'string', 'max' => 60],
+			[['description'], 'string'],
+			
+			['deleted', 'default', 'value' => self::STATUS_NOT_DELETED],
+            ['deleted', 'in', 'range' => [self::STATUS_NOT_DELETED, self::STATUS_DELETED]],
+        ];
+    }
+	
+	/**
+	 * @beforeSave($insert)
+	 */
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			
+			if ($insert) {
+               
+			   $this->creation_date = date('Y-m-d H:i:s');
+			   
+            } else {
+			
+				if (!empty($this->deleted)) {
+					
+					$this->deleted_date = date('Y-m-d H:i:s');
+				}
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * search()
+	 */
+	public function search()
+	{
+		$query = static::find()->orderBy('id_prog');
+		   
+		return new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => Yii::$app->params['pagination'],
+			],
+			'sort' => [
+				'defaultOrder' => [
+					'id_prog' => SORT_DESC,
+				]
+			],
+		]);
+	}
+}

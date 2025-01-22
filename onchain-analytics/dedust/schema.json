@@ -1,0 +1,1165 @@
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "name": "Asset",
+          "description": null,
+          "fields": [
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "AssetType",
+                  "kind": "ENUM"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "address",
+              "description": null,
+              "type": {
+                "name": "ID",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "symbol",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "image",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "decimals",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "Int",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "aliased",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "Boolean",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "price",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "source",
+              "description": null,
+              "type": {
+                "name": "AssetSource",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "AssetSource",
+          "description": null,
+          "fields": [
+            {
+              "name": "chain",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "address",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "bridge",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "symbol",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "AssetType",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "Boolean",
+          "description": "The `Boolean` scalar type represents `true` or `false`.",
+          "fields": []
+        },
+        {
+          "name": "Boost",
+          "description": null,
+          "fields": [
+            {
+              "name": "asset",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "budget",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "endAt",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "liquidityPool",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "rewardPerDay",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "startAt",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "Float",
+          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
+          "fields": []
+        },
+        {
+          "name": "ID",
+          "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \"4\") or integer (such as 4) input value will be accepted as an ID.",
+          "fields": []
+        },
+        {
+          "name": "Int",
+          "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+          "fields": []
+        },
+        {
+          "name": "Pool",
+          "description": null,
+          "fields": [
+            {
+              "name": "address",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "ID",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "totalSupply",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "PoolType",
+                  "kind": "ENUM"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "tradeFee",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "assets",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "reserves",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "fees",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "volume",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "PoolAssetsQueryOperatorInput",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "PoolType",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "PoolsFiltersInput",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "Price",
+          "description": null,
+          "fields": [
+            {
+              "name": "address",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "ID",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "value",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "PriceFilterInput",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "PriceInput",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "Promo",
+          "description": null,
+          "fields": [
+            {
+              "name": "address",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "ID",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "Query",
+          "description": null,
+          "fields": [
+            {
+              "name": "pool",
+              "description": null,
+              "type": {
+                "name": "Pool",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": [
+                {
+                  "name": "address",
+                  "description": null,
+                  "type": {
+                    "name": null,
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "name": "ID",
+                      "kind": "SCALAR"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "pools",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": [
+                {
+                  "name": "filter",
+                  "description": null,
+                  "type": {
+                    "name": "PoolsFiltersInput",
+                    "kind": "INPUT_OBJECT",
+                    "ofType": null
+                  }
+                }
+              ]
+            },
+            {
+              "name": "asset",
+              "description": null,
+              "type": {
+                "name": "Asset",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": [
+                {
+                  "name": "address",
+                  "description": null,
+                  "type": {
+                    "name": null,
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "name": "ID",
+                      "kind": "SCALAR"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "assets",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "price",
+              "description": null,
+              "type": {
+                "name": "Price",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": [
+                {
+                  "name": "address",
+                  "description": null,
+                  "type": {
+                    "name": null,
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "name": "ID",
+                      "kind": "SCALAR"
+                    }
+                  }
+                },
+                {
+                  "name": "decimals",
+                  "description": null,
+                  "type": {
+                    "name": null,
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "name": "Int",
+                      "kind": "SCALAR"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "prices",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": [
+                {
+                  "name": "filter",
+                  "description": null,
+                  "type": {
+                    "name": null,
+                    "kind": "NON_NULL",
+                    "ofType": {
+                      "name": "PriceFilterInput",
+                      "kind": "INPUT_OBJECT"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "promotions",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "boosts",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "String",
+          "description": "The `String`scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+          "fields": []
+        },
+        {
+          "name": "__Directive",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "locations",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "args",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "isRepeatable",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "Boolean",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__DirectiveLocation",
+          "description": null,
+          "fields": []
+        },
+        {
+          "name": "__EnumValue",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "Boolean",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__Field",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "args",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "__Type",
+                  "kind": "OBJECT"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "Boolean",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__InputValue",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "String",
+                  "kind": "SCALAR"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "__Type",
+                  "kind": "OBJECT"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "defaultValue",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__Schema",
+          "description": null,
+          "fields": [
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "types",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "queryType",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "__Type",
+                  "kind": "OBJECT"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "mutationType",
+              "description": null,
+              "type": {
+                "name": "__Type",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "subscriptionType",
+              "description": null,
+              "type": {
+                "name": "__Type",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "directives",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": null,
+                  "kind": "LIST"
+                }
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__Type",
+          "description": null,
+          "fields": [
+            {
+              "name": "kind",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "NON_NULL",
+                "ofType": {
+                  "name": "__TypeKind",
+                  "kind": "ENUM"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "fields",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "LIST",
+                "ofType": {
+                  "name": null,
+                  "kind": "NON_NULL"
+                }
+              },
+              "args": [
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "name": "Boolean",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                }
+              ]
+            },
+            {
+              "name": "interfaces",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "LIST",
+                "ofType": {
+                  "name": null,
+                  "kind": "NON_NULL"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "possibleTypes",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "LIST",
+                "ofType": {
+                  "name": null,
+                  "kind": "NON_NULL"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "enumValues",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "LIST",
+                "ofType": {
+                  "name": null,
+                  "kind": "NON_NULL"
+                }
+              },
+              "args": [
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "name": "Boolean",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                }
+              ]
+            },
+            {
+              "name": "inputFields",
+              "description": null,
+              "type": {
+                "name": null,
+                "kind": "LIST",
+                "ofType": {
+                  "name": null,
+                  "kind": "NON_NULL"
+                }
+              },
+              "args": []
+            },
+            {
+              "name": "ofType",
+              "description": null,
+              "type": {
+                "name": "__Type",
+                "kind": "OBJECT",
+                "ofType": null
+              },
+              "args": []
+            },
+            {
+              "name": "specifiedByURL",
+              "description": null,
+              "type": {
+                "name": "String",
+                "kind": "SCALAR",
+                "ofType": null
+              },
+              "args": []
+            }
+          ]
+        },
+        {
+          "name": "__TypeKind",
+          "description": null,
+          "fields": []
+        }
+      ],
+      "queryType": {
+        "name": "Query"
+      },
+      "mutationType": null,
+      "subscriptionType": null
+    }
+  }
+}

@@ -1,0 +1,32 @@
+//
+// general.scss
+//
+
+/*********************************/
+/*     General-DARK              */
+/*===============================*/
+
+body {
+    color: $dark;
+    background: $bg-body;
+}
+::selection {
+    color: $dark;
+}
+
+//Switcher
+#style-switcher {
+    .content {
+        ul {
+            .t-dark,
+            .t-rtl-light,
+            .t-ltr-dark {
+                display: none;
+            }
+            .t-light,
+            .t-rtl-dark {
+                display: inline-block;
+            }
+        }
+    }
+}

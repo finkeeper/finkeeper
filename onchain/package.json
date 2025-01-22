@@ -1,0 +1,30 @@
+{
+  "name": "front",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@dedust/apiary-v1": "^0.0.1",
+    "@dedust/sdk": "^0.8.7",
+    "@ston-fi/sdk": "^1.2.0",
+    "@ton/core": "^0.59.0",
+    "@ton/crypto": "^3.3.0",
+    "@ton/ton": "^14.0.0",
+    "@tonconnect/ui": "^2.0.9",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
+  }
+}

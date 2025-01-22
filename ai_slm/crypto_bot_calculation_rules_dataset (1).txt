@@ -1,0 +1,122 @@
+{
+    "examples": [
+        {
+            "scenario": "Processed user assets and recommendations",
+            "input": {
+                "total_investment": 15.120609965678865,
+                "coins": [
+                    {
+                        "symbol": "TON",
+                        "balance": 0.383,
+                        "price": 5.54355,
+                        "storage": "ton",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "USDT",
+                        "balance": 1.984,
+                        "price": 1.0,
+                        "storage": "ton",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "AquaUSD",
+                        "balance": 0.3,
+                        "price": 0.9916731560358745,
+                        "storage": "ton",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "HMSTR",
+                        "balance": 67.379,
+                        "price": 0.0027899336420561557,
+                        "storage": "ton",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "L3",
+                        "balance": 3.0,
+                        "price": 0.0887,
+                        "storage": "bybit",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "USDT",
+                        "balance": 0.11,
+                        "price": 0.998617,
+                        "storage": "bybit",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "USDT",
+                        "balance": 1.0,
+                        "price": 0.998617,
+                        "storage": "bybit",
+                        "category": "trading"
+                    },
+                    {
+                        "symbol": "USDC",
+                        "balance": 2.0,
+                        "price": 1.0014,
+                        "storage": "okx",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "BTC",
+                        "balance": 5.2e-06,
+                        "price": 92472.8,
+                        "storage": "okx",
+                        "category": "active"
+                    },
+                    {
+                        "symbol": "TON",
+                        "balance": 0.47,
+                        "price": 5.551,
+                        "storage": "okx",
+                        "category": "trading"
+                    },
+                    {
+                        "symbol": "USDC",
+                        "balance": 2.18,
+                        "price": 1.0014,
+                        "storage": "okx",
+                        "category": "trading"
+                    },
+                    {
+                        "symbol": "SOL",
+                        "balance": 0.01,
+                        "price": 187.77,
+                        "storage": "sol",
+                        "category": "active"
+                    }
+                ]
+            },
+            "output": {
+                "total_value": 15.120609965678865,
+                "recommendations": [
+                    "You have SOL tokens. Consider staking them to earn annual returns. For example, explore protocols like Solayer.",
+                    "You have a total of 7.27 in stablecoins (USDT, USDC). Consider using DeFi protocols like Kamino or Save to earn approximately 10% annual returns."
+                ]
+            },
+            "output_ru": {
+                "total_value": 15.120609965678865,
+                "recommendations": [
+                    "У вас есть токены SOL. Рассмотрите возможность стейкинга для получения годовой доходности. Например, протоколы вроде Solayer.",
+                    "У вас есть 7.27 в стейблкоинах (USDT, USDC). Рассмотрите возможность использования DeFi-протоколов, таких как Kamino или Save, чтобы получать примерно 10% годовых."
+                ]
+            }
+        }
+    ],
+    "rules": [
+        {
+            "condition": "any(coin['symbol'] == 'SOL' for coin in coins)",
+            "response": "You have SOL tokens. Consider staking them to earn annual returns. For example, explore protocols like Solayer (https://solayer.org). At approximately 11% annual returns, you could earn an additional {sol_earned:.2f} SOL, equivalent to {usd_earned:.2f} USD based on current prices.",
+            "response_ru": "У вас есть токены SOL. Рассмотрите возможность стейкинга для получения годовой доходности. Например, протоколы вроде Solayer (https://solayer.org). При ставке около 11% годовых вы можете заработать дополнительно {sol_earned:.2f} SOL, что эквивалентно {usd_earned:.2f} USD по текущей цене."
+        },
+        {
+            "condition": "sum(coin['balance'] for coin in coins if coin['symbol'] in ['USDT', 'USDC']) > 0",
+            "response": "You have stablecoins (USDT, USDC). Consider using DeFi protocols like Kamino (https://app.kamino.finance/?filter=jlp) or Save (https://save.finance/dashboard). At approximately 10% annual returns, you could earn an additional {stablecoin_earned:.2f} USD.",
+            "response_ru": "У вас есть стейблкоины (USDT, USDC). Рассмотрите возможность использования DeFi-протоколов, таких как Kamino (https://app.kamino.finance/?filter=jlp) или Save (https://save.finance/dashboard). При ставке около 10% годовых вы можете заработать дополнительно {stablecoin_earned:.2f} USD."
+        }
+    ]
+}

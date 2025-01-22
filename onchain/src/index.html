@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swap Concept</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div id="ton-connect"></div>
+      </div>
+      <h2>Swap</h2>
+      <div class="row">
+        <h3>Swap</h3>
+        <button id="swap-tonusdt-button">TON->USDT</button>
+        <button id="swap-usdtton-button">USDT->TON</button>
+        <button id="swap-tonaqua-button">TON->AquaUSD</button>
+        <button id="swap-usdtaqua-button">USDT->AquaUSD</button>
+      </div>
+      <h2>Liquidity Pools</h2>
+      <div class="row">
+        <h3>TON/USDT</h3>
+        <button id="tonusdt-add-liquidity-button">Add</button>
+        <button id="tonusdt-remove-liquidity-button">Remove</button>
+      </div>
+      <div class="row">
+        <h3>Aqua/USDT</h3>
+        <button id="aquausd-add-liquidity-button">Add</button>
+        <button id="aquausd-remove-liquidity-button">Remove</button>
+        <!-- <button id="aquausd-claim-button">Claim</button> -->
+      </div>
+    </div>
+    <script src="../dist/bundle.js"></script>
+  </body>
+</html>
