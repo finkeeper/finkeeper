@@ -1831,7 +1831,7 @@ $this->registerJs('
 								};
 							});
 	
-						} else {
+						} else {       
 							
 							addNotify("'.Yii::t('Api', 'Not Sui Active').'", "warning");
 
