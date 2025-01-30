@@ -43,6 +43,18 @@ if (!empty($exchange)) {
 	}
 }
 
+
+
+//$this->registerJsFile('https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js', ['position' => \yii\web\View::POS_HEAD]);
+
+//$this->registerJsFile('https://app.finkeeper.pro/finkeeper/js/appkit/dist/bundle.js?14000', ['position' => \yii\web\View::POS_HEAD]);
+//$this->registerJsFile('https://app.finkeeper.pro/finkeeper/js/appkit/dist/vendors-node_modules_reown_appkit-scaffold-ui_dist_esm_exports_w3m-modal_js.bundle.js', ['position' => \yii\web\View::POS_HEAD]);
+//$this->registerJsFile('https://app.finkeeper.pro/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_metamask-sdk_lib_esm_index_js.bundle.js', ['position' => \yii\web\View::POS_HEAD]);
+//$this->registerJsFile('https://app.finkeeper.pro/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_sdk_lib_esm_index_js.bundle.js', ['position' => \yii\web\View::POS_HEAD]);
+
+
+
+
 $this->registerJsFile('https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js', ['position' => \yii\web\View::POS_HEAD]);
 
 //Connect JS scripts
@@ -77,6 +89,9 @@ require dirname(__FILE__).'/elements/__target_modal.php';
 
 // Modal Solana form
 require dirname(__FILE__).'/elements/__sol_modal.php';
+
+// Modal Sui form
+require dirname(__FILE__).'/elements/__sui_modal.php';
 
 /*
 // console for ios

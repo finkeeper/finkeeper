@@ -2,7 +2,7 @@
 namespace api\modules\v2\components;
 
 use Yii;
-use api\modules\v3\models\ApiChatbot;
+use api\modules\v2\models\ApiChatbot;
 use common\models\Exchange;
 use CURLFile;
 

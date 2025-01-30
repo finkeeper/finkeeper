@@ -8,6 +8,17 @@ use yii\bootstrap5\Html;
 		<!-- Start calc -->
 		<div id="wrap-sol-form">
 			
+			<div class="sol_auth"><?=Yii::t('Api', 'Or connect SOL wallet via WalletConnect')?></div>
+
+			<div class="input-group-sol mt-17">
+	
+				<?=Html::button(Yii::t('Api', 'Connect Wallet'), [
+					'id' => 'wallet-connect',
+					'class' =>  'btn-turquoise btn-wc',
+				])?>
+				
+			</div>
+			
 			<div class="sol_auth"><?=Yii::t('Api', 'Please provide your SOL address wallet')?></div>
 					
 			<div class="input-group input-group-sol mt-17">

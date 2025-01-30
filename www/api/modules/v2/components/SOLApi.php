@@ -4,6 +4,7 @@ namespace api\modules\v2\components;
 
 use Yii;
 use common\models\Exchange;
+use common\components\SOL;
 use common\components\BaseFunctions;
 
 class SOLApi {
@@ -72,7 +73,15 @@ class SOLApi {
 		if (!empty($result['error'])) {
 			return [
 				'error' => 1,
-				'messsage' => $result['message'],
+				'messsage' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No balance'),
+				'data' => $data,
+			];
+		}
+		
+		if (empty($result) || empty($result['data'])) {
+			return [
+				'error' => 0,
+				'messsage' => Yii::t('Api', 'Not SOL Active'),
 				'data' => $data,
 			];
 		}
@@ -184,12 +193,19 @@ class SOLApi {
 		if (!empty($result['error'])) {
 			return [
 				'error' => 1,
-				'messsage' => $result['message'],
+				'messsage' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No token'),
 				'data' => $data,
 			];
 		}
-		
+
 		foreach ($result['data'] as $value) {
+			
+			if (empty($value['price'])) {
+				$price = SOL::pstatic()->getPrice($value['mint']);
+				if (empty($price['error']) && !empty($price['data'])) {
+					$value['price'] = $price['data'];
+				}
+			}
 
 			$data[] = [
 				'balance' => $value['coin_balance'],

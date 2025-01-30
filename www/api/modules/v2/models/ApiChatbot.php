@@ -201,6 +201,15 @@ class ApiChatbot extends Model
 					'message' => Yii::t('Error', 'Missing SOL Address Wallet'),
 				];
 			}
+			
+		} else if ($type==5) {
+			
+			if (empty($identify1)) {
+				return [
+					'error' => 1,
+					'message' => Yii::t('Error', 'Missing SUI Address Wallet'),
+				];
+			}
 
 		} else {
 			
@@ -326,6 +335,7 @@ class ApiChatbot extends Model
 			'bybit' => 0,
 			'okx' => 0,
 			'sol' => 0,
+			'sui' => 0,
 		];
 		
 		if (empty($log_id)) {
@@ -375,6 +385,16 @@ class ApiChatbot extends Model
 
 		if (!empty($modelTokens4) && !empty($modelTokens4->user_connect)) {
 			$status['sol'] = 1;
+		}
+		
+		$modelTokens5 = Tokens::findOne([
+			'service_type' => 5, 
+			'id_client' => $modelChatbotLog->id_client, 
+			'deleted'=>Tokens::STATUS_NOT_DELETED,
+		]);
+
+		if (!empty($modelTokens5) && !empty($modelTokens5->user_connect)) {
+			$status['sui'] = 1;
 		}
 		
 		return $status;
@@ -876,6 +896,18 @@ class ApiChatbot extends Model
 	}
 	
 	/**
+	 * getSolTokens($id=0)
+	 */
+	public static function getSuiTokens($id=0)
+	{
+		return Tokens::findOne([
+			'service_type' => 5, 
+			'id_client' => $id, 
+			'deleted'=>Tokens::STATUS_NOT_DELETED,
+		]);
+	}
+	
+	/**
 	 * getChatbotLog($id=0)
 	 */
 	public static function getTelegramData($id=0)
@@ -1126,6 +1158,51 @@ class ApiChatbot extends Model
 				$bs64address = substr_replace($modelTokens->identify1, '...', 8, -8);
 
 				$send['text'] = Yii::t('Api', 'SOL Wallet').' '.$bs64address.' '.Yii::t('Api', 'disconnected from FinKeeper').'.  <a href="https://t.me/finkeeper_ru/26">FinKeeper(RU)</a>';
+				
+				if (!empty($btn)) {
+					$send['reply_markup'] = $btn;
+				}
+					
+				if (TelegramApi::sendData($send, $data['bot_token'])) {
+					return true;
+				}		
+				
+			} else if ($type==9) {
+				
+				$modelTokens = self::getSuiTokens($data['id_client']);
+				if (empty($modelTokens)) {
+					return false;
+				}
+
+				$send = [];
+				$send['chat_id'] = $data['chat_id'];
+				$send['parse_mode'] = 'HTML';
+				$send['disable_web_page_preview'] = true;
+				$bs64address = substr_replace($modelTokens->identify1, '...', 8, -8);
+				$send['text'] = Yii::t('Api', 'SUI Wallet').' '.$bs64address.' '.Yii::t('Api', 'successfully connected to FinKeeper').'.  <a href="https://t.me/finkeeper_ru/26">FinKeeper(RU)</a>';
+				
+				if (!empty($btn)) {
+					$send['reply_markup'] = $btn;
+				}
+
+				if (TelegramApi::sendData($send, $data['bot_token'])) {
+					return true;
+				}
+				
+			} else if ($type==10) {
+				
+				$modelTokens = self::getSuiTokens($data['id_client']);
+				if (empty($modelTokens)) {
+					return false;
+				}
+
+				$send = [];
+				$send['chat_id'] = $data['chat_id'];
+				$send['parse_mode'] = 'HTML';
+				$send['disable_web_page_preview'] = true;
+				$bs64address = substr_replace($modelTokens->identify1, '...', 8, -8);
+
+				$send['text'] = Yii::t('Api', 'SUI Wallet').' '.$bs64address.' '.Yii::t('Api', 'disconnected from FinKeeper').'.  <a href="https://t.me/finkeeper_ru/26">FinKeeper(RU)</a>';
 				
 				if (!empty($btn)) {
 					$send['reply_markup'] = $btn;

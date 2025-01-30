@@ -585,6 +585,12 @@ function solRecalculation() {
 	getAllActive();
 }
 
+function suiRecalculation() {
+	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
+	suiSummActive = 0;
+	getAllActive();
+}
+
 function getActiveButton(btn=1) {
 	jQuery('.bottom-navigation-line div').removeClass('active-line').addClass('default-line');
 	jQuery('.bottom-navigation__icons').find('li').removeClass('navigation_active');
@@ -781,6 +787,18 @@ function displayBackdrop(type=0, flag=0) {
 		elem = jQuery("#asModal #okx-exchange-connect-button .backdrop-connect-button");
 		send_button = jQuery("#ct-okx-api-send");
 		text_button = jQuery(send_button).text();
+	} else if(type==5) {
+		elem = jQuery("#asModal #sui-wallet-connect-button .backdrop-connect-button");
+		send_button = jQuery("#ct-sui-api-send");
+		text_button = jQuery(send_button).text();
+	} else if(type==6) {
+		elem = jQuery("#asModal #wc-wallet-connect-button .backdrop-connect-button");
+		send_button = jQuery("#ct-wc-api-send");
+		text_button = jQuery(send_button).text();
+	} else if(type==7) {
+		//elem = jQuery("#asModal #sol-wallet-connect-button .backdrop-connect-button");
+		//send_button = jQuery("#wallet-connect");
+		//text_button = jQuery(send_button).text();
 	} else {
 		return false;
 	}
@@ -802,7 +820,7 @@ function displayBackdrop(type=0, flag=0) {
 	}	
 }
 
-function displayConnectIcon(type=0, flag=0) {
+function displayConnectIcon(type=0, flag=0, error=0) {
 	if (typeof type==="undefined" || type===undefined || !type) {
 		return false;
 	} 
@@ -817,12 +835,24 @@ function displayConnectIcon(type=0, flag=0) {
 		elem = jQuery("#asModal #bybit-exchange-connect-button .mdi");
 	} else if(type==4) {
 		elem = jQuery("#asModal #okx-exchange-connect-button .mdi");
+	} else if(type==5) {
+		elem = jQuery("#asModal #sui-wallet-connect-button .mdi");
+	} else if(type==6) {
+		elem = jQuery("#asModal #wc-wallet-connect-button .mdi");
+	} else if(type==7) {
+		//elem = jQuery("#asModal #sol-wallet-connect-button .mdi");
 	} else {
 		return false;
 	}
 	
+	jQuery(elem).removeClass("error");
+	
 	if (flag) {
-		jQuery(elem).removeClass("mdi-wifi-off").addClass("mdi-wifi");
+		if (typeof error!=="undefined" && error!==undefined && error) {
+			jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off error");
+		} else {
+			jQuery(elem).removeClass("mdi-wifi-off").addClass("mdi-wifi");
+		}
 	} else {
 		jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off");
 	}	
@@ -875,6 +905,65 @@ function findCoins(search) {
 	} else {
 		$("#user_balance .option_item").show();
 	}
+}
+
+function selectCoin(coin) {
+		
+	if (
+		typeof userActivesMin==="undefined" || 
+		userActivesMin===undefined || 
+		!userActivesMin || 
+		typeof userActivesMin!=="object"
+	) {
+		return false;
+	} 
+	
+	var obj = {};
+	for (key in userActivesMin) {
+
+		if (
+			typeof userActivesMin[key]!=="undefined" && 
+			userActivesMin[key]!==undefined && 
+			userActivesMin[key] && 
+			typeof userActivesMin[key]==="object"
+		) {
+			
+			for (index in userActivesMin[key]) {
+			
+				if (
+					typeof userActivesMin[key][index]!=="undefined" && 
+					userActivesMin[key][index]!==undefined && 
+					userActivesMin[key][index] && 
+					typeof userActivesMin[key][index]==="object"
+				) {
+					
+					for (type in userActivesMin[key][index]) {
+				
+						if (
+							typeof userActivesMin[key][index][type]!=="undefined" && 
+							userActivesMin[key][index][type]!==undefined && 
+							userActivesMin[key][index][type] && 
+							typeof userActivesMin[key][index][type]==="object"
+						) {
+							
+							for (symbol in userActivesMin[key][index][type]) {
+						
+								if (coin==symbol) {
+									
+									obj[key] = {};
+									obj[key][index] = {};
+									obj[key][index][type] = {};
+									obj[key][index][type][symbol] = userActivesMin[key][index][type][symbol];
+								}
+							}
+						}
+					}
+				}
+			}
+		} 
+	}
+	
+	return obj;		
 }
 
 jQuery(document).ready(function($) {
@@ -1282,6 +1371,24 @@ jQuery(document).ready(function($) {
 		solform();
 	});
 
+	$(document).delegate(".sui_connect_button", "click", function(){
+		if (suiConnectedStatus==false) {
+			if (!jQuery("#suiModal").hasClass("show")) {
+				closeAllModal();
+				getActiveButton(2);
+				var modal = new bootstrap.Modal(document.getElementById("suiModal"), {
+					backdrop: false,
+					keyboard: false			
+				});
+				modal.show();
+			}
+		}
+	});
+	
+	$("#ct-sui-api-send").on("click", function() {
+		suiform();
+	});
+
 	$("#target_actions-button").on("click", function() {
 		if (!jQuery("#targetModal").hasClass("show")) {
 			closeAllModal();
@@ -1406,6 +1513,10 @@ jQuery(document).ready(function($) {
 	
 	$(document).delegate(".sol_disconnect_button","click", function(){
 		soldisconnect();
+	});
+	
+	$(document).delegate(".sui_disconnect_button","click", function(){
+		suidisconnect();
 	});
 	
 	$("#send-invite").on("click", function() {

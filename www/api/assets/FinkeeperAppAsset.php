@@ -17,7 +17,7 @@ class FinkeeperAppAsset extends AssetBundle
 		'finkeeper/css/style.css?999','https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600&display=swap',
 		'finkeeper/css/font-awesome5.min.css',
 		'finkeeper/css/materialdesignicons.min.css',
-		'finkeeper/css/site.css?36000',
+		'finkeeper/css/site.css?36666',
 		//YII_ENV_DEV ? 'finkeeper/css/site.css?12555' : 'finkeeper/css/site.min.css?12666'
     ];
 	
@@ -33,7 +33,11 @@ class FinkeeperAppAsset extends AssetBundle
 		'finkeeper/js/header-scroll.js',
 		//'finkeeper/js/telegram-web-app.js',
 		'https://telegram.org/js/telegram-web-app.js',
-		'finkeeper/js/site.js?38777',
+		'/finkeeper/js/appkit/dist/bundle.js?14888',
+		'/finkeeper/js/appkit/dist/vendors-node_modules_reown_appkit-scaffold-ui_dist_esm_exports_w3m-modal_js.bundle.js',
+		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_metamask-sdk_lib_esm_index_js.bundle.js',
+		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_sdk_lib_esm_index_js.bundle.js',
+		'finkeeper/js/site.js?39444',
 		//YII_ENV_DEV ? 'finkeeper/js/site.js?222' : 'finkeeper/js/site.min.js?222'
     ];
 	
@@ -52,6 +56,6 @@ class FinkeeperAppAsset extends AssetBundle
 			$lang='ru';			
 		}
 		
-		$this->js[] = ['/finkeeper/js/bundle.js?13777', 'data-id'=>'bundle', 'data-lang'=>$lang];
+		$this->js[] = ['/finkeeper/js/bundle.js?13888', 'data-id'=>'bundle', 'data-lang'=>$lang];
 	}
 }

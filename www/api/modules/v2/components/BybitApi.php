@@ -33,7 +33,7 @@ class BybitApi {
 	 * INVESTMENT
 	 * FUND - Active account
 	 */
-    public function getWalletBalance($type='FUND') 
+    public function getWalletBalance($type='FUND', $couns='') 
 	{
 		$data = [
 			'active' => [],
@@ -44,6 +44,11 @@ class BybitApi {
 			'accountType' => $type,
 			'memberId' => $this->uid,
 		];
+		
+		if ($type=='UNIFIED' && !empty($couns)) {
+			
+			$params['coin'] = $couns;
+		}
 		
 		$params = http_build_query($params);
 		

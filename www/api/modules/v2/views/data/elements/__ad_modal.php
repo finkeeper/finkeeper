@@ -51,11 +51,7 @@ use yii\bootstrap5\Html;
 				</div>
 				<div class="clearfix"></div>	
 			</div>
-
-			<div id="block_ton_wallet_actives"></div>			
-			<div id="block_bybit_exchange_actives"></div>
-			<div id="block_okx_exchange_actives"></div>
-			<div id="block_sol_exchange_actives"></div>
+			<div id="wrap_actives_coin"></div>
 			<div id="block_target_actions">
 				<div class="float-start">
 					<div id="target-info"></div>

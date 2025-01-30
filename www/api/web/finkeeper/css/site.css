@@ -3,6 +3,15 @@ body,
 html {
 	background:#0f0638 !important;
 }
+w3m-modal {
+	background-color: #000000;
+    transition: opacity 0.2s ease-in-out;
+	z-index:9991;
+}
+wui-card {
+	position:absolute;
+	top:10px;
+}
 .mta-20 {
 	height:20px;
 }
@@ -146,6 +155,9 @@ html {
 input {
 	padding:0;
 	margin:0;
+}
+.error {
+	color:red !important;
 }
 /* END: Common Style */
 /* Home Page Style */
@@ -677,7 +689,7 @@ input {
 /* END: Detailscoin Page */
 /* Actives Page */
 #wrap-actives {
-	padding:32px 16px 80px 16px;
+	padding:22px 16px 80px 16px;
 	background-color:#0f0638;
 	/*
 	background-image:url();
@@ -698,6 +710,12 @@ input {
 #wrap-actives #okx-exchange-connect-button {
 	background-image:url(/images/logos/okx_connect.png);
 }
+#wrap-actives #sui-wallet-connect-button {
+	background-image:url(/images/logos/sui_connect.png);
+}
+#wrap-actives #wc-wallet-connect-button {
+	background-image:url(/images/logos/wc_connect.png);
+}
 #wrap-actives .wallet-connect-button {
 	position:relative;
 	width:60px;
@@ -705,11 +723,12 @@ input {
 	background-repeat:no-repeat;
 	background-position:right bottom;
 	background-size:90%;
+	background-color:#000000;
 	float:left;
 	border:2px solid #fff;
 	border-radius:10px;
 	cursor:pointer;
-	margin:auto;
+	margin:10px auto 0 auto;
 	overflow:hidden;
 	z-index:4;
 }
@@ -820,74 +839,9 @@ input {
 #wrap-actives #close-search {
 	cursor:pointer;
 }
-/*
-
-
-
-#wrap-conv .modal-search .input-group-text img {
-	width:24px;
-}
-#wrap-conv .currency_button_group {
-	display:block;
-}
-#wrap-conv .modal-search .currency_button {
-	color:#ffffff;
-	padding:8px;
-	border:2px solid #3E3567;
-	border-radius:12px;
-	cursor:pointer;
-	display:table;
-	float:left;
-	font-size:16px;
-	background-color:#3E3567;
-}
-#wrap-conv .modal-search .close_button {
-	color:#8b86a4;
-	padding:8px 15px;
-	border:1px solid #8b86a4;
-	border-radius:12px;
-	cursor:pointer;
-	display:table;
-	float:right;
-	margin-right:3px;
-}
-#wrap-conv .modal-search .currency_button_active {
-	color:#000000;
-	background:#47e7ce;
-	border:2px solid #ffffff;
-	border-radius:12px;
-	font-size:16px;
-}
-#wrap-conv .circle-image {
-	width:26px;
-	height:26px;
-	border-radius:20%;
-	display: inline-block;
-	overflow: hidden;
-	float:left;
-	margin-top:2px;
-}
-#wrap-conv .currency_block .circle-image {
-	width:26px;
-	height:26px;
-	border-radius:20%;
-	display: inline-block;
-	overflow: hidden;
-	float:left;
-	margin-right:8px;
-	margin-top:2px;
-}
-#wrap-conv .circle-image img{
-	max-width:100%;
-}
-*/
-/*
-#wrap-actives #okx-connect {
-	margin-bottom:20px;	
-	width:100%;
-}
-*/
 #wrap-actives #sol-connect,
+#wrap-actives #sui-connect,
+#wrap-actives #wc-connect,
 #wrap-actives #okx-connect,
 #wrap-actives #bybit-connect,
 #wrap-actives #ton-connect{
@@ -895,66 +849,11 @@ input {
 	width:50%;
 	float:left;
 }
-#wrap-actives #bybit-connect-button {
-	background-color: #0098EA;
-    color: #FFFFFF;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
-    padding: 8px 16px 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    height: 40px;
-    justify-content: unset;
-    border: none;
-    border-radius: 100vh;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 510;
-    line-height: 18px;
-    transition: transform 0.125s ease-in-out;
-	width:fit-content;
-	margin:auto;
-}
-#wrap-actives #ton-connect-button {
-	background-color: #0098EA;
-    color: #FFFFFF;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
-    padding: 8px 16px 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    height: 40px;
-    justify-content: unset;
-    border: none;
-    border-radius: 100vh;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 510;
-    line-height: 18px;
-    transition: transform 0.125s ease-in-out;
-	width:fit-content;
-	margin:auto;
-}
-#wrap-actives #okx-connect-button {
-	background-color: #0098EA;
-    color: #FFFFFF;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
-    padding: 8px 16px 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    height: 40px;
-    justify-content: unset;
-    border: none;
-    border-radius: 100vh;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 510;
-    line-height: 18px;
-    transition: transform 0.125s ease-in-out;
-	width:fit-content;
-	margin:auto;
-}
+#wrap-actives #bybit-connect-button,
+#wrap-actives #ton-connect-button,
+#wrap-actives #okx-connect-button,
+#wrap-actives #sui-connect-button,
+#wrap-actives #wc-connect-button,
 #wrap-actives #sol-connect-button {
 	background-color: #0098EA;
     color: #FFFFFF;
@@ -975,20 +874,23 @@ input {
 	width:fit-content;
 	margin:auto;
 }
-#wrap-actives #bybit-connect .active_bybit_button {
-	background-color: #ffffff;
-    color: #000000;
-}
-#wrap-actives #ton-connect .active_ton_button {
-	background-color: #ffffff;
-    color: #000000;
-}
+#wrap-actives #bybit-connect .active_bybit_button,
+#wrap-actives #ton-connect .active_ton_button,
+#wrap-actives #sol-connect .active_sol_button,
+#wrap-actives #sui-connect .active_sui_button,
+#wrap-actives #wc-connect .active_wc_button,
 #wrap-actives #okx-connect .active_okx_button {
 	background-color: #ffffff;
     color: #000000;
 }
 #wrap-actives #okx-connect button,
 #wrap-actives #okx-connect div,
+#wrap-actives #sol-connect button,
+#wrap-actives #sol-connect div,
+#wrap-actives #sui-connect button,
+#wrap-actives #sui-connect div,
+#wrap-actives #wc-connect button,
+#wrap-actives #wc-connect div,
 #wrap-actives #bybit-connect button,
 #wrap-actives #bybit-connect div,
 #wrap-actives #ton-connect button,
@@ -1013,7 +915,8 @@ tc-root {
 	position:relative !important;
 }
 #wrap-actives #title_balance {
-	font-size:16px;
+	font-size:19px;
+	text-align:center;
 }
 #wrap-actives .ton-wallet-title {
 	font-size:18px;
@@ -1098,10 +1001,18 @@ tc-root {
 }
 #wrap-actives .okx_disconnect,
 #wrap-actives .ton_disconnect,
+#wrap-actives .sol_disconnect,
+#wrap-actives .sui_disconnect,
+#wrap-actives .wc_disconnect,
 #wrap-actives .bybit_disconnect {
 	transform: rotate(270deg);
 	transition: transform 0.1s ease-in-out;
 }
+#wrap-actives .okx_disconnect_button,
+#wrap-actives .ton_disconnect_button,
+#wrap-actives .sol_disconnect_button,
+#wrap-actives .sui_disconnect_button,
+#wrap-actives .wc_disconnect_button,
 #wrap-actives .bybit_disconnect_button {
 	height:40px;
 	width:100%;
@@ -1113,10 +1024,11 @@ tc-root {
 #wrap-actives .service_icon_second {
 	margin:4px 0 0 -6px !important;
 }
-#wrap-actives .ton_icon {
-	width:24px !important;
-	height:24px !important;
-}
+#wrap-actives .ton_icon,
+#wrap-actives .okx_icon,
+#wrap-actives .sol_icon,
+#wrap-actives .sui_icon,
+#wrap-actives .wc_icon,
 #wrap-actives .bybit_icon {
 	width:24px !important;
 	height:24px !important;
@@ -1454,7 +1366,7 @@ tc-root {
 	background-position:center;
 	*/
 }
-#wrap-v-form .form-currency-search {
+#wrap-sol-form .form-currency-search {
 	font-size:24px;
 }
 #wrap-sol-form .fa-asterisk {
@@ -1507,6 +1419,11 @@ tc-root {
 	bottom:70px;
 	width:100;
 }
+#wrap-sol-form .btn-wc {
+	background:hsla(230, 100%, 67%, 1) !important;
+	border-color:#0f0638;
+	color:#fff;
+}
 #wrap-sol-form .fa-question-circle {
 	color:#8b86a4;
 	font-size:22px;
@@ -1550,6 +1467,113 @@ tc-root {
 	font-size:14px;
 }
 /* END: Sol Form Page */
+/* Sui Form Page */
+#wrap-sui-form {
+	padding:32px 16px 160px 16px;
+	background-color:#0f0638;
+	/*
+	background-image:url();
+	background-repeat:no-repeat;
+	background-size:cover;
+	background-position:center;
+	*/
+}
+#wrap-sui-form .form-currency-search {
+	font-size:24px;
+}
+#wrap-sui-form .fa-asterisk {
+	color:#000000;
+	font-size:18px;
+}
+#wrap-sui-form .input-group {
+	border:2px solid #fff;
+	border-radius:12px;
+	background-color:#3e3567;
+}
+#wrap-sui-form .input-group-text {
+	background:#ffffff;
+	border:0 !important;
+	color:#ffffff;
+	background:#3e3567 !important;
+	font-size:16px;
+	font-weight:normal !important;
+	border-radius:10px;
+	padding:10px 5px 10px 10px !important;
+}
+#wrap-sui-form .form-currency-search {
+	outline:none !important;
+	box-shadow:none !important;
+	border:0 !important;
+	color:#ffffff;
+	background:#3e3567;
+	font-size:16px;
+	font-weight:normal !important;
+	border-radius:12px;
+	padding:10px 0 !important;
+	height:48px !important!
+}
+#wrap-sui-form .form-currency-search:focus {
+	border:0 !important;
+	font-weight:normal !important;
+}
+#wrap-sui-form .form-currency-search::placeholder {
+  color:#8b86a4;
+  opacity: 1; 
+  font-weight:normal !important;
+}
+#wrap-sui-form .form-currency-search::-ms-input-placeholder {
+  color:#8b86a4;
+}
+#wrap-sui-form .input-group-text img {
+	width:24px;
+}
+#wrap-sui-form .btn-turquoise {
+	bottom:70px;
+	width:100;
+}
+#wrap-sui-form .fa-question-circle {
+	color:#8b86a4;
+	font-size:22px;
+	cursor:pointer;
+	background:transparent;
+	outline:none;
+	border:none;
+	padding:0;
+	margin:0;
+}
+#wrap-sui-form .quest-addon {
+	padding-right:10px !important;
+}
+@media (min-width: 700px) {
+	#wrap-sui-form .btn-turquoise {   
+		width:calc(700px - 30px);
+	}
+}
+.question_popover {
+	border-radius:8px;
+	padding:10px;
+}
+.question_popover .popover-content {
+	background:transparent;
+	font-size:16px !important;
+	color:#000000;
+	height:fit-content;
+	width:fit-content;
+	cursor:pointer;
+}
+.question_popover .popover-content:hover {
+	background:#F1F3F5;
+}
+.question_popover .popover_text a {
+	text-decoration:underline !important;
+	color:#000000;
+}
+.question_popover .fa-external-link-alt {
+	color:#666666;
+	text-decoration:underline !important;
+	font-size:14px;
+}
+/* END: Sui Form Page */
 /* Target Form Page */
 #wrap-target-form {
 	padding:32px 16px 160px 16px;

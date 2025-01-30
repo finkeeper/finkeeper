@@ -25,6 +25,14 @@ use yii\bootstrap5\Html;
 					</div>
 				</div>
 				
+				<div id="sui-wallet-connect-button" class="wallet-connect-button">
+					<span class="mdi mdi-wifi-off"></span>
+					<div tabindex="0" role="button" id="sui-wallet-click-button" class="areal-click-button"></div>
+					<div class="backdrop-connect-button" style="display:none">
+						<span class="far fa-hourglass fa-spin"></span>
+					</div>
+				</div>
+				
 				<div id="bybit-exchange-connect-button" class="wallet-connect-button">
 					<span class="mdi mdi-wifi-off"></span>
 					<div tabindex="0" role="button" id="bybit-exchange-click-button" class="areal-click-button"></div>
@@ -47,8 +55,7 @@ use yii\bootstrap5\Html;
 			<div class="clearfix"></div>
 			<div id="wrap-balance" class="">		
 				<div id="title_balance"><?=Yii::t('Api', 'Connect your wallet to see list of assets')?></div>
-				
-				<?php //if (in_array($id_client, [10, 15])) { ?>
+
 				<?php if (!empty($used_gpt1)) { ?>
 	
 					<div id="all-summ-active">
