@@ -5,11 +5,12 @@
 
 FinKeeper is a Telegram mini app in that will show you a complete picture of your crypto assets in different networks, blockchains, from different wallets and exchanges.
 
-It will also allow you to use the yield farming function on TON blockchain — get income on your assets in literally one click, choosing the best offer right inside your portfolio.
+It will also allow you to use the yield farming function — get income on your assets in literally one click, choosing the best offer right inside your portfolio.
 
 A useful bonus for all DeFi fans will be the APR calculator, which can quickly calculate the real benefit of any protocol for your investment amount.
 
 ### Integrations
+Solana, TON, SUI, Bybit, OKX
 ![enter image description here](https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png) ![enter image description here](https://s2.coinmarketcap.com/static/img/coins/64x64/23156.png) ![enter image description here](https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png) ![enter image description here](https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/aqua.png)
 
 # Links
