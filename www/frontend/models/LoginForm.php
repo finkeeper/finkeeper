@@ -79,6 +79,30 @@ class LoginForm extends Model
         
         return false;
     }
+	
+	/**
+     * Logs in a user using the provided username and password.
+     *
+     * @return bool whether the user is logged in successfully
+     */
+    public function loginsecure($token='')
+    {
+        if(empty($token)) {
+			return false;
+		}
+		
+		$client = Clients::findByTelegramToken($token);
+        if(empty($client)) {
+			return false;
+		}
+		
+		$client->tg_auth_token = '';
+		if (!$client->save(false)) {
+			return false;
+		}
+
+		return Yii::$app->user->login($client, 3600 * 24 * 30);
+    }
 
     /**
      * Finds user by [[username]]

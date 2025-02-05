@@ -5,15 +5,14 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Response;
 use yii\web\Controller;
-use yii\web\HttpException;
-use common\models\Clients;
-use common\models\Certificate;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\HttpException;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\widgets\ActiveForm;
+use common\models\Clients;
 use frontend\models\LoginForm;
 use frontend\models\ResendEmail;
 use frontend\models\PasswordResetConfirm;
@@ -21,6 +20,7 @@ use frontend\models\PasswordReset;
 use frontend\models\SignupForm;
 use frontend\models\ConfirmForm;
 use frontend\models\LoadPage;
+use frontend\models\LoadClients;
 
 /**
  * Site controller
@@ -51,18 +51,14 @@ class SiteController extends Controller
 							'passwordreset', 
 							'passwordresetconfirm',
 							'formvalidation',
-							'info',
-							'certificate',
-							'stakingcalc',
-							'stakingcalcapi',
-							'tontest',
-							'getaddress',
+							'loginsecure',
 						],
                         'allow' => true,
+						'roles' => ['?'],
                     ],
                     [
                         'actions' => [
-							'logout', 
+							'logoutapp', 
 							'index', 
 							'error',
 							'terms',
@@ -140,21 +136,32 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
 		if (Yii::$app->language == 'ru-RU') {
-			$model = LoadPage::getPage(5);
+			$model = LoadPage::getPage(6);
 		} else {
-			$model = LoadPage::getPage(1);
+			$model = LoadPage::getPage(7);
 		}
 
 		if (empty($model)) {
 			throw new NotFoundHttpException();
 		}
 
+		$users = LoadClients::countUsers();
+	
+		$model->template = str_replace(
+			[
+				'{count_users}',
+			],
+			[
+				$users,
+			],
+			$model->template
+		);
+
 		return $this->render('index', [
             'model' => $model
         ]);
-    }
+	}
 
     /**
      * Displays privacy page.
@@ -163,6 +170,8 @@ class SiteController extends Controller
      */
     public function actionPrivacy()
     {
+		throw new NotFoundHttpException();
+		
 		$model = LoadPage::getPage(2);
 		
 		if (empty($model)) {
@@ -181,6 +190,8 @@ class SiteController extends Controller
      */
     public function actionTerms()
     {
+		throw new NotFoundHttpException();
+		
 		$model = LoadPage::getPage(3);
 		
 		if (empty($model)) {
@@ -199,6 +210,8 @@ class SiteController extends Controller
      */
     public function actionHelp()
     {
+		throw new NotFoundHttpException();
+		
 		$model = LoadPage::getPage(4);
 		
 		if (empty($model)) {
@@ -217,7 +230,9 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        throw new NotFoundHttpException();
+		
+		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
@@ -233,16 +248,38 @@ class SiteController extends Controller
         ]);
     }
 	
+	/**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionLoginsecure($sc='')
+    {
+		if (!Yii::$app->user->isGuest) {
+			return $this->redirect('/app');
+		}
+		if (empty($sc)) {
+			throw new NotFoundHttpException();
+		}
+
+		$model = new LoginForm();
+		if (!$model->loginsecure($sc)) {
+            new HttpException(401 , Yii::t('Error', 'Unauthorized'));
+        }
+		
+		return $this->redirect('/app');
+	}
+	
     /**
      * Logs out the current user.
      *
      * @return mixed
      */
-    public function actionLogout()
+    public function actionLogoutapp()
     {
-        Yii::$app->user->logout();
+		Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect('/app');
     }
 
     /**
@@ -252,7 +289,9 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        if (!Yii::$app->user->isGuest) {
+        throw new NotFoundHttpException();
+		
+		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 		
@@ -274,6 +313,8 @@ class SiteController extends Controller
      */
     public function actionConfirm($token)
     {
+		throw new NotFoundHttpException();
+		
 		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -320,6 +361,8 @@ class SiteController extends Controller
      */
     public function actionPasswordreset()
     {
+		throw new NotFoundHttpException();
+		
 		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -383,6 +426,8 @@ class SiteController extends Controller
      */
     public function actionPasswordresetconfirm($token)
     {		
+		throw new NotFoundHttpException();
+		
 		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -436,6 +481,8 @@ class SiteController extends Controller
      */
     public function actionResendemail($login='')
     {
+		throw new NotFoundHttpException();
+		
 		if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -488,6 +535,8 @@ class SiteController extends Controller
 	 */
 	public function actionFormvalidation() 
 	{
+		throw new NotFoundHttpException();
+		
 		$post = [];
 		if (Yii::$app->request->isAjax) {
 
@@ -540,159 +589,5 @@ class SiteController extends Controller
 		}
 
         throw new BadRequestHttpException('Bad request!');
-	}
-	
-	/**
-     * Info.
-     *
-     * @return mixed
-     */
-    public function actionInfo()
-    {
-		if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        return $this->render('info', [
-
-        ]);
-	}
-	
-	/**
-     * Info.
-     *
-     * @return mixed
-     */
-    public function actionCertificate($id=0, $hash='', $type=0)
-    {
-		if (empty($id) || empty($hash)) {
-			throw new HttpException(404 , Yii::t('Error', '404'));
-		}
-		
-		if (!Certificate::validateHashCertificate($id, $hash)) {
-			throw new HttpException(404 , Yii::t('Error', '404'));
-		}
-
-		$im = Certificate::generateImageCertificate($id);
-		if (empty($im)) {
-			throw new HttpException(404 , Yii::t('Error', '404'));
-		}
-		
-		if (empty($type)) {
-			
-			header('Content-Type: image/png');
-			imagepng($im);
-			
-		} elseif ($type == 'file') {
-			
-			
-			
-		} elseif ($type == 'pdf') {
-			
-			
-		}
-		
-		imagedestroy($im);
-		exit;
-	}
-	
-	/**
-     * Stakingcalc
-     *
-     * @return mixed
-     */
-    public function actionStakingcalc()
-    {
-        return $this->render('stakingcalc', [
-           
-        ]);
-    }
-	
-	/**
-     * Stakingcalcapi
-     *
-     * @return mixed
-     */
-    public function actionStakingcalcapi($id=0)
-    {
-        if (empty($id)) {
-			//exit(json_encode(['error'=>1, 'message'=>'Missing chat id']));
-		}
-		
-		return $this->render('stakingcalcapi', [
-           
-        ]);
-    }
-	
-	/**
-     * Stakingcalcapi
-     *
-     * @return mixed
-     */
-    public function actionTontest()
-    {
-        return $this->render('tontest', [
-           
-        ]);
-    }
-	
-	/** 
-	 * https://bank.ctfn.pro/getaddress
-	 * https://docs.tonconsole.com/tonapi/api-v2
-	 */
-	public function actionGetaddress()
-	{
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-		
-		if (empty($array['address'])) {
-			exit(json_encode(['error'=>1, 'message'=>'Not Address']));			
-		}
-		
-		$ton_url = 'https://tonapi.io/v2/blockchain/accounts/'.$array['address'];
-		$all_url = 'https://tonapi.io/v2/accounts/'.$array['address'].'/jettons';
-		
-		$data = [];
-		
-		$ch = curl_init();
-		curl_setopt_array($ch, [
-			CURLOPT_HEADER => false,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_URL => $ton_url,
-		]);
-		$result1 = curl_exec($ch);
-		curl_close($ch);
-		$ton = json_decode($result1, true);
-		
-		if (!empty($ton) && !empty($ton['balance'])) {
-			$data[] = [
-				'balance' => $ton['balance'],
-				'name' => 'Ton',
-			];
-		}
-		
-		$ch = curl_init();
-		curl_setopt_array($ch, [
-			CURLOPT_HEADER => false,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_URL => $all_url,
-		]);
-		$result2 = curl_exec($ch);
-		curl_close($ch);
-		$all = json_decode($result2, true);
-		
-		if (!empty($all) && !empty($all['balances']) && is_array($all['balances'])) {
-			foreach ($all['balances'] as $val) {
-				$data[] = [
-					'balance' => $val['balance'],
-					'name' => $val['jetton']['name'],
-				];
-			}
-		}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'data'=>$data,
-		]));
 	}
 }

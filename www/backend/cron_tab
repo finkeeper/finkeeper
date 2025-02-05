@@ -1,5 +1,0 @@
-CTFNPRO Актуализация курса криптовалют
-
-cd /var/www/14_aoserver_crypto/data; /usr/bin/php -f www/bank.ctfn.pro/common/cron/launch_exchange.php cron >/root/cron.log 2>/root/cron.error.log
-
-*/10 * * * *

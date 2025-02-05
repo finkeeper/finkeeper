@@ -316,38 +316,21 @@ class DataController extends ActiveController
 		if (TelegramApi::validateUser($id, $sc)) {
 			$this->accessUser = true;
 		}
-		
-		$id_client = ApiChatbot::getUserid($id);
+	
 		$used_gpt1 = ApiChatbot::getUsedGPTChat(1);
 		$used_gpt2 = ApiChatbot::getUsedGPTChat(2);
-
-		ApiChatbot::addMenuButton($id);
-		
-		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-		
 		$exchange = Exchange::getData();	
-
-		$targets = ApiChatbot::getTargets($id);
-
-		$friends = ApiChatbot::getReferralsData();
-		if (!empty($this->accessUser)) {		
-			$friends = ApiChatbot::getReferralsData($id);		
-		}
-
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
-		$status = ApiChatbot::getStatusConnect($id);
+		$friends = ApiChatbot::getReferralsData();
+
+		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
 	
 		return $this->render('converter', [
-           'id' => $id,
-		   'sc' => $sc,
 		   'exchange' => $exchange,
 		   'friends' => $friends,
 		   'default_currency' => $currency,
 		   'grafema' => $grafema,
-		   'status' => $status,
-		   'targets' => $targets,
-		   'id_client' => $id_client,
 		   'used_gpt1' => $used_gpt1,
 		   'used_gpt2' => $used_gpt2,
         ]);
@@ -358,16 +341,172 @@ class DataController extends ActiveController
 	 */
 	public function actionUserdata() 
 	{
-		//error_log(print_r($_POST, true)."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+		$input = file_get_contents('php://input');
+		if (empty($input) || !is_string($input)) {
+			exit(json_encode([
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing Telegram User Data')." 1",
+			]));
+		}
+
+		$array = @json_decode($input, true);
+		if (
+			empty($array) || 
+			!is_array($array) || 
+			empty($array['initData']) || 
+			empty($array['initDataUnsafe']) || 
+			!is_array($array['initDataUnsafe'])
+		) {
+			exit(json_encode([
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing Telegram User Data')." 2",
+			]));
+		}
+
+		if (!TelegramApi::isSafe($array['initData'])) {
+			exit(json_encode([
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing Telegram User Data')." 3",
+			]));
+		}
+
+		if (!empty($array['initDataUnsafe']['user']) && !empty($array['initDataUnsafe']['user']['photo_url'])) {
+			ApiChatbot::saveUserpic($array['initDataUnsafe']['user']['id'], $array['initDataUnsafe']['user']['photo_url']);
+		}
+
+		$data = [];
+		
+		if (!empty($array['initDataUnsafe']['start_param']) && $array['initDataUnsafe']['start_param']=='auth') {
+			
+			$data['tg_token'] = $array['initDataUnsafe']['hash'];
+			if (!ApiChatbot::saveTGToken($array['initDataUnsafe']['user']['id'], $array['initDataUnsafe']['hash'])) {
+				exit(json_encode([
+					'error' => 1,
+					'message' => Yii::t('Error', 'Not save user data'),
+				]));
+			}
+
+			exit(json_encode([
+				'error' => 0,
+				'type' => 'auth',
+				'data' => $data,
+			]));
+						
+		} else {
+			
+			$client = ApiChatbot::getClient($array['initDataUnsafe']['user']['id']);
+			if (empty($client)) {
+				exit(json_encode([
+					'error' => 1,
+					'message' => Yii::t('Error', 'Missing Telegram User Data')." 4",
+				]));
+			}
+			
+			$log = ApiChatbot::getUserLog($client->id);
+			if (empty($log)) {
+				exit(json_encode([
+					'error' => 1,
+					'message' => Yii::t('Error', 'Missing Telegram User Data')." 5",
+				]));
+			}
+			
+			$exchange = Exchange::getData();
+			$currency = [];
+			if (!empty($exchange)) {
+				foreach ($exchange as $val) {
+					$currency[] = [
+						'id' => $val['id'],
+						'symbol' => $val['name'],
+						'name' => $val['text_name'],
+						'price' => $val['price'],
+						'src' => $val['img'],
+						'type' => $val['type'],
+					];
+				}
+			}			
+			
+			$data['sc'] = TelegramApi::tg()->generateUserToken($log->id);
+			$data['id'] = $log->id;
+			$data['id_client'] = $client->id;
+			
+			ApiChatbot::addMenuButton($log->id); 
+
+			$data['targets'] = ApiChatbot::getTargets($log->id);
+			$data['status'] = ApiChatbot::getStatusConnect($log->id);
+			$data['page_url'] = '/v2/datas/converter?id='.$log->id.'&sc='.$data['sc'];
+			$data['currency'] = $currency;
+			$data['friends'] = ApiChatbot::getReferralsData($log->id);
+			
+			$data['lang'] = 'en';
+			if (!empty($client->lang)) {
+				$data['lang'] = $client->lang;
+			}
+			
+			Yii::$app->language=strtolower($data['lang']).'-'.strtoupper($data['lang']);
+	
+			exit(json_encode([
+				'error' => 0,
+				'type' => '',
+				'data' => $data,
+			]));
+		}
+	}
+	
+	/** 
+	 * https://api.bank.ctfn.pro/v2/datas/stakingcalc
+	 */
+	public function actionStakingcalc($id=0)
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+
+		return $this->render('stakingcalc', [
+           'id' => $id,
+        ]);
+	}
+	
+	/**
+	 * actionChangelang() 
+	 */
+	public function actionChangelang() 
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		
 		$input = file_get_contents('php://input');
+		if (empty($input) || !is_string($input)) {
+			exit(json_encode([
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing Data'),
+			]));
+		}
+
+		$array = @json_decode($input, true);
+		if (empty($array) || !is_array($array)) {
+			exit(json_encode([
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing Data'),
+			]));
+		}
 		
-		//error_log($input."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+		if (empty($array['lang'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing language')]));			
+		}
 		
-		//$array = @json_decode($input, true);
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
 		
-		error_log($input."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-		exit('test');
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		if (ApiChatbot::setSettingsLang($array['log_id'], $array['lang'])) {
+			
+			Yii::$app->language=strtolower($array['lang']).'-'.strtoupper($array['lang']);
+			
+			exit(json_encode(['error'=>0, 'message'=>Yii::t('Api', 'Success Change Language').': '.$array['lang']]));
+		}
+		
+		exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not change user language')]));	
 	}
 	
 	/** 
@@ -558,7 +697,7 @@ class DataController extends ActiveController
 			}
 			
 		} else {
-			$error[] = $response['messsage'];
+			$error[] = $response['message'];
 		}
 
 		$str_coins = '';
@@ -653,7 +792,7 @@ class DataController extends ActiveController
 					}
 					
 				} else {
-					$error[] = $response['messsage'];
+					$error[] = $response['message'];
 				}
 			}
 		}
@@ -683,6 +822,7 @@ class DataController extends ActiveController
 			'grafema' => $grafema,
 			'connect' => $status_connect,
 			'message' => $error,
+			'address' => $bybit->uid,
 		]));
 	}
 	
@@ -865,7 +1005,7 @@ class DataController extends ActiveController
 			}
 
 		} else {
-			exit(json_encode(['error'=>1, 'message'=>$response['messsage']]));
+			exit(json_encode(['error'=>1, 'message'=>$response['message']]));
 		}
 		
 		$response = $okx->getWalletBalance('UNIFIED');
@@ -955,7 +1095,7 @@ class DataController extends ActiveController
 			}
 		
 		} else {
-			exit(json_encode(['error'=>1, 'message'=>$response['messsage']]));
+			exit(json_encode(['error'=>1, 'message'=>$response['message']]));
 		}
 		
 		$status_connect = 0;
@@ -977,6 +1117,7 @@ class DataController extends ActiveController
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
 			'connect' => $status_connect,
+			'address' => $okx->uid,
 		]));
 	}
 
@@ -1136,7 +1277,7 @@ class DataController extends ActiveController
 			} 
 
 		} else {
-			$error[] = $response['messsage'];
+			$error[] = $response['message'];
 		}
 		
 		$response = $sol->getTokenBalance();
@@ -1228,7 +1369,14 @@ class DataController extends ActiveController
 			} 
 
 		} else {
-			$error[] = $response['messsage'];
+			$error[] = $response['message'];
+		}
+		
+		if (!empty($error)) {
+			exit(json_encode([
+				'error'=>1, 
+				'message' => implode('; ', $error),
+			]));
 		}
 
 		$status_connect = 0;
@@ -1250,6 +1398,7 @@ class DataController extends ActiveController
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
 			'connect' => $status_connect,
+			'address' => $sol->address,
 		]));
 	}
 	
@@ -1414,8 +1563,16 @@ class DataController extends ActiveController
 			} 
 
 		} else {
-			$error[] = $response['messsage'];
+			$error[] = $response['message'];
 		}
+		
+		if (!empty($error)) {
+			exit(json_encode([
+				'error'=>1, 
+				'message' => implode('; ', $error),
+			]));
+		}
+
 
 		$status_connect = 0;
 		if (ApiChatbot::saveStatusConnect(5, $array['log_id'], 1)) {
@@ -1426,8 +1583,10 @@ class DataController extends ActiveController
 			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 9)) {
 			
 			}
-		}		
+		}	
 		
+		$address = SUIApi::pstatic()->getAddressParse($sui->address);
+
 		exit(json_encode([
 			'error'=>0, 
 			'data'=>$data,
@@ -1436,6 +1595,7 @@ class DataController extends ActiveController
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
 			'connect' => $status_connect,
+			'address' => $address,
 		]));
 	}
 
@@ -1542,6 +1702,8 @@ class DataController extends ActiveController
 				
 			}	
 		}
+		
+		$address = TonApi::pstatic()->getAddressParse($array['address']);
 
 		exit(json_encode([
 			'error'=>0, 
@@ -1549,6 +1711,7 @@ class DataController extends ActiveController
 			'summ' => Exchange::formatValue($summ),
 			'grafema' => $grafema,
 			'connect' => $status_connect,
+			'address' => $address,
 		]));
 	}
 	
@@ -1640,6 +1803,8 @@ class DataController extends ActiveController
 				usort($data, [$this, 'cmp']);
 			}
 		}
+		
+		$address = TonApi::pstatic()->getAddressParse($tokens['ton']['address']);
 
 		exit(json_encode([
 			'error'=>0, 
@@ -1647,6 +1812,7 @@ class DataController extends ActiveController
 			'summ' => Exchange::formatValue($summ),
 			'grafema' => $grafema,
 			'connect' => 1,
+			'address' => $address,
 		]));	
 	}
 	
@@ -1902,18 +2068,6 @@ class DataController extends ActiveController
 		if (empty($answer['error'])) {
 			ApiChatbot::sendMessageToChat($array['log_id'], $answer);
 		}
-	}
-
-	/** 
-	 * https://api.bank.ctfn.pro/v2/datas/stakingcalc
-	 */
-	public function actionStakingcalc($id=0)
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-
-		return $this->render('stakingcalc', [
-           'id' => $id,
-        ]);
 	}
 
 	/**

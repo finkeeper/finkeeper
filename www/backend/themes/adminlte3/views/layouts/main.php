@@ -23,14 +23,12 @@ $this->beginPage();
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png">
-		<link rel="manifest" href="/images/favicons/site.webmanifest">
-		<link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
-		<meta name="msapplication-TileColor" content="#da532c"> 
-		<meta name="theme-color" content="#ffffff">
-		
+		<link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/images/favicons/favicon.svg" />
+		<link rel="shortcut icon" href="/images/favicons/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="Admin FinKeeper" />
+		<link rel="manifest" href="/images/favicons/site.webmanifest" />		
 		
 		<?php $this->registerCsrfMetaTags() ?>
 		<title><?= Html::encode($this->title) ?></title>

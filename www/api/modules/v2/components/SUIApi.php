@@ -18,7 +18,7 @@ class SUIApi {
 	function __construct() {
 		
 		$conf = Exchange::getConfig(3);
-		if (empty($conf) || !is_array($conf) || empty($conf['solana']) || !is_array($conf['solana'])) {
+		if (empty($conf) || !is_array($conf) || empty($conf['sui']) || !is_array($conf['sui'])) {
 			return false;
 		}
 		
@@ -54,7 +54,7 @@ class SUIApi {
 		if (!empty($result['error'])) {
 			return [
 				'error' => 1,
-				'messsage' => $result['message'],
+				'message' => $result['message'],
 				'data' => $data,
 			];
 		}
@@ -62,7 +62,7 @@ class SUIApi {
 		if (empty($result) || empty($result['data'])) {
 			return [
 				'error' => 0,
-				'messsage' => Yii::t('Api', 'Not Sui Active'),
+				'message' => Yii::t('Api', 'Not Sui Active'),
 				'data' => $data,
 			];
 		}
@@ -124,14 +124,14 @@ class SUIApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 	
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 
@@ -152,7 +152,7 @@ class SUIApi {
 				
 			return [
 				'error' => 1,
-				'messsage' => $message,
+				'message' => $message,
 			];
 		}
 
@@ -167,6 +167,14 @@ class SUIApi {
 			'error' => 0,
 			'data' => $data['result'],	
 		];
+	}
+	
+	/**
+	 * getAddressParse($address='')
+	 */ 
+	public function getAddressParse($address='')
+	{
+		return $address;
 	}
 
 	/**

@@ -91,14 +91,14 @@ class BybitApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -106,14 +106,14 @@ class BybitApi {
 		if (!empty($data['retCode'])) {
 			return [
 				'error' => 1,
-				'messsage' => $data['retMsg'],
+				'message' => $data['retMsg'],
 			];
 		}
 		
 		if (empty($data) || !is_array($data)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 

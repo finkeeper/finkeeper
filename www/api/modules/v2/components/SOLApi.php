@@ -73,7 +73,7 @@ class SOLApi {
 		if (!empty($result['error'])) {
 			return [
 				'error' => 1,
-				'messsage' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No balance'),
+				'message' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No balance'),
 				'data' => $data,
 			];
 		}
@@ -81,7 +81,7 @@ class SOLApi {
 		if (empty($result) || empty($result['data'])) {
 			return [
 				'error' => 0,
-				'messsage' => Yii::t('Api', 'Not SOL Active'),
+				'message' => Yii::t('Api', 'Not SOL Active'),
 				'data' => $data,
 			];
 		}
@@ -128,14 +128,14 @@ class SOLApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -149,7 +149,7 @@ class SOLApi {
 				
 			return [
 				'error' => 1,
-				'messsage' => $message,
+				'message' => $message,
 			];
 		}
 		
@@ -162,7 +162,7 @@ class SOLApi {
 		) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 
@@ -193,7 +193,7 @@ class SOLApi {
 		if (!empty($result['error'])) {
 			return [
 				'error' => 1,
-				'messsage' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No token'),
+				'message' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No token'),
 				'data' => $data,
 			];
 		}
@@ -236,7 +236,7 @@ class SOLApi {
 		if (empty($address)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Missing Address'),
+				'message' => Yii::t('Error', 'Missing Address'),
 			];
 		}
 		
@@ -263,14 +263,14 @@ class SOLApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -284,7 +284,7 @@ class SOLApi {
 				
 			return [
 				'error' => 1,
-				'messsage' => $message,
+				'message' => $message,
 			];
 		}
 
@@ -360,7 +360,7 @@ class SOLApi {
 		if (empty($account_token)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Missing Account Token'),
+				'message' => Yii::t('Error', 'Missing Account Token'),
 			];
 		}
 		
@@ -387,14 +387,14 @@ class SOLApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -408,7 +408,7 @@ class SOLApi {
 				
 			return [
 				'error' => 1,
-				'messsage' => $message,
+				'message' => $message,
 			];
 		}
 		
@@ -423,7 +423,7 @@ class SOLApi {
 		) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -453,7 +453,7 @@ class SOLApi {
 		if (empty($token_mint)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Missing Token Mint'),
+				'message' => Yii::t('Error', 'Missing Token Mint'),
 			];
 		}
 		
@@ -480,14 +480,14 @@ class SOLApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -501,7 +501,7 @@ class SOLApi {
 				
 			return [
 				'error' => 1,
-				'messsage' => $message,
+				'message' => $message,
 			];
 		}
 
@@ -521,7 +521,7 @@ class SOLApi {
 		) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		

@@ -1,47 +1,54 @@
 <?php
-
 use yii\helpers\Html;
 
-$this->title = $name;
-?>
+$statusCode = '500?';
+if (!empty($exception) && !empty($exception->statusCode)) {
+	$statusCode = $exception->statusCode;
+}
 
-<?= $this->render(
-	'@app/themes/th1/views/site/elements/__header_2.php'
-) ?>
+if (!empty($_POST)) {
 
-<!-- Hero Start -->
-<section class="content position-relative bg-soft-primary">
-	<div class="site-error">
+	header('HTTP/1.1 '.$statusCode); 
+	header("Content-Type: text/xml");
+	header("Expires: Thu, 19 Feb 1998 13:24:18 GMT");
+	header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+	header("Cache-Control: no-cache, must-revalidate");
+	header("Cache-Control: post-check=0,pre-check=0");
+	header("Cache-Control: max-age=0");
+	header("Pragma: no-cache");
 	
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-12 p-0">
-					<div class="d-flex flex-column min-vh-100 p-4">
-						<!-- Start Logo -->
-						<div class="text-center">
-							<a href="/"><img src="/images/logo/logo-dark.png" alt=""></a>
-						</div>
-                        <!-- End Logo -->
-
-						<!-- Start Content -->
-						<div class="title-heading text-center my-auto">
-							<img src="/images/bg/error.png" class="img-fluid" alt="">
-							<h1 class="heading sub-heading mb-3 mt-5 text-dark"><?= nl2br(Html::encode($name)) ?></h1>
-							<p class="text-muted"><?= nl2br(Html::encode($message)) ?></p>
-						</div>
-						<!-- End Content -->
-
-                        <!-- Footer Start -->
-						<footer class="">
-							<div class="container text-center">
-								<small class="mb-0 text-dark title-dark">© <?= date('Y') ?> <?= Html::encode(Yii::$app->name) ?></small>
-							</div><!--end container-->
-						</footer><!--end footer-->
-						<!-- Footer End -->
-                    </div>
-				</div><!--end col-->
-			</div><!--end row-->
-		</div><!--end container-->
+	echo '<?xml version="1.0" encoding="UTF-8" ?>';
+	echo '<Error>';
+		echo '<title>'.$name.'</title>';
+		echo '<StatusCode>'.$statusCode.'</StatusCode>';
+		echo '<Message>'.$message.'</Message>';
+	echo '</Error>';
+	exit;
 	
+} else {
+
+	$this->title = $name;
+	header('HTTP/1.1 '.$statusCode);
+	?>
+
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404"></div>
+			<?php if ($statusCode==520) : ?>
+				
+				<h2>Oops!</h2>
+				
+			<?php else : ?>
+				
+				<h1><?=$statusCode?></h1>
+				
+			<?php endif; ?>
+			<h4><?=nl2br(Html::encode($message))?></h4>
+			<p>&nbsp;</p>
+			<p><?=Yii::t('Frontend', 'Error Message Footer')?>:&nbsp;<a href="mailto:<?=Yii::$app->params['adminEmail']?>"><?=Yii::$app->params['adminEmail']?></a></p>
+			
+		</div>
 	</div>
-</div>
+	
+<?php 
+}

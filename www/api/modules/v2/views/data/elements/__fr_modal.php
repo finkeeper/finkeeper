@@ -1,20 +1,5 @@
 <?php
 use yii\bootstrap5\Html;
-
-$awards = 100;
-if (!empty((int) $friends['friends'])) {
-	$awards += $friends['friends']*50;
-}
-
-if (!empty($friends['awards'])) {
-	if (!empty($friends['awards'][1])) {
-		$awards += 100;
-	} 
-	
-	if (!empty($friends['awards'][2])) {
-		$awards += 150;
-	} 
-}
 ?>
 
 <div class="modal fade" id="frModal" tabindex="-1" aria-labelledby="frModalLabel" data-parent="">
@@ -34,7 +19,7 @@ if (!empty($friends['awards'])) {
 				</div>
 				<div class="clearfix"></div>
 					
-				<?=Html::textInput('fr_link_1', $friends['link'],[
+				<?=Html::textInput('fr_link_1', '',[
 					'autocomplete' => 'off', 
 					'id' => 'fr-link-1',
 					'class' =>  'form-currency',
@@ -45,7 +30,7 @@ if (!empty($friends['awards'])) {
 			
 			<div class="text_awards mb-2 text-center">
 
-				<?=Yii::t('Title', 'Your Points')?>: <b><?=$awards?></b>
+				<?=Yii::t('Api', 'Your Points')?>: <b class="awards_friends">0</b>
 				
 			</div>
 
@@ -65,41 +50,16 @@ if (!empty($friends['awards'])) {
 				</div>
 				<div class="clearfix"></div>
 			</div>
-			
-			<?php if (!empty($friends['friends'])) { ?>
-			
-				<div id="referrals_username">
-					
-					<?=Yii::t('Title', 'Invited friends')?>: <?=$friends['friends']?><br>
 
-					<?php if (!empty($friends['referrals']) && is_array($friends['referrals'])) { ?>
-					
-						<?php foreach ($friends['referrals'] as $key => $friend) { ?>
-					
-							<div class="option_friends">
-								<?=$key+1?>. <?=$friend?>
-							</div>
-					
-					
-						<?php } ?>
-						
-					<?php } ?>
+			<div id="referrals_username">
 				
+				<?=Yii::t('Title', 'Invited friends')?>: 0
+				
+				<div class="option_friends">
+					<?=Yii::t('Api', 'Unlock Hints and earn Points by inviting your friends to join FinKeeper')?> :)
 				</div>
-				
-			<?php } else { ?>
-				
-				<div id="referrals_username">
-					
-					<?=Yii::t('Title', 'Invited friends')?>: 0
-					
-					<div class="option_friends">
-						<?=Yii::t('Api', 'Unlock Hints and earn Points by inviting your friends to join FinKeeper')?> :)
-					</div>
-				
-				</div>
-				
-			<?php }	?>
+			
+			</div>
 				
 		</div>
 		<!-- End friends -->

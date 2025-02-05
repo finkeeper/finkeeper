@@ -53,6 +53,8 @@ class ApiChatbot extends Model
 	public $bot_id;
 	public $id_client;
 	public $user_connect=0;
+	public $userpic;
+	public $tg_auth_token;
 
 	/**
      * @inheritdoc
@@ -130,6 +132,14 @@ class ApiChatbot extends Model
 		return Chatbot::findOne(['id_bot' => $id]);
 	}
 	
+	/**
+	 * getBots()
+	 */
+	public static function getBots()
+	{
+		return Chatbot::find()->where(['deleted'=>0])->all();
+	}
+
 	/**
 	 * saveTokens($type=0, $identify1=0, $identify2=0, $identify3=0)
 	 */
@@ -1685,6 +1695,23 @@ class ApiChatbot extends Model
 	}
 	
 	/**
+	 * getUserLog($id=0)
+	 */
+	public static function getUserLog($id=0)
+	{
+		if (empty($id)) {
+			return false;
+		}
+		
+		$modelChatbotLog = ChatbotLog::findOne(['id_client' => $id]);
+		if (empty($modelChatbotLog)) {
+			return false;
+		}
+		
+		return $modelChatbotLog;
+	}
+	
+	/**
 	 * getUserid($id_log=0)
 	 */
 	public static function getUsedGPTChat($id=1)
@@ -1696,4 +1723,36 @@ class ApiChatbot extends Model
 		
 		return false;
 	}
+	
+	/**
+	 * saveUserpic($id=0, $image='')
+	 */
+	public static function saveUserpic($chat_id=0, $image='')
+	{
+		$modelClient = Clients::findOne(['tg_chat_id' => $chat_id, 'deleted' => Clients::STATUS_NOT_DELETED]);
+		if (empty($modelClient)) {
+			return false;
+		}
+		
+		if (!empty($modelClient->userpic)) {
+			return false;
+		}
+		
+		$modelClient->userpic = $image;
+		return $modelClient->save();
+	}	
+	
+	/**
+	 * saveUserpic($id=0, $image='')
+	 */
+	public static function saveTGToken($chat_id=0, $token='')
+	{
+		$modelClient = Clients::findOne(['tg_chat_id' => $chat_id, 'deleted' => Clients::STATUS_NOT_DELETED]);
+		if (empty($modelClient)) {
+			return false;
+		}
+		
+		$modelClient->tg_auth_token = $token;
+		return $modelClient->save();
+	}	
 }

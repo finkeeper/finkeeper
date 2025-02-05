@@ -3,7 +3,7 @@ use yii\bootstrap5\Html;
 ?>
 
 
-<div class="modal fade" id="targetModal" tabindex="-1" aria-labelledby="targetModalLabel" data-parent="adModal">
+<div class="modal fade" id="targetModal" tabindex="-1" aria-labelledby="targetModalLabel" data-parent="asModal">
 	<div class="modal-dialog">
 		<!-- Start calc -->
 		<div id="wrap-target-form">

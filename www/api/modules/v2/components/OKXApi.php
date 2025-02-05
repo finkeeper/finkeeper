@@ -92,14 +92,14 @@ class OKXApi {
 		if (empty($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Not response'),
+				'message' => Yii::t('Error', 'Not response'),
 			];
 		}
 		
 		if (!is_string($response)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 		
@@ -107,14 +107,14 @@ class OKXApi {
 		if (!empty($data['msg']) && !empty($data['code'])) {
 			return [
 				'error' => 1,
-				'messsage' => $data['msg'],
+				'message' => $data['msg'],
 			];
 		}
 		
 		if (empty($data) || !is_array($data)) {
 			return [
 				'error' => 1,
-				'messsage' => Yii::t('Error', 'Incorrect response'),
+				'message' => Yii::t('Error', 'Incorrect response'),
 			];
 		}
 

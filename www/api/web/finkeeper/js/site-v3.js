@@ -1,6 +1,11 @@
 var tonConnectUI, userAmount, userQueryID, userTonSend, userUSDTSend, userUSDT, swapCommission = 0.1, userAmount2, userAQUASend2, userUSDTSend2, userUSDT2, swapCommission2 = 1;
 
 document.addEventListener("DOMContentLoaded", function () {
+	tonConnected();
+});
+
+function tonConnected() {
+	
 	var lang = document.querySelector('script[data-id="bundle"][data-id]').getAttribute('data-lang');
 	
 	tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
@@ -41,8 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	$(document).delegate(".ton_connect_button", "click", function(){
 		tonConnectUI.openModal();
 	});
-
-});
+}
 
 function formatValue(value, type=0) {
 	if (isNaN(value) || typeof value==="undefined" || value===undefined || !value) {
@@ -966,7 +970,93 @@ function selectCoin(coin) {
 	return obj;		
 }
 
-jQuery(document).ready(function($) {
+
+function string_replace(str, sub, start, end) {
+	
+	if (typeof str==="undefined" || str===undefined || !str || typeof str!=="string") {
+		var str = '';
+	}
+	
+	if (typeof sub==="undefined" || sub===undefined || !sub || typeof sub!=="string") {
+		var sub = '';
+	}
+	
+	if (typeof start==="undefined" || start===undefined || !start || typeof start!=="number") {
+		var start = 0;
+	}
+	
+	if (typeof end==="undefined" || end===undefined || !end || typeof end!=="number") {
+		var end = 0;
+	}
+	
+	var newStr = '';
+	
+	if (!str) {
+		return newStr;		
+	}
+	
+	if (start>0) {
+		
+		newStr += str.slice(0, start);
+	}
+	
+	if (sub) {
+		newStr += sub;
+	}
+	
+	if (end>0) {
+		
+		var length = str.length;
+		length = length - end;
+		newStr += str.slice(length);
+	}
+
+	return newStr;
+}
+
+function openStartPage() {
+	if (!jQuery("#asModal").hasClass("show")) {
+		closeAllModal();
+		getActiveButton(2);
+		var modal = new bootstrap.Modal(document.getElementById("asModal"), {
+			backdrop: false,
+			keyboard: false			
+		});
+		modal.show();
+	}	
+}
+
+function getErrorPage(code, message) {
+	
+	var html = '<h1 style="color:#000000 !important">Bad Request</h1><p>Incorrect request</p><hr><address>Apache/2.2.22 (CentOS) Server at app.finkeeper.pro Port 80</address>';
+	
+	document.title = '400 Bad Request';
+	
+	if (code==404) {
+		
+		var html = '<h1 style="color:#000000 !important">Not Found</h1><p>The requested URL was not found on this server.</p><hr><address>Apache/2.2.22 (CentOS) Server at app.finkeeper.pro Port 80</address>';
+		
+		if (message) {
+			var html = '<h1 style="color:#000000 !important">Not Found</h1><p>' + message + '</p><hr><address>Apache/2.2.22 (CentOS) Server at app.finkeeper.pro Port 80</address>';
+		}
+	
+		document.title = '404 Not Found';
+		
+	} else if(code==522) {
+		
+		var html = '<h1 style="color:#000000 !important">Connection Timed Out</h1><p>The server is not responding, please try again later.</p><hr><address>Apache/2.2.22 (CentOS) Server at app.finkeeper.pro Port 80</address>';
+		
+		if (message) {
+			var html = '<h1 style="color:#000000 !important">Connection Timed Out</h1><p>' + message + '</p><hr><address>Apache/2.2.22 (CentOS) Server at app.finkeeper.pro Port 80</address>';
+		}
+	
+		document.title = '522 Connection Timed Out';
+	} 
+
+	$("body").attr('style', 'background:#ffffff !important;color:#000000 !important').html(html);	
+}
+
+function loadContentOuter() {
 
 	$("#search-actives").on("click", function() {
 		$("#form-search-active").show();
@@ -1268,16 +1358,18 @@ jQuery(document).ready(function($) {
 	
 	// Copy
 	$(".copy_button").on("click", function() {
-		copyValue(this);
+		copyValue(this, 1);
+	});
+	
+	$(document).delegate(".view_address", "click", function(){
+		copyValue(this, 2);
 	});
 	
 	// Radio language
 	$(".lg-radio[name=select_lg]").on("click", function() {
 		if ($(this).is(":checked")){
 			var value = $(this).val();	
-			$.get(page_url + '&lang=' + value, function($data) {
-				location.href=page_url;
-			});
+			changeLanguage(value);
 		}
 	});
 	
@@ -1547,4 +1639,15 @@ jQuery(document).ready(function($) {
 			modal.show();
 		}
 	});
+	
+	$('#auth-in-website').on("click", function() {		
+		var url = "https://finkeeper.pro/loginsecure?sc=" + sc;
+		Telegram.WebApp.openLink(url)	
+		Telegram.WebApp.close();
+	});
+}
+
+jQuery(document).ready(function($) {
+	openStartPage();
+	loadContentOuter();	
 });

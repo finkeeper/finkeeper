@@ -3,12 +3,12 @@ $this->registerJs('
 
 	Telegram.WebApp.expand();
 
-	var log_id = '.$id.';
-	var sc = "'.$sc.'";
+	var log_id = 0;
+	var sc = "";
 	var globe_num = 0;
-	var exchange = \''.json_encode($currency).'\';
-	var targets = \''.json_encode($targets).'\';
-	var page_url = "'.$page_url.'";
+	var exchange = JSON.stringify({});
+	var targets = JSON.stringify({});
+	var page_url = "";
 	var count_recent = 10;
 	var tonSummActive = 0;
 	var bybitSummActive = 0;
@@ -17,11 +17,11 @@ $this->registerJs('
 	var suiSummActive = 0;
 	var coinsSummActive = 0;
 	var tonSummActiveCurrency = 0;
-	var tonConnectedStatus='.$status['ton'].';
-	var bybitConnectedStatus='.$status['bybit'].';
-	var okxConnectedStatus='.$status['okx'].';
-	var solConnectedStatus='.$status['sol'].';
-	var suiConnectedStatus='.$status['sui'].';
+	var tonConnectedStatus=0;
+	var bybitConnectedStatus=0;
+	var okxConnectedStatus=0;
+	var solConnectedStatus=0;
+	var suiConnectedStatus=0;
 	var userActives={
 		"grafema": "",
 		"data": {
@@ -96,6 +96,63 @@ $this->registerJs('
 		select: "abcpbuttonselect",
 		status: "abcpbuttonstatus",
 		settings1: "abcpbuttonsettings1",
+	}
+	
+	function loadStatus(status) {
+		tonConnectedStatus = status.ton;
+		bybitConnectedStatus = status.bybit;
+		okxConnectedStatus = status.okx;
+		solConnectedStatus = status.sol;
+		suiConnectedStatus = status.sui;					
+	}
+	
+	function loadFriends(friends) {
+		
+		var count = parseInt(friends.friends);
+
+		jQuery(".count-friends").html(count);
+		
+		var awards = 100;
+
+		if (count>0) {
+			awards += count*50;
+		}
+
+		if (typeof friends.awards!=="undefined" && friends.awards!==undefined && friends.awards) {
+			if (typeof friends.awards[1]!=="undefined" && friends.awards[1]!==undefined && friends.awards[1]) {
+				awards += 100;
+			} 
+			
+			if (typeof friends.awards[2]!=="undefined" && friends.awards[2]!==undefined && friends.awards[2]) {
+				awards += 150;
+			} 
+		}
+		
+		
+		
+		jQuery("#frModal #fr-link-1").val(friends.link);
+		jQuery("#frModal .awards_friends").html(awards);
+		
+		var html = "";
+		html += "'.Yii::t('Title', 'Invited friends').': ";
+		html += count + "<br>";
+		
+		if (
+			typeof friends.referrals!=="undefined" && 
+			friends.referrals!==undefined && 
+			friends.referrals &&
+			typeof friends.referrals==="object"
+		) {
+			for (var key in friends.referrals) {
+				var inc = key+1;
+				html += "<div class=\"option_friends\">";
+				html += inc + " " + friends.referrals[key];
+				html += "</div>";
+			}
+			
+			jQuery("#referrals_username").html(html);
+		}
+
 	}
 
 	function convertData(data) {
@@ -359,9 +416,16 @@ $this->registerJs('
 		convertData(data);
 	}
 	
-	function copyValue(event) {
+	function copyValue(event, type) {
 
-		var value = $(event).parents(".text_input").find("input.form-currency").val();
+		if (type==1) {
+		
+			var value = $(event).parents(".text_input").find("input.form-currency").val();
+			
+		} else if(type==2) {
+			
+			var value = $(event).find(".copy_address").html();
+		}
 
 		navigator.clipboard.writeText(value)
         .then(() => {
@@ -681,13 +745,14 @@ $this->registerJs('
 				if (!response.error) {
 
 					displayConnectIcon(1, 1);
-					displayConnectMenu(1, 1);
+					displayConnectMenu(1, 1, response.address);
 					
 					tonSummActive = response.summ;
 					getAllActive();
 					
 					userActives.grafema = response.grafema;
-	
+					userActives.address = response.address;
+			
 					if (
 						typeof response.data==="object" && 
 						response.data!==undefined && 
@@ -757,7 +822,12 @@ $this->registerJs('
 		tonRecalculation();
 		
 		addListCoin();
-
+		
+		console.log("bybit: " + bybitConnectedStatus);
+		console.log("okx: " + okxConnectedStatus);
+		console.log("sol: " + solConnectedStatus);
+		console.log("sui: " + suiConnectedStatus);
+		
 		if (!bybitConnectedStatus && !okxConnectedStatus && !solConnectedStatus && !suiConnectedStatus) {
 			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
 		}
@@ -798,18 +868,19 @@ $this->registerJs('
 			"contentType": "application/json",
 			"data": JSON.stringify({"log_id": log_id, sc: sc}),
 			"success": function(response){
-				
+
 				displayBackdrop(1, 0);
 
 				if (!response.error) {
 					
 					displayConnectIcon(1, 1);
-					displayConnectMenu(1, 1);
+					displayConnectMenu(1, 1, response.address);
 
 					tonSummActive = response.summ;
 					getAllActive();
 					
 					userActives.grafema = response.grafema;
+					userActives.address = response.address;
 	
 					if (
 						typeof response.data==="object" && 
@@ -887,12 +958,13 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(3, 1);
-						displayConnectMenu(3, 1);
+						displayConnectMenu(3, 1, response.address);
 
 						bybitSummActive = response.summ;
 						getAllActive();
 
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 	
 						if (response.data.active && response.data.active.length) {
 
@@ -1057,7 +1129,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(3, 1);
-						displayConnectMenu(3, 1);
+						displayConnectMenu(3, 1, response.address);
 					
 						var html = "";
 						
@@ -1065,6 +1137,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 						
 						if (response.data.active && response.data.active.length) {
 
@@ -1168,12 +1241,13 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(4, 1);
-						displayConnectMenu(4, 1);
+						displayConnectMenu(4, 1, response.address);
 
 						okxSummActive = response.summ;
 						getAllActive();
 
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 	
 						if (response.data.active && response.data.active.length) {
 
@@ -1337,7 +1411,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(4, 1);
-						displayConnectMenu(4, 1);
+						displayConnectMenu(4, 1, response.address);
 					
 						var html = "";
 						
@@ -1345,6 +1419,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 						
 						if (response.data.active && response.data.active.length) {
 
@@ -1444,7 +1519,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(2, 1);
-						displayConnectMenu(2, 1);
+						displayConnectMenu(2, 1, response.address);
 					
 						var html = "";
 						
@@ -1452,6 +1527,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 						
 						if (response.data && response.data.length) {
 		
@@ -1582,7 +1658,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(2, 1);
-						displayConnectMenu(2, 1);
+						displayConnectMenu(2, 1, response.address);
 					
 						var html = "";
 						
@@ -1590,6 +1666,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 						
 						if (response.data && response.data.length) {
 		
@@ -1666,7 +1743,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(5, 1);
-						displayConnectMenu(5, 1);
+						displayConnectMenu(5, 1, response.address);
 	
 						var html = "";
 						
@@ -1674,6 +1751,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 			
 						if (response.data && response.data.length) {
 		
@@ -1797,7 +1875,7 @@ $this->registerJs('
 					if (!response.error) {
 						
 						displayConnectIcon(5, 1);
-						displayConnectMenu(5, 1);
+						displayConnectMenu(5, 1, response.address);
 					
 						var html = "";
 						
@@ -1805,6 +1883,7 @@ $this->registerJs('
 						getAllActive();
 						
 						userActives.grafema = response.grafema;
+						userActives.address = response.address;
 						
 						if (response.data && response.data.length) {
 		
@@ -1831,7 +1910,7 @@ $this->registerJs('
 								};
 							});
 	
-						} else {       
+						} else {
 							
 							addNotify("'.Yii::t('Api', 'Not Sui Active').'", "warning");
 
@@ -3040,7 +3119,7 @@ $this->registerJs('
 	}
 	
 	//displayConnectMenu(type=0, flag=0)
-	function displayConnectMenu(type=0, flag=0) {
+	function displayConnectMenu(type=0, flag=0, address) {
 		if (typeof type==="undefined" || type===undefined || !type) {
 			return false;
 		} 
@@ -3071,8 +3150,14 @@ $this->registerJs('
 		popover.dispose();
 
 		if (flag) {
-			
-			var template = "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"" + ident + "_disconnect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Disconnect').'</div><div class=\"clearfix\"></div></div></div></div>";
+
+			if (type==3) {
+				var parseAddress = string_replace(address, "...", 6, 1);
+			} else {
+				var parseAddress = string_replace(address, "...", 6, 6);
+			}
+
+			var template = "<div class=\"popover disconnect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"view_address text_input\"><span>" + parseAddress + "</span> <img src=\"/images/icons/copy2.svg\" alt=\"copy\" title=\"copy\"><div class=\"copy_address\">" + address + "</div></div><div class=\"" + ident + "_disconnect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Disconnect').'</div><div class=\"clearfix\"></div></div></div></div>";
 
 		} else {
 			
@@ -3087,24 +3172,127 @@ $this->registerJs('
 			template: template,
 		});
 	}
-	
-	//document ready
-	jQuery(document).ready(function($) {
 
-		//console.log(solanaWeb3);
+	function getUserData() {
+
+		var data = Telegram.WebApp;
+	
+		if (
+			typeof data==="undefined" ||
+			data===undefined ||
+			!data ||
+			typeof data!=="object" ||
+			typeof data.initData==="undefined" ||
+			data.initData===undefined ||
+			!data.initData ||
+			typeof data.initDataUnsafe==="undefined" ||
+			data.initDataUnsafe===undefined ||
+			!data.initDataUnsafe
+		) {
+			$("#auth-loader").hide();
+			getErrorPage(404);
+			return false;
+		}
+
+		jQuery.ajax({
+			"url": "/v2/datas/userdata",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify(Telegram.WebApp),
+			"success": function(response){
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+				$("#auth-loader").hide();
+				
+				if (response) {
+					
+					if (!response.error) {
+						
+						if (response.type=="auth") {
+						
+							sc = response.data.tg_token;
+							$("#auth-page").show();	
+							return false;
+						
+						} else {
+							
+							sc = response.data.sc;
+							log_id = response.data.id;
+							id_client = response.data.id_client;
+							targets = JSON.stringify(response.data.targets);
+							var status = response.data.status;
+							page_url = response.data.page_url;
+							exchange = JSON.stringify(response.data.currency);
+							var friends = response.data.friends;
+					
+							lang = response.data.lang;
+				
+							$("#select-" + lang).prop("checked", true);
+							loadFriends(friends);
+							$("#content").show();
+							loadStatus(status);
+							loadContentOuter();
+							loadContentInner();
+							
+						}
+						
+					} else {
+
+						getErrorPage(400, response.message);
+						return false;
+					}
+										
+				} else {
+
+					getErrorPage(504, "'.Yii::t('Api', 'Not response').'");
+					return false;
+				}				
+			},
+			error: function(qXHR, exception) {
+				$("#auth-loader").hide();
+				getErrorPage(qXHR.status, qXHR.responseText);
+				return false;
+			}
+		});	
+	}
+	
+	function changeLanguage(lang) {
+
+		jQuery.ajax({
+			"url": "/v2/datas/changelang",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({"lang": lang, "log_id": log_id, sc: sc}),
+			"success": function(response){
+
+				if (response) {
+					
+					if (!response.error) {
+						
+						location.href = page_url;
+
+					} else {
+
+						getErrorPage(400, response.message);
+						addNotify(response.message, "error");
+						return false;
+					}
+										
+				} else {
+
+					addNotify("'.Yii::t('Api', 'Not response').'", "error");
+					return false;
+				}				
+			},
+			error: function(qXHR, exception) {
+				addNotify(qXHR.responseText, "error");
+				return false;
+			}
+		});		
+	}
+	
+	function loadContentInner() {
 
 		$("#smart-toy").on("click", function() {
 			
@@ -3259,23 +3447,11 @@ $this->registerJs('
 			trigger: "click",
 			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sui_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
+	}
 	
-		/*
-		jQuery.ajax({
-			"url": "/v2/datas/userdata",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify(Telegram.WebApp),
-			"success": function(response){
-				
-			},
-			error: function(e) {
-				addNotify(e, "error");
-				jQuery("#bybit-connect-button").html(text_button);
-				return false;
-			}
-		});	
-		*/
+	//document ready
+	jQuery(document).ready(function($) {
+		getUserData();
+		loadContentInner();
 	});
 ', yii\web\View::POS_END);

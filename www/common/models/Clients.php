@@ -260,6 +260,19 @@ class Clients extends ActiveRecord implements IdentityInterface
     }
 	
 	/**
+     * Finds user by tg token
+     *
+     * @param string $tg_auth_token
+     */
+    public static function findByTelegramToken($token='') 
+    {
+        return static::findOne([
+            'tg_auth_token' => $token,
+			'deleted' => self::STATUS_NOT_DELETED,
+        ]);
+    }
+	
+	/**
      * Finds user by password reset token
      *
      * @param string $token password reset token
