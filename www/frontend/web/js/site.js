@@ -1,4 +1,4 @@
-var tonConnectUI, userAmount, userQueryID, userTonSend, userUSDTSend, userUSDT, swapCommission = 0.1, userAmount2, userAQUASend2, userUSDTSend2, userUSDT2, swapCommission2 = 1;
+var tonConnectUI, userAmount, userQueryID, userTonSend, userUSDTSend, userUSDT, swapCommission = 0.1, userAmount2, userAQUASend2, userUSDTSend2, userUSDT2, swapCommission2 = 1, lang = 'en', fromIdentify = 'finkeeperuser156974', toIdentify = 'finkeeperai15697426';
 
 document.addEventListener("DOMContentLoaded", function () {
 	var lang = document.querySelector('script[data-id="bundle"][data-id]').getAttribute('data-lang');
@@ -1026,9 +1026,55 @@ function openStartPage() {
 	}	
 }
 
+function changeButtonChat(load) {	
+	if (typeof load==="undefined" || load===undefined || !load) {
+		$('#chat-active-send').show();
+		$('#chat-active-send-loader').hide();
+	} else {
+		$('#chat-active-send').hide();
+		$('#chat-active-send-loader').show();
+	}	
+}
+
+function changeFooter(type) {
+	if (type==1) {
+		$("#bottom-toolbar").hide();
+		$("#bottom-as-toolbar").show();	
+	} else {
+		$("#bottom-as-toolbar").hide();
+		$("#bottom-toolbar").show();		
+	}	
+}
+
+function getAsModalBlockSize() {
+	var height = $("#asModal .modal-dialog").height();	
+	jQuery("#user_balance").height(height-300);
+	jQuery("#chat-form-as").height(height-300);
+}
+
 jQuery(document).ready(function($) {
-	
+
 	openStartPage();
+	
+	jQuery("#chat-form-as").perfectScrollbar({
+		wheelSpeed:0.3,
+		wheelPropagation: true,
+		minScrollbarLength: 20,
+		maxHeight: "300px"
+	});
+	
+	jQuery("#user_balance").perfectScrollbar({
+		wheelSpeed:0.3,
+		wheelPropagation: true,
+		minScrollbarLength: 20,
+		maxHeight: "300px"
+	});
+	
+	jQuery(window).on("resize", function() {
+		if (jQuery("#asModal").hasClass("show")) {
+			getAsModalBlockSize();
+		}
+	});	
 
 	$("#search-actives").on("click", function() {
 		$("#form-search-active").show();
@@ -1036,6 +1082,19 @@ jQuery(document).ready(function($) {
 	
 	$("#close-search").on("click", function() {
 		closeSearch();			
+	});
+	
+	$('#smart-toy-aiagent').on('click', function(){
+		$('#list-active-page, .user-actives-list>.bottom-navigation').hide();
+		$('#chat-active-page, .user-actives-chat>.bottom-chat-form').show();
+		$('#chat-active-page').css('marginTop', '20px');
+		$('#chat-active-page .fa-times').show();
+	});
+	
+	$('#chat-close').on('click', function(){
+		$('#list-active-page, .user-actives-list>.bottom-navigation').show();
+		$('#chat-active-page').css('marginTop', '60px');
+		$('#chat-active-page .fa-times').hide();
 	});
 	
 	$(".app-back").on("click", function() {
@@ -1079,6 +1138,13 @@ jQuery(document).ready(function($) {
 	
 	$("#asModal").on("hide.bs.modal", function () {
 		closeSearch();
+		changeFooter(0);
+	});
+	
+	$("#asModal").on("shown.bs.modal", function () {
+		getAsModalBlockSize();
+		closeSearch();
+		changeFooter(1);
 	});
 	
 	$("#adModal").delegate("#inputSwap","input", function(){
@@ -1325,9 +1391,13 @@ jQuery(document).ready(function($) {
 	$(".copy_button").on("click", function() {
 		copyValue(this, 1);
 	});
-	
+
 	$(document).delegate(".view_address", "click", function(){
 		copyValue(this, 2);
+	});
+	
+	$("#asModal").delegate("#as-wallet-copy", "click", function() {
+		copyValue(this, 3);
 	});
 	
 	// Radio language
@@ -1352,7 +1422,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	$("#as-modal").on("click", function(event) {
+	$(document).delegate("#as-modal", "click", function(event) {
 		if (!jQuery("#asModal").hasClass("show")) {
 			closeAllModal();
 			getActiveButton(2);
@@ -1364,7 +1434,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	$("#fr-modal, .bot-banner").on("click", function() {
+	$(document).delegate("#fr-modal, .bot-banner", "click", function() {
 		if (!jQuery("#frModal").hasClass("show")) {
 			closeAllModal();
 			getActiveButton(3);
@@ -1507,7 +1577,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	$("#close-all-modal").on("click", function() {			
+	$(document).delegate("#close-all-modal", "click", function() {	
 		closeAllModal();
 		getActiveButton(1);
 		$("#convModal .option_item").attr("data-num", 0);
@@ -1604,6 +1674,23 @@ jQuery(document).ready(function($) {
 				keyboard: false
 			});
 			modal.show();
+		}
+	});
+	
+	$('#create-aiagent-wallet').on('click', function() {
+		createWalletProcess();
+	});
+	
+	document.addEventListener( 'keyup', function(event) {
+		if(event.keyCode == 13) {
+			if (jQuery("#asModal").hasClass("show")) {
+				var input = $('#chat-active-input').val();
+				if (typeof input==="undefined" || input===undefined || !input) {
+					return false;
+				}
+			
+				$('#chat-active-send').trigger('click');
+			}
 		}
 	});
 });

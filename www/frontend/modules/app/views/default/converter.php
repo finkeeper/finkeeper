@@ -41,6 +41,8 @@ Yii::$app->view->render('elements/__script',[
 	'targets' => $targets,
 	'status' => $status,
 	'page_url' => $page_url,
+	'username' => $username,
+	'userpic' => $userpic,
 ]);
 
 
@@ -62,6 +64,8 @@ echo Yii::$app->view->render('elements/__fr_modal',[
 // Modal window wallet
 echo Yii::$app->view->render('elements/__as_modal',[
 	'grafema' => $grafema,
+	'used_gpt1' => $used_gpt1,
+	'wallet' => $wallet,
 ]);
 
 // Modal staking calc
@@ -332,10 +336,20 @@ echo Yii::$app->view->render('elements/__sui_modal');
 <div class="clearfix mta-70"></div>
 <!-- PAGE END -->
 
-<?php
-// Bottom navigation
-require dirname(__FILE__).'/elements/__footer.php';
-?>
+<div id="bottom-toolbar" class="bottom-toolbar">
+	<?=Yii::$app->view->render('elements/__footer')?>
+</div>
+
+<div id="bottom-as-toolbar" class="bottom-toolbar" style="display:none">
+	<div class="row">
+		<div class="col-xxl-6 user-actives-list">
+			<?=Yii::$app->view->render('elements/__footer')?>
+		</div>
+		<div class="col-xxl-6 user-actives-chat">
+			<?=Yii::$app->view->render('elements/__chat_footer')?>
+		</div>
+	</div>
+</div>
 
 <div class="card-info bottom-fixed">
 

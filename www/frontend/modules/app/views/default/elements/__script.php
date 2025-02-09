@@ -3,6 +3,8 @@ $this->registerJs('
 
 	var log_id = '.$id.';
 	var sc = "'.$sc.'";
+	var username = "'.$username.'";
+	var userpic = "'.$userpic.'";
 	var globe_num = 0;
 	var exchange = \''.json_encode($currency).'\';
 	var targets = \''.json_encode($targets).'\';
@@ -94,6 +96,7 @@ $this->registerJs('
 		select: "abcpbuttonselect",
 		status: "abcpbuttonstatus",
 		settings1: "abcpbuttonsettings1",
+		chat: "abcpchat1",
 	}
 
 	function convertData(data) {
@@ -366,6 +369,10 @@ $this->registerJs('
 		} else if(type==2) {
 			
 			var value = $(event).find(".copy_address").html();
+			
+		} else if(type==3) {
+
+			var value = $(event).attr("data-address");
 		}
 
 		navigator.clipboard.writeText(value)
@@ -558,6 +565,14 @@ $this->registerJs('
 
 			return localStorage.getItem(storage_type.settings1);
 			
+		} else if(type==11) {
+
+			return localStorage.setItem(storage_type.chat, value);
+			
+		} else if(type==12) {
+
+			return localStorage.getItem(storage_type.chat);
+						
 		}
 	}
 
@@ -1784,12 +1799,23 @@ $this->registerJs('
 	}
 	
 	//suiform()
-	function suiform() {
+	function suiform(address) {
+
+		if (address==="undefined" || address===undefined || !address) {
 		
-		var address = $("#ct-sui-address").val();
-		if (typeof address==="undefined" || address===undefined || !address) {
-			addNotify("'.Yii::t('Error', 'Missing SUI Address Wallet').'", "error");
-			return false;
+			var address = $("#ct-sui-address").val();
+			if (typeof address==="undefined" || address===undefined || !address) {
+				addNotify("'.Yii::t('Error', 'Missing SUI Address Wallet').'", "error");
+				return false;
+			}
+			
+		} else {
+
+			if (suiConnectedStatus) {
+				return false;
+			}
+			
+			suiConnectedStatus = true;
 		}
 
 		displayBackdrop(5, 1);
@@ -1863,24 +1889,27 @@ $this->registerJs('
 
 					} else {		
 						addNotify(response.message, "error");
+						suiConnectedStatus = false;
 						return false;
 					}
 				
 				} else {
 					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					suiConnectedStatus = false;
 					return false;
 				}		
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				displayBackdrop(5, 0);
 				addNotify(thrownError, "error");
+				suiConnectedStatus = false;
 				return false;
 			}
 		});	
 	}
 
 	//sendDataAl()
-	function sendDataAl(type) {
+	function sendDataAl(type, message) {
 
 		var data;
 		if (type==1) {
@@ -1899,6 +1928,14 @@ $this->registerJs('
 			} 
 
 			var data = selectCoin(coin);
+			
+		} else if (type==3) {
+			
+			if (typeof message==="undefined" || message===undefined || !message) {
+				return false;
+			} 
+			
+			data = message;
 
 		} else {
 			return false;
@@ -1911,7 +1948,21 @@ $this->registerJs('
 			"contentType": "application/json",
 			"data": JSON.stringify({"data": data, "log_id": log_id, sc: sc, type: type}),
 			"success": function(response){
-				//console.log(response);	
+				if (response) {
+				
+					if (!response.error) {
+						
+						return response.message;
+
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}		
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				addNotify(thrownError, "error");
@@ -3114,8 +3165,263 @@ $this->registerJs('
 		});
 	}
 	
+	function sendMessageAl(str, from, username, userpic) {
+
+		changeButtonChat(1);
+		var chat = abcpLocalStorage(12);
+
+		if (typeof str==="undefined" || str===undefined || !str) {
+
+			if (typeof chat==="undefined" || chat===undefined || !chat) {
+				changeButtonChat(0);
+				return false
+
+			} else {
+				
+				var arr = JSON.parse(chat);
+				
+			}
+	
+		} else {
+			
+			if (typeof from==="undefined" || from===undefined || !from) {
+				addNotify("'.Yii::t('Error', 'Storage not from identify').'", "error");
+				return false;
+			}
+			
+			var mess = from + str;
+
+			if (typeof chat==="undefined" || chat===undefined || !chat) {
+	
+				var arr = [];
+				arr.push(mess);
+				var value = JSON.stringify(arr);
+
+			} else {
+				
+				var arr = JSON.parse(chat);
+				var len = arr.length;
+				if (len>=10) {
+					arr.shift();
+				}
+
+				arr.push(mess);
+				var value = JSON.stringify(arr);
+			}
+
+			abcpLocalStorage(11, value);
+		}
+
+		if (typeof username==="undefined" || username===undefined || !username) {
+			var username = "You";
+		}
+		
+		if (typeof userpic==="undefined" || userpic===undefined || !userpic) {
+			
+			var firstLitera = string_replace(username, "", 1, 0);
+			var userpic = "<div style=\"background:#47e7ce\" class=\"text-center avatar\"><span>" + firstLitera.toUpperCase() + "</span></div>";
+
+		} else {
+			
+			var userpic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"" + userpic + "\"></div>";
+			
+		}
+		
+		var apppic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
+		
+		var appname = "FinKeeper";
+		
+		var arrIdentify = [fromIdentify, toIdentify];
+		
+		$("#chat-form-as").html("");
+		arr.reverse();
+		arr.forEach(function(item, i, arr) {
+			
+			if (typeof item==="undefined" || item===undefined || !item) {
+				return false;
+			}
+			
+			var pic = userpic;
+			var name = username;
+
+			arrIdentify.forEach(function(identify, i, arr) {
+				var search = identify.length;
+				var result = string_replace(item, "", search, 0);
+				if (result==identify) {
+					var str = item.slice(search);
+					if (identify==toIdentify){
+						pic = apppic;
+						name = appname;
+						item = str;
+						return "";
+					} else {
+						pic = userpic;
+						name = username;
+						item = str;
+						return "";
+					}
+				}
+			});
+
+			var html = "<div class=\"sl-item p-b-md\">" + pic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + name + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
+			
+			$("#chat-form-as").append(html);
+
+		});
+		
+		if (typeof str==="undefined" || str===undefined || !str) {
+
+			changeButtonChat(0);
+			return false;
+		}
+		
+		jQuery.ajax({
+			"url": "/app/alassistant",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({"data": str, "log_id": log_id, sc: sc, type: 3}),
+			"success": function(response){
+
+				if (response) {
+				
+					if (!response.error) {
+
+						var mess = toIdentify + response.message;
+						var chat = abcpLocalStorage(12);
+
+						if (typeof chat==="undefined" || chat===undefined || !chat) {
+				
+							var arr = [];
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+
+						} else {
+							
+							var arr = JSON.parse(chat);
+							var len = arr.length;
+							if (len>=10) {
+								arr.shift();
+							}
+
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+						}
+
+						abcpLocalStorage(11, value);
+						var arrIdentify = [fromIdentify, toIdentify];
+						
+						$("#chat-form-as").html("");
+						arr.reverse();
+						arr.forEach(function(item, i, arr) {
+							
+							if (typeof item==="undefined" || item===undefined || !item) {
+								return false;
+							}
+							
+							var pic = userpic;
+							var name = username;
+							
+							arrIdentify.forEach(function(identify, i, arr) {
+								var search = identify.length;
+								var result = string_replace(item, "", search, 0);
+								if (result==identify) {
+									var str = item.slice(search);
+									
+									if (identify==toIdentify){
+										pic = apppic;
+										name = appname;
+										item = str;
+									} else {
+										pic = userpic;
+										name = username;
+										item = str;
+										return "";
+									}
+								}
+							});
+
+							var html = "<div class=\"sl-item p-b-md\">" + pic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + name + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
+							
+							$("#chat-form-as").append(html);
+
+						});
+
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}
+
+				changeButtonChat(0);	
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				addNotify(thrownError, "error");
+				changeButtonChat(0);
+				return false;
+			}
+		});			
+	}
+	
+	function createWalletProcess() {
+		
+		var buttonName = jQuery("#create-aiagent-wallet").html();
+		jQuery("#create-aiagent-wallet").html(buttonName + "&nbsp;&nbsp;<i class=\"fas fa-asterisk fa-spin\"></i>");
+
+		jQuery.ajax({
+			"url": "/app/alassistant",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({data: "create", "log_id": log_id, sc: sc, type: 4}),
+			"success": function(response){
+				
+				console.log(response);
+
+				jQuery("#create-aiagent-wallet").html(buttonName);
+
+				if (response) {
+				
+					if (!response.error) {
+					
+						var html = "'.Yii::t('Api', 'AI agent SUI wallet').':&nbsp;" + string_replace(response.message, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as-wallet-copy\" data-address=\"" + response.message + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + response.message + "\" target=\"_blank\" id=\"as-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a><br>'.Yii::t('Api', 'Balance').':&nbsp;0";
+						
+						jQuery("#chat-active-page .create_aiagent_wallet").html(html);
+		
+		
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				addNotify(thrownError, "error");
+				return false;
+			}
+		});		
+	}
+
 	//document ready
-	jQuery(document).ready(function($) {		
+	jQuery(document).ready(function($) {	
+
+		sendMessageAl("", "", username, userpic);
+		
+		$("#chat-active-send").on("click", function(e) {
+			e.preventDefault();
+			var text = $("#chat-active-input").val();
+			$("#chat-active-input").val("");
+			sendMessageAl(text, fromIdentify, username, userpic);		
+		});
+	
 
 		$("#smart-toy").on("click", function() {
 			

@@ -118,4 +118,41 @@ class Tokens extends ActiveRecord
 			],
 		]);
 	}
+	
+	/**
+	 * saveWalletData($result=[])
+	 */
+	public static function saveWalletData($result=[])
+	{
+		if (
+			empty($result['ads']) ||
+			empty($result['pbk']) ||
+			empty((int) $result['id'])
+		) {
+			return false;
+		}
+		
+		$type = 6;
+		
+		$modelTokens = self::findOne([
+			'service_type' => $type, 
+			'id_client' => $result['id'], 
+			'deleted'=>Tokens::STATUS_NOT_DELETED,
+		]);
+		
+		if (!empty($modelTokens)) {
+			return false;
+		}
+		
+		$modelTokens = new Tokens;
+		$modelTokens->id_client = $result['id'];
+		$modelTokens->identify1 = $result['ads'];
+		$modelTokens->identify2 = $result['pbk'];
+		$modelTokens->service_type = $type;
+		if (!$modelTokens->save()) {
+			return false;
+		}
+		
+		return true;
+	}
 }

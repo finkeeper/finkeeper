@@ -12,6 +12,14 @@ use yii\bootstrap5\Html;
 				<i class="fas fa-arrow-left app-back"></i>
 			</div>
 			
+			<div class="sui_auth"><?=Yii::t('Api', 'Or connect SUI wallet via WalletConnect')?></div>
+
+			<div class="input-group-sol mt-17">
+	
+				<div id="wallet-button"></div>
+				
+			</div>
+
 			<div class="sui_auth"><?=Yii::t('Api', 'Please provide your SUI address wallet')?></div>
 					
 			<div class="input-group input-group-sol mt-17">

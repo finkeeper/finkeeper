@@ -20,6 +20,7 @@ use yii\data\ActiveDataProvider;
 use yii\base\InvalidParamException;
 use frontend\modules\app\AppModule;
 use frontend\modules\app\components\TonApi;
+use frontend\modules\app\components\SUIApi;
 use frontend\modules\app\components\TelegramApi;
 
 /**
@@ -1755,4 +1756,53 @@ class ApiChatbot extends Model
 		$modelClient->tg_auth_token = $token;
 		return $modelClient->save();
 	}	
+	
+	/**
+	 * getWallet($id=0) 
+	 */
+	public static function getWallet($id=0) 
+	{
+		if (empty($id)) {
+			return false;
+		} 
+		
+		$modelTokens = Tokens::findOne(['id_client' => $id, 'service_type' => 6, 'deleted' => Clients::STATUS_NOT_DELETED]);
+		if (empty($modelTokens) || empty($modelTokens->identify1)) {
+			return false;
+		}
+		
+		$sui = new SUIApi;
+		$sui->address = $modelTokens->identify1;
+		$balance = 0;
+		
+		$response = $sui->getWalletBalance();
+		if (empty($response['error'])) {
+			if (!empty($response['data']) && !empty($response['data'][0])) {
+				
+				foreach ($response['data'][0] as $val) {
+					
+					if (empty($val['balance']) || empty($val['symbolid'])) {
+						continue;
+					}
+					
+					$balance = $val['balance'];
+
+					if (!empty($balance)) {
+						if (is_float($balance)) {
+							$valbalance = number_format($balance, 12, '.', '');
+						} else if (is_int($balance)) {
+							$balance = number_format($balance, 12, '.', '');
+						} else {
+							$balance = $balance*1;
+							$balance = number_format($balance, 12, '.', '');
+						}
+					}
+					
+					$balance = Exchange::formatValue($balance);					
+				}
+			}
+		}
+		
+		return ['address' => $modelTokens->identify1, 'balance' => $balance];
+	}
 }

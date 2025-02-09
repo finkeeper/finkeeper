@@ -45,7 +45,7 @@ use yii\bootstrap5\Html;
 						<?=Yii::t('Api', 'Assets Coins')?>
 					</div>					
 				</div>	
-				<?php if (!empty($used_gpt2)) { ?>
+				<?php if (false && !empty($used_gpt2)) { ?>
 					<div class="info_details_coin">	
 						<img src="/images/svg/element/smart_toy.svg" id="smart-toy-active">
 					</div>

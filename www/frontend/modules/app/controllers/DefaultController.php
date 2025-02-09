@@ -14,7 +14,9 @@ use frontend\modules\app\components\TonApi;
 use frontend\modules\app\components\OKXApi;
 use frontend\modules\app\components\SOLApi;
 use frontend\modules\app\components\GPTApi2;
+use frontend\modules\app\components\AiagentApi;
 use frontend\modules\app\components\SUIApi;
+use frontend\modules\app\components\WalletApi;
 use frontend\modules\app\components\AppController;
 
 /**
@@ -86,8 +88,21 @@ class DefaultController extends AppController
 		if (!empty($this->accessUser)) {
 			
 			$id_client = Yii::$app->user->getId();
-			$used_gpt1 = ApiChatbot::getUsedGPTChat(1);
-			$used_gpt2 = ApiChatbot::getUsedGPTChat(2);
+			$used_gpt1 = []; //ApiChatbot::getUsedGPTChat(1);
+			$used_gpt2 = []; //ApiChatbot::getUsedGPTChat(2);
+			
+			$userpic = '';
+			$name = Yii::t('Api', 'You');
+			$client = ApiChatbot::findClient($id_client);
+			if (!empty($client)) {
+				if (!empty($client->userpic)) {
+					$userpic = $client->userpic;
+				}
+				
+				if (!empty($client->name)) {
+					$name = $client->name;
+				}
+			}
 			
 			$log = ApiChatbot::getUserLog($id_client);
 			$id = $log->id;
@@ -100,6 +115,7 @@ class DefaultController extends AppController
 
 			$friends = ApiChatbot::getReferralsData($id);		
 			$status = ApiChatbot::getStatusConnect($id);
+			$wallet = ApiChatbot::getWallet($id_client);
 			
 			$sc = TelegramApi::tg()->generateUserToken($id);
 			
@@ -118,6 +134,9 @@ class DefaultController extends AppController
 				'id_client' => $id_client,
 				'used_gpt1' => $used_gpt1,
 				'used_gpt2' => $used_gpt2,
+				'username' => $name,
+				'userpic' => $userpic,
+				'wallet' => $wallet,
 			]);
 			
 		} else {
@@ -1676,7 +1695,7 @@ class DefaultController extends AppController
 		if (empty($array['log_id'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not ID')]));
 		}
-		
+	
 		if (empty($array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
@@ -1685,31 +1704,38 @@ class DefaultController extends AppController
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
 		
-		if (empty($array['data'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Question')]));	
-		} 
-		
 		if (empty($array['type'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Type')]));	
 		}
+		
+		if (empty($array['data'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Question')]));	
+		}
+		
+		if ($array['type']==3) {
 
-		$answer = GPTApi2::pstatic()->getQuestion(json_encode($array['data']), $array['log_id'], $array['type']);
-		if (empty($answer['error'])) {
-			ApiChatbot::sendMessageToChat($array['log_id'], $answer);
+			$answer = AiagentApi::pstatic()->getQuestion($array['data']);
+			exit(json_encode($answer));	
+			
+			exit(json_encode(['error'=>0, 'message'=>'Success']));
+			
+		} else if ($array['type']==4) {
+
+			$answer = WalletApi::pstatic()->createWallet($array['log_id']);
+			exit(json_encode($answer));
+			
+		} else {
+		
+			$answer = GPTApi2::pstatic()->getQuestion(json_encode($array['data']), $array['log_id'], $array['type']);
+			if (empty($answer['error'])) {
+				ApiChatbot::sendMessageToChat($array['log_id'], $answer);
+				exit(json_encode(['error'=>0, 'message'=>Yii::t('Api', 'Successful Send')]));	
+			}
+			
+			exit(json_encode($answer));
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * cmp($a=[], $b=[])
 	 */

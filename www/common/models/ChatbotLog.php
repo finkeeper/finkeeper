@@ -125,5 +125,15 @@ class ChatbotLog extends ActiveRecord
 		]);
 	}
 	
-	
+	/**
+     * @inheritdoc
+     */
+    public static function findLog($id=0)
+    {
+		if (empty($id)) {
+			return false;
+		}
+		
+		return static::findOne(['id' => $id]);
+    }
 }
