@@ -3,6 +3,9 @@
 # Finkeeper
 [FinKeeper](https://finkeeper.pro/app) AI agent & Yield Farming Optimization with portfolio tracker.
 
+Solana AI Hackathon [participant](https://www.solanaaihackathon.com/projects).
+Semi-final of the [TON Hackathon](https://blog.ton.org/hackers-league-semi-finalists-revealed).
+
 ## 🌐 A Modern Crypto Investor's Challenge
 
 A modern crypto investor stores assets across multiple wallets, DeFi platforms, and exchange accounts, which complicates asset management. Additionally, using DeFi is inaccessible for most people due to the high complexity of interfaces and interactions.
