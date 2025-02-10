@@ -18,11 +18,12 @@ FinKeeper provides a complete financial overview across multiple crypto wallets 
 
 ## 🤖 Built-in AI Agent: Your Guide and Friend in WEB3
 
-- Provides tips on coins and answers questions.  
+- Provides tips on coins and answers questions.
+- Helps transfer assets (now working transfer from AI wallet)
 - Overcomes the complexities of DeFi, ensuring high returns through:  
-  - Smart pool selection.
-  - Automatic rebalancing between pools.
-  - Auto-compounding.
+  - Smart pool selection. (now working with Navi Protocol SDK)
+  - Automatic rebalancing between pools. (in roadmap)
+  - Auto-compounding. (in roadmap)
  
 ## WorkFlow
 <img src="https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/WorkFlow.png"  />
