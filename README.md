@@ -49,19 +49,13 @@ SUI, ATOMA, NAVI, BlueFIN, Bybit, OKX, Solana, TON, Ston.fi
 <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png" height="64" /> <img src="https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/fin-atoma.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/29296.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/8724.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/27311.png" width="64" height="64" />
 
 # Links
-## For developers
--   **[Telegram mini app itself](https://t.me/finkeeper_app_bot?start=7dccedf56cbec221467013d53b0aa373)**
-- [Onchain API for DeDust integration](onchain)
-- [Onchain analytics service for tracking assets and parsing APR from DeDust](onchain-analytics)
 ## For users
--   **[Telegram mini app itself](https://t.me/finkeeper_app_bot?start=7dccedf56cbec221467013d53b0aa373)**
+-   [FinKeeper](https://finkeeper.pro/app)
+-   [X.com (Twitter)](https://x.com/FinKeeper/)
 -   [TG channel (EN)](https://t.me/+EcdwEgf0kjVmNjli)
 -   [TG channel (RU)](https://t.me/+OvMVn3V9mDRjYzc6)
 -   [User docs GitBook EN](https://finkeeper.gitbook.io/finkeeper/en)
 -   [User docs GitBook RU](https://finkeeper.gitbook.io/finkeeper)
--   [X.com (Twitter)](https://x.com/FinKeeper/)
--   [YouTube overview RU](https://youtu.be/df085zBj6e0)
--   [YouTube video course RU](https://www.youtube.com/playlist?list=PLk_I_DvdiWKV7fCTwPQHFj1Z6cNmdWRH6)  
 
 ## How it works
 
