@@ -24,6 +24,97 @@ FinKeeper provides a complete financial overview across multiple crypto wallets 
   - Smart pool selection. (now working with Navi Protocol SDK)
   - Automatic rebalancing between pools. (in roadmap)
   - Auto-compounding. (in roadmap)
+
+## ⚡ **Tech Stack**
+- **SUI Blockchain** – Creating and managing wallets, executing transactions, and connecting wallets for portfolio viewing and asset management.
+- **ATOMA** – AI processing for text-based queries, prompt analysis, and portfolio evaluation.  
+  - **Model used:** `meta-llama/Llama-3.3-70B-Instruct`.  
+  - _Future plans:_ Integration of **`multilingual-e5-large-instruct`** for knowledge base management and testing **DeepSeek-R1** for enhanced AI processing.
+- **Navi Protocol** – A decentralized lending and borrowing protocol on SUI.  
+  - Used for **depositing SUI** to earn yield and **withdrawing funds** from staking pools.  
+  - _Future plans_: use for AI-driven suggestions for maximizing returns via DeFi strategies (leverage farming, porfolio rebalancing).
+
+- **FastAPI** – A high-performance Python-based API framework for handling multi-chain operations.
+- **Uvicorn** – An ASGI server optimized for running FastAPI.
+- **Node.js** – Used for blockchain service integrations, real-time event handling, and API communication.
+- **Yii2 + MySQL** – The backend stack for the FinKeeper web application, handling user authentication, transaction history, and asset tracking.
+
+## 🔥 **Quick Start for Users**  
+
+### **1️⃣ Verify and Connect Telegram**  
+- Go to [https://finkeeper.pro/app](https://finkeeper.pro/app), click **"Verify Yourself"**, and connect your **Telegram account** to log into the application.  
+- **Authorization is required to create a wallet.**  
+- If you encounter any issues, you can first create an account via the **Telegram bot**: [https://t.me/finkeeper_app_bot?start](https://t.me/finkeeper_app_bot?start).  
+
+---
+
+### **2️⃣ Create an AI Agent Wallet**  
+- Click **"Create AI agent wallet"**, and a **SUI blockchain wallet** will be generated.  
+- This wallet is linked to the user account (**currently via Telegram authentication**).  
+- The AI Agent will use this wallet to execute **on-chain transactions** (*eventually replaced by a Move smart contract*).  
+
+---
+
+### **3️⃣ Fund Your Wallet**  
+- You can find your wallet **address** in the **top-right corner** of the interface.  
+- Copy the address and **fund it from your personal SUI wallet** or **directly from a crypto exchange**.  
+- *Currently, only SUI tokens are displayed. In the future, all SUI assets and DeFi positions will be visible.*  
+
+---
+
+### **4️⃣ Send SUI from the AI Agent Wallet**  
+- To **send SUI**, type the command:  
+  ```
+  send 1 SUI to WALLET_ADDRESS
+  ```
+- The AI agent will **request confirmation** before executing the transaction.  
+- If you confirm by selecting **OK**, the transaction will be sent to the blockchain, and you will receive a **transaction explorer link**.  
+- This command can be used to:
+  - **Return funds to your personal wallet**  
+  - **Send SUI to an exchange**  
+  - **Transfer SUI to another user**  
+- *Future update: We will add an "Address Book," allowing users to send funds using simpler commands like:*  
+  ```
+  send 10 SUI to my wallet
+  send 100 SUI to mom
+  ```
+
+---
+
+### **5️⃣ Deposit Funds into Navi Protocol**  
+- To **deposit SUI** into the **Navi Protocol lending platform**, use the command:  
+  ```
+  deposit 10 SUI to Navi
+  ```
+- *Future updates: We will support depositing and tracking other assets.*  
+
+---
+
+### **6️⃣ Withdraw Funds from Navi Protocol**  
+- To **withdraw SUI** from Navi Protocol, use the command:  
+  ```
+  withdraw 10 SUI from Navi
+  ```
+
+---
+
+### **7️⃣ Portfolio Analysis with Connected Wallets**  
+- If you connect your **SUI, Solana, and TON wallets**, along with your **Bybit and OKX exchange accounts**, you can analyze your portfolio using the command:  
+  ```
+  portfolio analysis
+  ```
+- *Future update: AI-powered yield farming suggestions tailored to the tokens in your portfolio.*  
+
+---
+
+### **🔹 AI Processing with Atoma LLM**  
+- All commands are processed by the **Atoma LLM**.  
+- **Even minor variations or synonyms in commands will still work.**  
+- The AI will automatically understand and execute transactions based on your input.  
+
+🚀 **Start optimizing your crypto portfolio today!**
+
+
  
 ## WorkFlow
 <img src="https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/WorkFlow.png"  />
