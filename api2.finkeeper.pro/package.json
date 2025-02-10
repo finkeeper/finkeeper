@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@firefly-exchange/library-sui": "^2.5.2",
+    "@mysten/sui": "^1.21.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "navi-sdk": "^1.4.27",
+    "secp256k1": "^5.0.1"
+  },
+  "type": "module"
+}

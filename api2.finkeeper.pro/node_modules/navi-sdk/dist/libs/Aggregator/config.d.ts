@@ -1,0 +1,27 @@
+export declare const AggregatorConfig: {
+    aggregatorBaseUrl: string;
+    aggregatorContract: string;
+    cetusPackageId: string;
+    cetusConfigId: string;
+    turbosPackageId: string;
+    kriyaV3Version: string;
+    kriyaV3PackageId: string;
+    kriyaV2PackageId: string;
+    clockAddress: string;
+    aftermathPackageId: string;
+    aftermathPoolRegistry: string;
+    aftermathFeeVault: string;
+    aftermathTreasury: string;
+    aftermathInsuranceFund: string;
+    aftermathReferralVault: string;
+    deepbookPackageId: string;
+    deepSponsoredPackageId: string;
+    deepSponsoredPoolConfig: string;
+    deepTokenAddress: string;
+    bluefinPackageId: string;
+    bluefinGlobalConfig: string;
+    vSuiPackageId: string;
+    haSuiPackageId: string;
+    haSuiConfigId: string;
+};
+export declare function updateConfig(newConfig: Partial<typeof AggregatorConfig>): void;
