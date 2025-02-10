@@ -1,5 +1,5 @@
 
-![enter image description here](https://pbs.twimg.com/profile_banners/1838997904985567235/1731960723/1500x500)
+![enter image description here](https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/FinKeeper-1550-500.png)
 # Finkeeper
 [FinKeeper](https://finkeeper.pro/app) AI agent & Yield Farming Optimization with portfolio tracker.
 
