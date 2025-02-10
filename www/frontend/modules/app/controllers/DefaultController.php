@@ -1714,14 +1714,41 @@ class DefaultController extends AppController
 		
 		if ($array['type']==3) {
 
-			$answer = AiagentApi::pstatic()->getQuestion($array['data']);
+			$portfolio = [
+				"ton" => [0 => ["active" => []]],
+				"bybit" => [0 => ["active" =>[], "trading"=>[]]],
+				"okx" => [0 => ["active" =>[], "trading"=>[]]],
+				"sol" => [0 => ["active" => []]],
+				"sui" => [0 => ["active" => []]],
+			];
+			
+			if (!empty($array['portfolio'])) {
+				$portfolio = $array['portfolio'];
+			}
+			
+			$portfolio = json_encode($portfolio);
+			
+			$answer = AiagentApi::pstatic()->getQuestion($array['data'], $portfolio);
 			exit(json_encode($answer));	
-			
-			exit(json_encode(['error'=>0, 'message'=>'Success']));
-			
+
 		} else if ($array['type']==4) {
 
 			$answer = WalletApi::pstatic()->createWallet($array['log_id']);
+			exit(json_encode($answer));
+			
+		} else if ($array['type']==5) {
+
+			$answer = WalletApi::pstatic()->transferWallet($array);
+			exit(json_encode($answer));
+			
+		} else if ($array['type']==6) {
+
+			$answer = WalletApi::pstatic()->depositWallet($array);
+			exit(json_encode($answer));
+			
+		} else if ($array['type']==7) {
+
+			$answer = WalletApi::pstatic()->withdrawWallet($array);
 			exit(json_encode($answer));
 			
 		} else {

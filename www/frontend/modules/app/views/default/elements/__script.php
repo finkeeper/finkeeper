@@ -1934,7 +1934,7 @@ $this->registerJs('
 			if (typeof message==="undefined" || message===undefined || !message) {
 				return false;
 			} 
-			
+
 			data = message;
 
 		} else {
@@ -3227,7 +3227,7 @@ $this->registerJs('
 			
 		}
 		
-		var apppic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
+		var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
 		
 		var appname = "FinKeeper";
 		
@@ -3250,7 +3250,7 @@ $this->registerJs('
 				if (result==identify) {
 					var str = item.slice(search);
 					if (identify==toIdentify){
-						pic = apppic;
+						pic = appic;
 						name = appname;
 						item = str;
 						return "";
@@ -3275,18 +3275,118 @@ $this->registerJs('
 			return false;
 		}
 		
+		var portfolio = userActivesMin;
+
 		jQuery.ajax({
 			"url": "/app/alassistant",
 			"type": "post",
 			"dataType": "json",
 			"contentType": "application/json",
-			"data": JSON.stringify({"data": str, "log_id": log_id, sc: sc, type: 3}),
+			"data": JSON.stringify({"data": str, "portfolio": portfolio, "log_id": log_id, sc: sc, type: 3}),
 			"success": function(response){
-
+	
 				if (response) {
 				
 					if (!response.error) {
+						
+						var balance = 100; //parseFloat('.$wallet['sui']['balance'].');
 
+						if (
+							typeof response.message.function!=="undefined" &&
+							response.message.function!==undefined &&
+							response.message.function.function==1 &&
+							response.message.function.name=="transfer"
+						) {
+
+							var amount = parseFloat(response.message.function.amount);
+				
+							var short_address1 = response.message.function.address;
+							var address1 = response.message.function.address;
+							short_address1 = string_replace(short_address1, "...", 8, 8);
+							var short_address2 = "'.$wallet['sui']['address'].'";
+							short_address2 = string_replace(short_address2, "...", 8, 8);
+							
+							if (amount==0) {
+								
+								response.message = "'.Yii::t('Api', 'Amount is empty').'";
+								
+							} else if(amount>balance) {
+								
+								response.message = "'.Yii::t('Api', 'Not enough assets').'";
+
+							} else {
+								
+								response.message = "'.Yii::t('Api', 'Transfer  Coins').'<p></p><button onClick=\"transferWalletProcess(\'" + amount + "\', \'" + address1 + "\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
+							}
+
+							response.message = response.message.replaceAll("{coin}", amount);
+							response.message = response.message.replaceAll("{wallet}", short_address1);
+							response.message = response.message.replaceAll("{createwallet}", short_address2);
+							
+						}
+					
+						if (
+							typeof response.message!=="undefined" &&
+							response.message!==undefined &&
+							response.message &&
+							typeof response.message.function!=="undefined" &&
+							response.message.function!==undefined &&		
+							response.message.function &&
+							typeof response.message.function.function!=="undefined" &&
+							response.message.function.function!==undefined &&
+							response.message.function.function.function==2 &&
+							response.message.function.function.name=="deposit"
+						) {
+		
+							var amount = parseFloat(response.message.function.function.amount);
+		
+							var short_address2 = "'.$wallet['sui']['address'].'";
+							short_address2 = string_replace(short_address2, "...", 8, 8);
+				
+							if (amount==0) {
+								
+								response.message = "'.Yii::t('Api', 'Amount is empty').'";
+								
+							} else if(amount>balance) {
+								
+								response.message = "'.Yii::t('Api', 'Not enough assets Deposit').'";
+
+							} else {
+								
+								response.message = "'.Yii::t('Api', 'Deposit  Coins').'<p></p><button onClick=\"depositWalletProcess(\'" + amount + "\', \'sui\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
+							}
+							
+							response.message = response.message.replaceAll("{coin}", amount);
+							response.message = response.message.replaceAll("{wallet}", short_address2);
+						}
+						
+						/*
+						if (
+							typeof response.message.function.function!=="undefined" &&
+							response.message.function.function!==undefined &&
+							response.message.function.function.function==3 &&
+							response.message.function.function.name=="withdraw"
+						) {
+		
+							var amount = parseFloat(response.message.function.function.amount);
+		
+							var short_address2 = "'.$wallet['sui']['address'].'";
+							short_address2 = string_replace(short_address2, "...", 8, 8);
+							
+							if (amount==0) {
+								
+								response.message = "'.Yii::t('Api', 'Amount is empty').'";
+
+							} else {
+								
+								response.message = "'.Yii::t('Api', 'Withdraw  Coins').'<p></p><button onClick=\"withdrawWalletProcess(\'" + amount + "\', \'sui\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
+							}
+							
+							response.message = response.message.replaceAll("{coin}", amount);
+							response.message = response.message.replaceAll("{wallet}", short_address2);
+						}
+						*/
+	
 						var mess = toIdentify + response.message;
 						var chat = abcpLocalStorage(12);
 
@@ -3329,7 +3429,7 @@ $this->registerJs('
 									var str = item.slice(search);
 									
 									if (identify==toIdentify){
-										pic = apppic;
+										pic = appic;
 										name = appname;
 										item = str;
 									} else {
@@ -3346,18 +3446,20 @@ $this->registerJs('
 							$("#chat-form-as").append(html);
 
 						});
+						
+						changeButtonChat(0);	
 
 					} else {		
 						addNotify(response.message, "error");
+						changeButtonChat(0);
 						return false;
 					}
 				
 				} else {
 					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					changeButtonChat(0);
 					return false;
 				}
-
-				changeButtonChat(0);	
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				addNotify(thrownError, "error");
@@ -3379,8 +3481,6 @@ $this->registerJs('
 			"contentType": "application/json",
 			"data": JSON.stringify({data: "create", "log_id": log_id, sc: sc, type: 4}),
 			"success": function(response){
-				
-				console.log(response);
 
 				jQuery("#create-aiagent-wallet").html(buttonName);
 
@@ -3388,7 +3488,7 @@ $this->registerJs('
 				
 					if (!response.error) {
 					
-						var html = "'.Yii::t('Api', 'AI agent SUI wallet').':&nbsp;" + string_replace(response.message, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as-wallet-copy\" data-address=\"" + response.message + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + response.message + "\" target=\"_blank\" id=\"as-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a><br>'.Yii::t('Api', 'Balance').':&nbsp;0";
+						var html = "'.Yii::t('Api', 'AI agent SUI wallet').':&nbsp;" + string_replace(response.message, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as-wallet-copy\" data-address=\"" + response.message + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + response.message + "\" target=\"_blank\" id=\"as-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a><br>'.Yii::t('Api', 'Balance').':&nbsp;0&nbsp;SUI";
 						
 						jQuery("#chat-active-page .create_aiagent_wallet").html(html);
 		
@@ -3409,6 +3509,256 @@ $this->registerJs('
 			}
 		});		
 	}
+	
+	function transferWalletProcess(amount, address) {
+		
+		if (
+			typeof amount==="undefined" ||
+			typeof address==="undefined" ||
+			amount===undefined ||
+			address===undefined ||
+			!amount ||
+			!address
+		) {
+			addNotify("'.Yii::t('Error', 'Missing amount or address').'", "error");
+			return false;
+		}
+		
+		var data = {
+			"amount": amount,
+			"address": address,
+		};
+		
+		jQuery.ajax({
+			"url": "/app/alassistant",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 5}),
+			"success": function(response){
+
+				if (response) {
+				
+					if (!response.error) {
+						
+						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
+		
+						var appname = "FinKeeper";
+						
+						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
+						
+						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
+						
+						var mess = toIdentify + item;
+	
+						var chat = abcpLocalStorage(12);
+						
+						if (typeof chat==="undefined" || chat===undefined || !chat) {
+	
+							var arr = [];
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+
+						} else {
+							
+							var arr = JSON.parse(chat);
+							var len = arr.length;
+							if (len>=10) {
+								arr.shift();
+							}
+
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+						}
+						
+						abcpLocalStorage(11, value);
+	
+						$(html).prependTo("#chat-form-as"); 
+
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}
+
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				addNotify(thrownError, "error");
+				return false;
+			}
+		});		
+	}
+	
+	function depositWalletProcess(amount, token) {
+		
+		if (
+			typeof amount==="undefined" ||
+			typeof token==="undefined" ||
+			amount===undefined ||
+			token===undefined ||
+			!amount ||
+			!token
+		) {
+			addNotify("'.Yii::t('Error', 'Missing amount or token').'", "error");
+			return false;
+		}
+		
+		var data = {
+			"amount": amount,
+			"token": "sui",
+		};
+		
+		jQuery.ajax({
+			"url": "/app/alassistant",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 6}),
+			"success": function(response){
+			
+				if (response) {
+				
+					if (!response.error) {
+						
+						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
+		
+						var appname = "FinKeeper";
+						
+						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
+						
+						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
+						
+						var mess = toIdentify + item;
+	
+						var chat = abcpLocalStorage(12);
+						
+						if (typeof chat==="undefined" || chat===undefined || !chat) {
+	
+							var arr = [];
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+
+						} else {
+							
+							var arr = JSON.parse(chat);
+							var len = arr.length;
+							if (len>=10) {
+								arr.shift();
+							}
+
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+						}
+						
+						abcpLocalStorage(11, value);
+	
+						$(html).prependTo("#chat-form-as"); 
+						
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}			
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				//addNotify(thrownError, "error");
+				return false;
+			}
+		});
+	}
+	
+	function withdrawWalletProcess(amount, token) {
+		
+		if (
+			typeof amount==="undefined" ||
+			typeof token==="undefined" ||
+			amount===undefined ||
+			token===undefined ||
+			!amount ||
+			!token
+		) {
+			addNotify("'.Yii::t('Error', 'Missing amount or token').'", "error");
+			return false;
+		}
+		
+		var data = {
+			"amount": amount,
+			"token": "sui",
+		};
+		
+		jQuery.ajax({
+			"url": "/app/alassistant",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 7}),
+			"success": function(response){
+				
+				console.log(response);
+				return false;
+			
+				if (response) {
+				
+					if (!response.error) {
+						
+						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
+		
+						var appname = "FinKeeper";
+						
+						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
+						
+						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
+						
+						var mess = toIdentify + item;
+	
+						var chat = abcpLocalStorage(12);
+						
+						if (typeof chat==="undefined" || chat===undefined || !chat) {
+	
+							var arr = [];
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+
+						} else {
+							
+							var arr = JSON.parse(chat);
+							var len = arr.length;
+							if (len>=10) {
+								arr.shift();
+							}
+
+							arr.push(mess);
+							var value = JSON.stringify(arr);
+						}
+						
+						abcpLocalStorage(11, value);
+	
+						$(html).prependTo("#chat-form-as");
+						
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+				
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}			
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				addNotify(thrownError, "error");
+				return false;
+			}
+		});
+	}
 
 	//document ready
 	jQuery(document).ready(function($) {	
@@ -3421,7 +3771,6 @@ $this->registerJs('
 			$("#chat-active-input").val("");
 			sendMessageAl(text, fromIdentify, username, userpic);		
 		});
-	
 
 		$("#smart-toy").on("click", function() {
 			
@@ -3470,70 +3819,70 @@ $this->registerJs('
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question Bybit UID')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit UID'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon2").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question Bybit APIKey')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit APIKey'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon3").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question Bybit APISecret')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit APISecret'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon6").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question OKX UID')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX UID'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon7").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question OKX APIKey')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX APIKey'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon8").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question OKX APISecret')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX APISecret'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon9").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question OKX Password')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX Password'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon10").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question SOL Address')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question SOL Address'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#question-addon11").popover({
 			placement: "left",
 			content: "This is the body of Popover",
 			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'Question SUI Address')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question SUI Address'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		$("#smart-toy, #smart-toy-active").popover({
 			placement: "right",
 			content: "This is the body of Popover",
 			trigger: "hover",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'AI assistant')).'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'AI assistant'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 
 		// Popover menu
@@ -3542,7 +3891,7 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"ton_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"ton_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		jQuery("#sol-wallet-click-button").popover({
@@ -3550,7 +3899,7 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sol_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sol_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 
 		jQuery("#bybit-exchange-click-button").popover({
@@ -3558,7 +3907,7 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"bybit_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"bybit_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		jQuery("#okx-exchange-click-button").popover({
@@ -3566,7 +3915,7 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"okx_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"okx_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 		
 		jQuery("#sui-wallet-click-button").popover({
@@ -3574,7 +3923,14 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sui_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sui_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
+		});
+		
+		$("#question-addon-chat").popover({
+			placement: "left",
+			content: "This is the body of Popover",
+			trigger: "focus",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question FinKeeper Help'), "\r\n", "<br>")).'<br><a href=\"https://finkeeper.gitbook.io/finkeeper/en\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
 		});
 	});
 ', yii\web\View::POS_END);

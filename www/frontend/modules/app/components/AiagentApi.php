@@ -37,7 +37,7 @@ class AiagentApi {
 	/**
 	 * getQuestion($message='') 
 	 */
-    public function getQuestion($message='') 
+    public function getQuestion($message='', $portfolio='') 
 	{
 		if (empty($message)) {
 			return [
@@ -51,8 +51,8 @@ class AiagentApi {
 			'Authorization: Basic '.$this->api_key,
 		];
 
-		$message = addslashes($message);
-		$api_url = $this->api_url.'chat?input_text='.urlencode($message);
+		$message =urlencode(addslashes($message));
+		$api_url = $this->api_url.'chat?input_text='.$message;
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $api_url);
@@ -60,11 +60,14 @@ class AiagentApi {
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $portfolio);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
 		curl_setopt($curl, CURLOPT_PORT, 8443);
 		$response = curl_exec($curl);
 		curl_close($curl);
+		
+		//error_log($response."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 
 		if (empty($response) || !is_string($response)) {
 			return [

@@ -43,6 +43,8 @@ Yii::$app->view->render('elements/__script',[
 	'page_url' => $page_url,
 	'username' => $username,
 	'userpic' => $userpic,
+	'wallet' => $wallet,
+	'lang' => $lang,
 ]);
 
 

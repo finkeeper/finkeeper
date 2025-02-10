@@ -10,6 +10,7 @@ use common\models\Chatgpt;
 use common\models\Clients;
 use common\models\Tokens;
 use common\models\Targets;
+use common\models\Exchange;
 use common\models\Referrals;
 use common\models\ReferralsProgramm;
 use common\models\PointsLog;
@@ -1762,18 +1763,27 @@ class ApiChatbot extends Model
 	 */
 	public static function getWallet($id=0) 
 	{
+		$data = [
+			'sui' => [
+				'address' => '', 
+				'balance' => 0, 
+				'price' => 0
+			]
+		];
+		
 		if (empty($id)) {
-			return false;
+			return $data;
 		} 
 		
 		$modelTokens = Tokens::findOne(['id_client' => $id, 'service_type' => 6, 'deleted' => Clients::STATUS_NOT_DELETED]);
 		if (empty($modelTokens) || empty($modelTokens->identify1)) {
-			return false;
+			return $data;
 		}
 		
 		$sui = new SUIApi;
 		$sui->address = $modelTokens->identify1;
 		$balance = 0;
+		$value = 0;
 		
 		$response = $sui->getWalletBalance();
 		if (empty($response['error'])) {
@@ -1787,6 +1797,27 @@ class ApiChatbot extends Model
 					
 					$balance = $val['balance'];
 
+					if (empty($val['price'])) {
+						$price = ApiChatbot::getPrice($val['symbolid'], $currency, 3);
+						if (empty($price['error']) && !empty($price['data'])) {
+							$value = $price['data']*$balance;	
+						}
+					} else {
+						$price['data'] = $val['price'];
+						$value = $val['price']*$balance;
+					}
+					
+					if (!empty($value)) {
+						if (is_float($value)) {
+							$value = number_format($value, 12, '.', '');
+						} else if (is_int($value)) {
+							$value = number_format($value, 12, '.', '');
+						} else {
+							$value = $value*1;
+							$value = number_format($value, 12, '.', '');
+						}
+					}
+
 					if (!empty($balance)) {
 						if (is_float($balance)) {
 							$valbalance = number_format($balance, 12, '.', '');
@@ -1798,11 +1829,18 @@ class ApiChatbot extends Model
 						}
 					}
 					
-					$balance = Exchange::formatValue($balance);					
+					$value = Exchange::formatValue($value, 1);
+					$balance = Exchange::formatValue($balance, 1);					
 				}
 			}
 		}
 		
-		return ['address' => $modelTokens->identify1, 'balance' => $balance];
+		return [
+			'sui' => [
+				'address' => $modelTokens->identify1, 
+				'balance' => $balance, 
+				'price' => $value
+			]
+		];
 	}
 }

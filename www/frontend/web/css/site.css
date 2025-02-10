@@ -1374,6 +1374,19 @@ tc-root {
 #chat-active-page #as-rewiew-wallet {
 	cursor:pointer;
 }
+#chat-active-page #transfer-ok,
+#chat-active-page #transfer-cancel {
+	font-size:18px;
+}
+#chat-active-page #question-addon-chat {
+	position:absolute;
+	top:150px;
+	right:20px;
+	color:#ccc;
+	font-size:20px;
+	cursor:pointer;
+	z-index:9991
+}
 /*END: Chat */
 /* END: Actives Page */
 /* Bybit Form Page */

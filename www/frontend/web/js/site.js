@@ -1677,10 +1677,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
-	$('#create-aiagent-wallet').on('click', function() {
-		createWalletProcess();
-	});
-	
 	document.addEventListener( 'keyup', function(event) {
 		if(event.keyCode == 13) {
 			if (jQuery("#asModal").hasClass("show")) {
@@ -1692,5 +1688,9 @@ jQuery(document).ready(function($) {
 				$('#chat-active-send').trigger('click');
 			}
 		}
+	});
+	
+	$("#asModal").delegate("#create-aiagent-wallet", "click", function() {
+		createWalletProcess();
 	});
 });
