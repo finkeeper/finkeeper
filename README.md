@@ -1,16 +1,20 @@
 
 ![enter image description here](https://pbs.twimg.com/profile_banners/1838997904985567235/1731960723/1500x500)
 # Finkeeper
-[FinKeeper](https://t.me/finkeeper\_app\_bot) is an assets tracking and yield farming Telegram mini-app.
+[FinKeeper](https://finkeeper.pro/app) AI agent & Yield Farming Optimization with portfolio tracker.
 
-FinKeeper is a Telegram mini app in that will show you a complete picture of your crypto assets in different networks, blockchains, from different wallets and exchanges.
+A modern crypto investor stores assets across multiple wallets, DeFi platforms, and exchange accounts, which complicates asset management. Additionally, using DeFi is inaccessible for most people due to the high complexity of interfaces and interactions.
 
-It will also allow you to use the yield farming function — get income on your assets in literally one click, choosing the best offer right inside your portfolio.
+FinKeeper provides a complete financial overview across multiple crypto wallets and exchanges. It serves as a single window into the world of WEB3, offering a simple and intuitive interface. With FinKeeper, users can:
+Get a complete overview of their portfolio
+Set buy and sell goals (notifications available now, automated orders coming soon)
 
-A useful bonus for all DeFi fans will be the APR calculator, which can quickly calculate the real benefit of any protocol for your investment amount.
+The built-in AI agent is a guide and friend in the world of WEB3:
+Provides tips on coins and answers questions.
+It overcomes the complexities of DeFi, ensuring high returns through smart pool selection, automatic rebalancing between pools, and auto-compounding
 
 ### Integrations
-Solana, TON, SUI, Bybit, OKX
+SUI, Solana, TON, Bybit, OKX
 ![enter image description here](https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png) ![enter image description here](https://s2.coinmarketcap.com/static/img/coins/64x64/23156.png) ![enter image description here](https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png) ![enter image description here](https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/aqua.png)
 
 # Links
