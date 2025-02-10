@@ -50,7 +50,9 @@ SUI, ATOMA, NAVI, BlueFIN, Bybit, OKX, Solana, TON, Ston.fi
 
 <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png" height="64" /> <img src="https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/fin-atoma.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/29296.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/8724.png" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png" width="64" height="64" /> <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/27311.png" width="64" height="64" />
 
-# Links
+## Team
+![enter image description here](https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/finkeeper-Team.png)
+
 ## For users
 -   [FinKeeper](https://finkeeper.pro/app)
 -   [X.com (Twitter)](https://x.com/FinKeeper/)
