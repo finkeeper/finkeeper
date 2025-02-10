@@ -3,8 +3,7 @@
 # Finkeeper
 [FinKeeper](https://finkeeper.pro/app) AI agent & Yield Farming Optimization with portfolio tracker.
 
-Solana AI Hackathon [participant](https://www.solanaaihackathon.com/projects).
-Semi-final of the [TON Hackathon](https://blog.ton.org/hackers-league-semi-finalists-revealed).
+Solana AI Hackathon [participant](https://www.solanaaihackathon.com/projects). Semi-final of the [TON Hackathon](https://blog.ton.org/hackers-league-semi-finalists-revealed). FinKeeper received a grant from Stone.fi (No. 1 DEX on TON with TVL over $150 million).
 
 ## 🌐 A Modern Crypto Investor's Challenge
 
