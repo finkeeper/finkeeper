@@ -53,7 +53,7 @@ SUI, ATOMA, NAVI, BlueFIN, Bybit, OKX, Solana, TON, Ston.fi
 ## Team
 ![enter image description here](https://sheremetev.aoserver.ru/storage/8ae7c3e09485cbe7701b2aa305ba9078/Marketing/FinKeeper/finkeeper-Team.png)
 
-## For users
+## Links
 -   [FinKeeper](https://finkeeper.pro/app)
 -   [X.com (Twitter)](https://x.com/FinKeeper/)
 -   [TG channel (EN)](https://t.me/+EcdwEgf0kjVmNjli)
