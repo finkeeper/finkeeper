@@ -33,7 +33,9 @@ FinKeeper provides a complete financial overview across multiple crypto wallets 
 - **Navi Protocol** – A decentralized lending and borrowing protocol on SUI.  
   - Used for **depositing SUI** to earn yield and **withdrawing funds** from staking pools.  
   - _Future plans_: use for AI-driven suggestions for maximizing returns via DeFi strategies (leverage farming, porfolio rebalancing).
-Backend readme: https://github.com/finkeeper/finkeeper/tree/main/api2.finkeeper.pro
+ 
+    
+Backend API readme: https://github.com/finkeeper/finkeeper/tree/main/api2.finkeeper.pro
 
 - **FastAPI** – A high-performance Python-based API framework for handling multi-chain operations.
 - **Uvicorn** – An ASGI server optimized for running FastAPI.
