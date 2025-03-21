@@ -16,8 +16,13 @@ use frontend\modules\app\components\SOLApi;
 use frontend\modules\app\components\GPTApi2;
 use frontend\modules\app\components\AiagentApi;
 use frontend\modules\app\components\SUIApi;
+use frontend\modules\app\components\SUIApi2;
+use frontend\modules\app\components\APTApi;
+use frontend\modules\app\components\ETHApi;
 use frontend\modules\app\components\WalletApi;
 use frontend\modules\app\components\AppController;
+use frontend\modules\app\components\LaunchpoolsApi;
+use frontend\modules\app\components\AptospoolsApi;
 
 /**
  * Default controller for the `service` module
@@ -26,7 +31,6 @@ class DefaultController extends AppController
 {		
 	public $defaultAction = 'index'; 
 	public $accessUser = false;
-	public $limitCoins = 10;
 	
 	/**
      * @init
@@ -156,6 +160,18 @@ class DefaultController extends AppController
 			]);
 		}
 	}
+	
+	/** 
+	 * https://api.bank.ctfn.pro/v3/datas/stakingcalc
+	 */
+	public function actionStakingcalc($id=0)
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+
+		return $this->render('stakingcalc', [
+           'id' => $id,
+        ]);
+	}
 
 	/** 
 	 * actionGetbybitbalance
@@ -166,7 +182,7 @@ class DefaultController extends AppController
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
-
+		
 		if (empty($array['type'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
 		}
@@ -175,11 +191,25 @@ class DefaultController extends AppController
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
 		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+		
 		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
 		
-		if ($array['type']==1) {
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			return false;		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
 			
 			if (empty($array['uid'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Bybit UID')]));			
@@ -192,18 +222,14 @@ class DefaultController extends AppController
 			if (empty($array['apisecret'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Bybit API Secret')]));			
 			}
-			
-			if (empty($array['log_id'])) {
-				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
-			}
-			
+	
 			$bybit = new BybitApi;
 			$bybit->api_key = $array['apikey'];
 			$bybit->secret_key = $array['apisecret'];
 			$bybit->uid = $array['uid'];
-			
-			$save_tokens = ApiChatbot::saveTokens(2, $array['log_id'], $array['uid'], $array['apikey'], $array['apisecret']);
 
+			$save_tokens = ApiChatbot::saveTokens(2, $array['log_id'], $array['uid'], $array['apikey'], $array['apisecret'], '', '', $exname);
+	
 			if (
 				empty($save_tokens) || 
 				!is_array($save_tokens) || 
@@ -211,266 +237,110 @@ class DefaultController extends AppController
 			) {
 				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}
-			
-		} else if ($array['type']==2) {
-			
-			if (empty($array['log_id'])) {
-				return false;			
+		} else if ($array['type']==3) {
+
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Bybit Account ID')]));
 			}
 			
-			$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
-			if (empty($modelChatbotLog)) {
-				return false;		
+			if (!ApiChatbot::saveStatusConnect(2, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
 			}
+		}
+
+		$arrayTokens = ApiChatbot::getBybitTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens) || !is_array($arrayTokens)) {
+			return false;		
+		}
+
+		$currency = Exchange::getDefaultCurrency();
+		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
+		$summ = 0;
+		$sum_active = 0;
+		$sum_trade = 0;
+		$status_connect = 0;
+
+		foreach ($arrayTokens as $modelTokens) {
 			
-			$modelTokens = ApiChatbot::getBybitTokens($modelChatbotLog->id_client);
-			if (empty($modelTokens)) {
-				return false;		
+			if (empty($modelTokens->user_connect)) {
+				continue;
 			}
+		
+			$exname = $modelTokens->exname;
 			
 			$bybit = new BybitApi;
 			$bybit->api_key = $modelTokens->identify2;
 			$bybit->secret_key = $modelTokens->identify3;
 			$bybit->uid = $modelTokens->identify1;
-			
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect type balance')]));	
-		}
 
-		$currency = Exchange::getDefaultCurrency();
-		$grafema = Exchange::getGrafemCurrency($currency);
-		$summ = 0;
-		$sum_active = 0;
-		$sum_trade = 0;
-		$error = [];
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'trade' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
 		
-		$data =[
-			'active' => [],
-			'trade' => [],
-		];
+			$list_coins = [];
 		
-		$list_coins = [];
-
-		$response = $bybit->getWalletBalance('FUND');
-		if (empty($response['error'])) {
+			$response = $bybit->getWalletBalance();
+			if (empty($response['error'])) {
 			
-			if (
-				!empty($response['data']['result']) && 
-				!empty($response['data']['result']['balance'])
-			) {
-				$inc=1;
-				$index=1;
-				foreach ($response['data']['result']['balance'] as $val) {
+				if (!empty($response['data']['active'])) {
+					foreach ($response['data']['active'] as $key=>$val) {
 			
-					$value = 0;
-
-					if ($inc>$this->limitCoins) {
-						$inc=1;
-						$index++;		
-					}
-		
-					$list_coins[$index][] = strtoupper($val['coin']);
-					$inc++;
-
-					if (empty($val['walletBalance']) || empty($val['coin'])) {
-						continue;
-					}
-	
-					$price = ApiChatbot::getPrice($val['coin'], $currency, 1);
-					if (empty($price['error']) && !empty($price['data'])) {
-						$value = $price['data']*$val['walletBalance'];	
-					}
-	
-					$img = '/images/cryptologo/default_coin.webp';
-					$img_name = strtolower($val['coin']);
-					$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-
-					if (file_exists($path)) {
-						$img = '/images/cryptologo/'.$img_name.'.webp';
-					}
-			
-					if (!empty($value)) {
-						if (is_float($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else if (is_int($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else {
-							$value = $value*1;
-							$value = number_format($value, 12, '.', '');
-						}
-						
-						$summ += $value;
-						$sum_active += $value;
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;
 					}
 				
-						
-					if (!empty($val['walletBalance'])) {
-						if (is_float($val['walletBalance'])) {
-							$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-						} else if (is_int($val['walletBalance'])) {
-							$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-						} else {
-							$val['walletBalance'] = $val['walletBalance']*1;
-							$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-						}
-					}
-			
-					$currency_value = Exchange::formatValue($value);
-					$class = 'middle_value';
-					if ($currency_value<1) {
-						$class = 'small_value';
-					}
-				
-					$data['active'][] = [
-						'balance' => Exchange::formatValue($val['walletBalance']),
-						'name' => $val['coin'],
-						'currency' => $currency,
-						'sort' => $value,
-						'currency_value' => $currency_value,
-						'img' => $img,
-						'symbol' => $val['coin'],
-						'symbolid' => strtolower($val['coin']),
-						'grafema' => $grafema,
-						'class' => $class,
-						'apr' => '',
-						'price' => $price['data'],
-						'asset' => $bybit->uid,
-					];	
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+
 				}
 				
-				usort($data['active'], [$this, 'cmp']);
-
-			} else {
-				$error[] = Yii::t('Error', 'Not response');
-			}
+				if (!empty($response['data']['trade'])) {
+					foreach ($response['data']['trade'] as $key=>$val) {
 			
-		} else {
-			$error[] = $response['message'];
-		}
-	
-		$str_coins = '';
-		if (!empty($list_coins) && is_array($list_coins)) {
-			
-			foreach ($list_coins as $coins) {
-
-				$str_coins = implode(',', $coins);
-
-				$response = $bybit->getWalletBalance('UNIFIED', $str_coins);
-
-				if (empty($response['error'])) {
-					
-					if (
-						!empty($response['data']['result']) && 
-						!empty($response['data']['result']['balance'])
-					) {
-						
-						foreach ($response['data']['result']['balance'] as $val) {
-						
-							$value = 0;
-							
-							if (empty($val['walletBalance']) || empty($val['coin'])) {
-								continue;
-							}
-							
-							$price = ApiChatbot::getPrice($val['coin'], $currency, 1);
-							if (empty($price['error']) && !empty($price['data'])) {
-								$value = $price['data']*$val['walletBalance'];	
-							}
-							
-							$img = '/images/cryptologo/default_coin.webp';
-							$img_name = strtolower($val['coin']);
-							$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-
-							if (file_exists($path)) {
-								$img = '/images/cryptologo/'.$img_name.'.webp';
-							}
-
-							if (!empty($value)) {
-								if (is_float($value)) {
-									$value = number_format($value, 12, '.', '');
-								} else if (is_int($value)) {
-									$value = number_format($value, 12, '.', '');
-								} else {
-									$value = $value*1;
-									$value = number_format($value, 12, '.', '');
-								}
-								
-								$summ += $value;
-								$sum_trade += $value;
-							}
-							
-							if (!empty($val['walletBalance'])) {
-								if (is_float($val['walletBalance'])) {
-									$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-								} else if (is_int($val['walletBalance'])) {
-									$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-								} else {
-									$val['walletBalance'] = $val['walletBalance']*1;
-									$val['walletBalance'] = number_format($val['walletBalance'], 12, '.', '');
-								}
-							}
-							
-							$currency_value = Exchange::formatValue($value);
-							$class = 'middle_value';
-							if ($currency_value<1) {
-								$class = 'small_value';
-							}
-					
-							$data['trade'][] = [
-								'balance' => Exchange::formatValue($val['walletBalance']),
-								'name' => $val['coin'],
-								'currency' => $currency,
-								'sort' => $value,
-								'currency_value' => $currency_value,
-								'img' => $img,
-								'symbol' => $val['coin'],
-								'symbolid' => strtolower($val['coin']),
-								'grafema' => $grafema,
-								'class' => $class,
-								'apr' => '',
-								'price' => $price['data'],
-								'asset' => $bybit->uid,
-							];	
-						}
-						
-						usort($data['trade'], [$this, 'cmp']);
-						
-					} else {
-						$error[] = Yii::t('Error', 'Not response');
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['trade'][] = $val;
 					}
+				
+					usort($data[$modelTokens->identify1]['trade'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+
+				}
+			
+			}
+
+			$data[$modelTokens->identify1]['error'] = $response['errors'];
+			
+			if ($array['type']==2 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(2, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 3, $modelTokens->id_token)) {
 					
-				} else {
-					$error[] = $response['message'];
+					}
 				}
 			}
-		}
-
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(2, $array['log_id'], 1)) {
-			$status_connect = 1;
-		}
-
-		if ($array['type']==1 && !empty($save_tokens['change_token'])) {
-			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 3)) {
-			
-			}
-		}
-		
-		$err_st = 0;
-		if (!empty($error)) {
-			$err_st = 1;
 		}
 
 		exit(json_encode([
-			'error'=>$err_st, 
+			'error'=>0, 
+			'connect' => $status_connect,
 			'data'=>$data,
 			'summ' => Exchange::formatValue($summ),
 			'sum_active' => Exchange::formatValue($sum_active),
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
-			'connect' => $status_connect,
-			'message' => $error,
-			'address' => $bybit->uid,
 		]));
 	}
 	
@@ -492,11 +362,25 @@ class DefaultController extends AppController
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
 		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
 		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
 		
-		if ($array['type']==1) {
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+		
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
 			
 			if (empty($array['password'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing OKX Password')]));			
@@ -514,18 +398,14 @@ class DefaultController extends AppController
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing OKX UID')]));			
 			}
 			
-			if (empty($array['log_id'])) {
-				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
-			}
-			
 			$okx = new OKXApi;
 			$okx->api_key = $array['apikey'];
 			$okx->secret_key = $array['apisecret'];
 			$okx->password = $array['password'];
 			$okx->uid = $array['uid'];
 			
-			$save_tokens = ApiChatbot::saveTokens(3, $array['log_id'], $array['password'], $array['apikey'], $array['apisecret'], $array['uid']);
-
+			$save_tokens = ApiChatbot::saveTokens(3, $array['log_id'], $array['uid'], $array['apikey'], $array['apisecret'], $array['password'], '', $exname);
+	
 			if (
 				empty($save_tokens) || 
 				!is_array($save_tokens) || 
@@ -534,238 +414,111 @@ class DefaultController extends AppController
 				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}
 			
-		} else if ($array['type']==2) {	
-
-			if (empty($array['log_id'])) {
-				return false;			
-			}
-	
-			$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
-			if (empty($modelChatbotLog)) {
-				return false;		
+		} else if ($array['type']==3) {	
+		
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing OKX Account ID')]));
 			}
 			
-			$modelTokens = ApiChatbot::getOkxTokens($modelChatbotLog->id_client);
-			if (empty($modelTokens)) {
-				return false;		
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
 			}
-
-			$okx = new OKXApi;
-			$okx->api_key = $modelTokens->identify2;
-			$okx->secret_key = $modelTokens->identify3;
-			$okx->password = $modelTokens->identify1;
-			$okx->uid = $modelTokens->identify4;
-
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect type balance')]));	
 		}
 		
+		$arrayTokens = ApiChatbot::getOkxTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		}
+
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
 		$summ = 0;
 		$sum_active = 0;
 		$sum_trade = 0;
-		$error = [];
-		
-		$data =[
-			'active' => [],
-			'trade' => [],
-		];
-		
-		$response = $okx->getWalletBalance('FUND');
-		if (empty($response['error'])) {
-			
-			if (!empty($response['data'])) {
-				
-				foreach ($response['data'] as $val) {
-			
-					$value = 0;
-
-					if (empty($val['availBal']) || empty($val['ccy'])) {
-						continue;
-					}
-					
-					$price = ApiChatbot::getPrice($val['ccy'], $currency, 3);
-					if (empty($price['error']) && !empty($price['data'])) {
-						$value = $price['data']*$val['availBal'];	
-					}
-					
-					$img = '/images/cryptologo/default_coin.webp';
-					$img_name = strtolower($val['ccy']);
-					$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-
-					if (file_exists($path)) {
-						$img = '/images/cryptologo/'.$img_name.'.webp';
-					}
-					
-					if (!empty($value)) {
-						if (is_float($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else if (is_int($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else {
-							$value = $value*1;
-							$value = number_format($value, 12, '.', '');
-						}
-						
-						$summ += $value;
-						$sum_active += $value;
-					}
-						
-					if (!empty($val['availBal'])) {
-						if (is_float($val['availBal'])) {
-							$val['availBal'] = number_format($val['availBal'], 12, '.', '');
-						} else if (is_int($val['availBal'])) {
-							$val['availBal'] = number_format($val['availBal'], 12, '.', '');
-						} else {
-							$val['availBal'] = $val['availBal']*1;
-							$val['availBal'] = number_format($val['availBal'], 12, '.', '');
-						}
-					}
-					
-					$currency_value = Exchange::formatValue($value);
-					$class = 'middle_value';
-					if ($currency_value<1) {
-						$class = 'small_value';
-					}
-			
-					$data['active'][] = [
-						'balance' => Exchange::formatValue($val['availBal']),
-						'name' => $val['ccy'],
-						'currency' => $currency,
-						'sort' => $value,
-						'currency_value' => $currency_value,
-						'img' => $img,
-						'symbol' => $val['ccy'],
-						'symbolid' => strtolower($val['ccy']),
-						'grafema' => $grafema,
-						'class' => $class,
-						'apr' => '',
-						'price' => $price['data'],
-						'asset' => $okx->uid,
-					];		
-				}
-
-				usort($data['active'], [$this, 'cmp']);
-
-			} else {
-				$error[] = Yii::t('Error', 'Not response');
-			}
-
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>$response['message']]));
-		}
-		
-		$response = $okx->getWalletBalance('UNIFIED');
-		if (empty($response['error'])) {
-			
-			if (!empty($response['data'])) {
-				
-				foreach ($response['data'] as $val) {
-				
-					if (!empty($val['details']) && is_array($val['details'])) {
-					
-						foreach ($val['details'] as $asset) {					
-			
-							$value = 0;
-
-							if (empty($asset['availBal']) || empty($asset['ccy'])) {
-								continue;
-							}
-
-							$price = ApiChatbot::getPrice($asset['ccy'], $currency, 3);
-							if (empty($price['error']) && !empty($price['data'])) {
-								$value = $price['data']*$asset['availBal'];	
-							}
-					
-							$img = '/images/cryptologo/default_coin.webp';
-							$img_name = strtolower($asset['ccy']);
-							$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-
-							if (file_exists($path)) {
-								$img = '/images/cryptologo/'.$img_name.'.webp';
-							}
-					
-							if (!empty($value)) {
-								if (is_float($value)) {
-									$value = number_format($value, 12, '.', '');
-								} else if (is_int($value)) {
-									$value = number_format($value, 12, '.', '');
-								} else {
-									$value = $value*1;
-									$value = number_format($value, 12, '.', '');
-								}
-								
-								$summ += $value;
-								$sum_active += $value;
-							}
-								
-							if (!empty($asset['availBal'])) {
-								if (is_float($asset['availBal'])) {
-									$asset['availBal'] = number_format($asset['availBal'], 12, '.', '');
-								} else if (is_int($asset['availBal'])) {
-									$asset['availBal'] = number_format($asset['availBal'], 12, '.', '');
-								} else {
-									$asset['availBal'] = $asset['availBal']*1;
-									$asset['availBal'] = number_format($asset['availBal'], 12, '.', '');
-								}
-							}
-							
-							$currency_value = Exchange::formatValue($value);
-							$class = 'middle_value';
-							if ($currency_value<1) {
-								$class = 'small_value';
-							}
-			
-							$data['trade'][] = [
-								'balance' => Exchange::formatValue($asset['availBal']),
-								'name' => $asset['ccy'],
-								'currency' => $currency,
-								'sort' => $value,
-								'currency_value' => $currency_value,
-								'img' => $img,
-								'symbol' => $asset['ccy'],
-								'symbolid' => strtolower($asset['ccy']),
-								'grafema' => $grafema,
-								'class' => $class,
-								'apr' => '',
-								'price' => $price['data'],
-								'asset' => $okx->uid,
-							];		
-						}
-					}
-				}
-				
-				usort($data['trade'], [$this, 'cmp']);
-				
-			} else {
-				$error[] = Yii::t('Error', 'Not response');
-			}
-		
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>$response['message']]));
-		}
-		
 		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1)) {
-			$status_connect = 1;
-		}
+	
+		foreach ($arrayTokens as $modelTokens) {
+		
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+		
+			$exname = $modelTokens->exname;
+			
+			$okx = new OKXApi;
+			$okx->api_key = $modelTokens->identify2;
+			$okx->secret_key = $modelTokens->identify3;
+			$okx->password = $modelTokens->identify4;
+			$okx->uid = $modelTokens->identify1;
+		
+			$error = [];
+		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'trade' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+						
+			$response = $okx->getWalletBalance();
+			if (empty($response['error'])) {
+			
+				if (!empty($response['data']['active'])) {
+					foreach ($response['data']['active'] as $key=>$val) {
+			
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;
+					}
+				
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
 
-		if ($array['type']==1 && !empty($save_tokens['change_token'])) {
-			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 5)) {
+				}
+				
+				if (!empty($response['data']['trade'])) {
+					foreach ($response['data']['trade'] as $key=>$val) {
+			
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['trade'][] = $val;
+					}
+				
+					usort($data[$modelTokens->identify1]['trade'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+
+				}
 			
 			}
-		}		
+
+			$data[$modelTokens->identify1]['error'] = $response['errors'];
+			
+			if ($array['type']==3 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 5, $modelTokens->id_token)) {
+					
+					}
+				}
+			}
+		}	
 		
 		exit(json_encode([
-			'error'=>0, 
+			'error'=>0,
+			'connect' => $status_connect,			
 			'data'=>$data,
 			'summ' => Exchange::formatValue($summ),
 			'sum_active' => Exchange::formatValue($sum_active),
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
-			'connect' => $status_connect,
-			'address' => $okx->uid,
 		]));
 	}
 
@@ -778,7 +531,8 @@ class DefaultController extends AppController
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
-
+		$error = [];
+			
 		if (empty($array['type'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
 		}
@@ -787,11 +541,25 @@ class DefaultController extends AppController
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
 		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
 		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);	
 
-		if ($array['type']==1) {
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
 			
 			if (empty($array['address'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing SOL Address Wallet')]));			
@@ -800,7 +568,7 @@ class DefaultController extends AppController
 			$sol = new SOLApi;
 			$sol->address = $array['address'];
 			
-			$save_tokens = ApiChatbot::saveTokens(4, $array['log_id'], $array['address']);
+			$save_tokens = ApiChatbot::saveTokens(4, $array['log_id'], $array['address'], '', '', '', '', $exname);
 
 			if (
 				empty($save_tokens) || 
@@ -810,244 +578,94 @@ class DefaultController extends AppController
 				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}
 			
-		} else if ($array['type']==2) {	
+		} else if ($array['type']==3) {	
 
-			if (empty($array['log_id'])) {
-				return false;			
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing SOL Account ID')]));
 			}
 			
-			$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
-			if (empty($modelChatbotLog)) {
-				return false;		
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
 			}
-			
-			$modelTokens = ApiChatbot::getSolTokens($modelChatbotLog->id_client);
-			if (empty($modelTokens)) {
-				return false;		
-			}
-
-			$sol = new SOLApi;
-			$sol->address = $modelTokens->identify1;
-
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect type balance')]));	
+		}
+		
+		$arrayTokens = ApiChatbot::getSolTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		}
 
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
 		$summ = 0;
 		$sum_active = 0;
 		$sum_trade = 0;
-		$error = [];
-		
-		$data =[];
-
-		$response = $sol->getWalletBalance();
-		if (empty($response['error'])) {
-			
-			if (!empty($response['data'])) {
-				
-				foreach ($response['data'] as $val) {
-			
-					$value = 0;
-
-					if (empty($val['balance']) || empty($val['symbolid'])) {
-						continue;
-					}
-					
-					$price = ApiChatbot::getPrice($val['symbolid'], $currency, 3);
-					if (empty($price['error']) && !empty($price['data'])) {
-						$value = $price['data']*$val['balance'];	
-					}
-					
-					if (empty($val['image'])) {
-						$img = '/images/cryptologo/default_coin.webp';
-						$img_name = strtolower($val['symbolid']);
-						$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-					} else {
-						$img = $val['image'];
-					}
-
-					if (file_exists($path)) {
-						$img = '/images/cryptologo/'.$img_name.'.webp';
-					}
-					
-					if (!empty($value)) {
-						if (is_float($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else if (is_int($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else {
-							$value = $value*1;
-							$value = number_format($value, 12, '.', '');
-						}
-						
-						$summ += $value;
-						$sum_active += $value;
-					}
-						
-					if (!empty($val['balance'])) {
-						if (is_float($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else if (is_int($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else {
-							$val['balance'] = $val['balance']*1;
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						}
-					}
-					
-					$currency_value = Exchange::formatValue($value);
-					$class = 'middle_value';
-					if ($currency_value<1) {
-						$class = 'small_value';
-					}
-			
-					$data[] = [
-						'balance' => Exchange::formatValue($val['balance']),
-						'name' => $val['name'],
-						'currency' => $currency,
-						'sort' => $value,
-						'currency_value' => $currency_value,
-						'img' => $img,
-						'symbol' => $val['symbol'],
-						'symbolid' => strtolower($val['symbolid']),
-						'grafema' => $grafema,
-						'class' => $class,
-						'apr' => '',
-						'price' => $price['data'],
-						'asset' => $sol->address,
-					];		
-				}
-
-				usort($data, [$this, 'cmp']);
-
-			} 
-
-		} else {
-			$error[] = $response['message'];
-		}
-		
-		$response = $sol->getTokenBalance();
-		if (empty($response['error'])) {
-			
-			if (!empty($response['data'])) {
-				
-				foreach ($response['data'] as $val) {
-			
-					$value = 0;
-
-					if (empty($val['balance']) || empty($val['symbolid'])) {
-						continue;
-					}
-
-					if (!empty($val['price'])) {
-						$price['data'] = $val['price'];
-						$value = $val['price']*$val['balance'];
-					} else {
-						$price = ApiChatbot::getPrice($val['symbolid'], $currency, 3);
-						if (empty($price['error']) && !empty($price['data'])) {
-							$value = $price['data']*$val['balance'];	
-						}
-					}
-
-					if (empty($val['img'])) {
-						$img = '/images/cryptologo/default_coin.webp';
-						$img_name = strtolower($val['symbolid']);
-						$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-						
-						if (file_exists($path)) {
-							$img = '/images/cryptologo/'.$img_name.'.webp';
-						}
-						
-					} else {
-						$img = $val['img'];
-					}
-
-					if (!empty($value)) {
-						if (is_float($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else if (is_int($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else {
-							$value = $value*1;
-							$value = number_format($value, 12, '.', '');
-						}
-						
-						$summ += $value;
-						$sum_active += $value;
-					}
-						
-					if (!empty($val['balance'])) {
-						if (is_float($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else if (is_int($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else {
-							$val['balance'] = $val['balance']*1;
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						}
-					}
-					
-					$currency_value = Exchange::formatValue($value);
-					$class = 'middle_value';
-					if ($currency_value<1) {
-						$class = 'small_value';
-					}
-			
-					$data[] = [
-						'balance' => Exchange::formatValue($val['balance']),
-						'name' => $val['name'],
-						'currency' => $currency,
-						'sort' => $value,
-						'currency_value' => $currency_value,
-						'img' => $img,
-						'symbol' => $val['symbol'],
-						'symbolid' => strtolower($val['symbolid']),
-						'grafema' => $grafema,
-						'class' => $class,
-						'apr' => '',
-						'price' => $price['data'],
-						'asset' => $sol->address,
-					];		
-				}
-
-				usort($data, [$this, 'cmp']);
-
-			} 
-
-		} else {
-			$error[] = $response['message'];
-		}
-		
-		if (!empty($error)) {
-			exit(json_encode([
-				'error'=>1, 
-				'message' => implode('; ', $error),
-			]));
-		}
-
-
 		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(4, $array['log_id'], 1)) {
-			$status_connect = 1;
-		}
 
-		if ($array['type']==1 && !empty($save_tokens['change_token'])) {
-			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 7)) {
-			
+		foreach ($arrayTokens as $modelTokens) {
+		
+			if (empty($modelTokens->user_connect)) {
+				continue;
 			}
-		}		
+
+			$exname = $modelTokens->exname;
+			
+			$sol = new SOLApi;
+			$sol->address = $modelTokens->identify1;
+		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+	
+			$response = $sol->getWalletBalance();
+			if (empty($response['error'])) {
+				
+				if (!empty($response['data'])) {
+					
+					foreach ($response['data'] as $val) {
+		
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;	
+					}
+
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+					
+				}
+				
+			} else {
+				$error[] = $response['message'];
+			}
+	
+			$data[$modelTokens->identify1]['error'] = $error;
+			
+			if ($array['type']==4 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 7, $modelTokens->id_token)) {
+					
+					}
+				}
+			}	
+		}
 
 		exit(json_encode([
-			'error'=>0, 
+			'error'=>0,
+			'connect' => $status_connect,			
 			'data'=>$data,
 			'summ' => Exchange::formatValue($summ),
 			'sum_active' => Exchange::formatValue($sum_active),
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
-			'connect' => $status_connect,
-			'address' => $sol->address,
 		]));
 	}
 	
@@ -1060,7 +678,8 @@ class DefaultController extends AppController
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
-
+		$error = [];
+			
 		if (empty($array['type'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
 		}
@@ -1069,20 +688,34 @@ class DefaultController extends AppController
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
 		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
 		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);	
 
-		if ($array['type']==1) {
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
 			
 			if (empty($array['address'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing SUI Address Wallet')]));			
 			}
 
-			$sui = new SUIApi;
-			$sui->address = $array['address'];
+			$sui2 = new SUIApi2;
+			$sui2->address = $array['address'];
 			
-			$save_tokens = ApiChatbot::saveTokens(5, $array['log_id'], $array['address']);
+			$save_tokens = ApiChatbot::saveTokens(5, $array['log_id'], $array['address'], '', '', '', '', $exname);
 
 			if (
 				empty($save_tokens) || 
@@ -1091,521 +724,539 @@ class DefaultController extends AppController
 			) {
 				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}
+			
+		} else if ($array['type']==3) {	
 
-		} else if ($array['type']==2) {	
-
-			if (empty($array['log_id'])) {
-				return false;			
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing SUI Account ID')]));
 			}
 			
-			$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
-			if (empty($modelChatbotLog)) {
-				return false;		
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
 			}
-			
-			$modelTokens = ApiChatbot::getSuiTokens($modelChatbotLog->id_client);
-			if (empty($modelTokens)) {
-				return false;		
-			}
-
-			$sui = new SUIApi;
-			$sui->address = $modelTokens->identify1;
-
-		} else {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect type balance')]));	
+		}
+		
+		$arrayTokens = ApiChatbot::getSuiTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		}
 
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
 		$summ = 0;
 		$sum_active = 0;
 		$sum_trade = 0;
-		$error = [];
+		$status_connect = 0;
+
+		foreach ($arrayTokens as $modelTokens) {
 		
-		$data = [];
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+
+			$exname = $modelTokens->exname;
+
+			$sui2 = new SUIApi2;
+			$sui2->address = $modelTokens->identify1;
 		
-		$response = $sui->getWalletBalance();
-		if (empty($response['error'])) {
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+
+			$response = $sui2->getWalletBalance();
+			if (empty($response['error'])) {		
+				if (!empty($response['data'])) {
 			
-			if (!empty($response['data']) && !empty($response['data'][0])) {
+					foreach ($response['data'] as $val) {
 				
-				foreach ($response['data'][0] as $val) {
-			
-					$value = 0;
-
-					if (empty($val['balance']) || empty($val['symbolid'])) {
-						continue;
-					}
-					
-					if (empty($val['price'])) {
-						$price = ApiChatbot::getPrice($val['symbolid'], $currency, 3);
-						if (empty($price['error']) && !empty($price['data'])) {
-							$value = $price['data']*$val['balance'];	
-						}
-					} else {
-						$price['data'] = $val['price'];
-						$value = $val['price']*$val['balance'];
-					}
-		
-					if (empty($val['image'])) {
-						$img = '/images/cryptologo/default_coin.webp';
-						$img_name = strtolower($val['symbolid']);
-						$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
-					} else {
-						$img = $val['image'];
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;							
 					}
 
-					if (file_exists($path)) {
-						$img = '/images/cryptologo/'.$img_name.'.webp';
-					}
-					
-					if (!empty($value)) {
-						if (is_float($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else if (is_int($value)) {
-							$value = number_format($value, 12, '.', '');
-						} else {
-							$value = $value*1;
-							$value = number_format($value, 12, '.', '');
-						}
-						
-						$summ += $value;
-						$sum_active += $value;
-					}
-						
-					if (!empty($val['balance'])) {
-						if (is_float($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else if (is_int($val['balance'])) {
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						} else {
-							$val['balance'] = $val['balance']*1;
-							$val['balance'] = number_format($val['balance'], 12, '.', '');
-						}
-					}
-					
-					$currency_value = Exchange::formatValue($value);
-					$class = 'middle_value';
-					if ($currency_value<1) {
-						$class = 'small_value';
-					}
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+				}
 			
-					$data[] = [
-						'balance' => Exchange::formatValue($val['balance']),
-						'name' => $val['name'],
-						'currency' => $currency,
-						'sort' => $value,
-						'currency_value' => $currency_value,
-						'img' => $img,
-						'symbol' => $val['symbol'],
-						'symbolid' => strtolower($val['symbolid']),
-						'grafema' => $grafema,
-						'class' => $class,
-						'apr' => '',
-						'price' => $price['data'],
-						'asset' => $sui->address,
-					];		
+			} else {
+				$error[] = $response['message'];
+			}	
+
+			$data[$modelTokens->identify1]['error'] = $error;
+
+			if ($array['type']==5 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
 				}
 
-				usort($data, [$this, 'cmp']);
-
-			} 
-
-		} else {
-			$error[] = $response['message'];
-		}
-		
-		if (!empty($error)) {
-			exit(json_encode([
-				'error'=>1, 
-				'message' => implode('; ', $error),
-			]));
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 9, $modelTokens->id_token)) {
+					
+					}
+				}
+			}	
 		}
 
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(5, $array['log_id'], 1)) {
-			$status_connect = 1;
-		}
-
-		if ($array['type']==1 && !empty($save_tokens['change_token'])) {
-			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 9)) {
-			
-			}
-		}	
-		
-		$address = SUIApi::pstatic()->getAddressParse($sui->address);
-	
 		exit(json_encode([
-			'error'=>0, 
+			'error'=>0,
+			'connect' => $status_connect,			
 			'data'=>$data,
 			'summ' => Exchange::formatValue($summ),
 			'sum_active' => Exchange::formatValue($sum_active),
 			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
-			'connect' => $status_connect,
-			'address' => $address,
+		]));
+	}
+	
+	/** 
+	 * actionGetsuibalance
+	 */
+	public function actionGetaptbalance()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		$input = file_get_contents('php://input');
+		$array = @json_decode($input, true);
+		$error = [];
+			
+		if (empty($array['type'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
+		}
+		
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+		
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
+			
+			if (empty($array['address'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing APTOS Address Wallet')]));			
+			}
+
+			$apt = new APTApi;
+			$apt->address = $array['address'];
+			
+			$save_tokens = ApiChatbot::saveTokens(7, $array['log_id'], $array['address'], '', '', '', '', $exname);
+
+			if (
+				empty($save_tokens) || 
+				!is_array($save_tokens) || 
+				!empty($save_tokens['error'])
+			) {
+				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+			}
+			
+		} else if ($array['type']==3) {	
+
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing APTOS Account ID')]));
+			}
+			
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
+			}
+		}
+		
+		$arrayTokens = ApiChatbot::getAptTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		}
+
+		$currency = Exchange::getDefaultCurrency();
+		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
+		$summ = 0;
+		$sum_active = 0;
+		$sum_trade = 0;
+		$status_connect = 0;
+
+		foreach ($arrayTokens as $modelTokens) {
+		
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+
+			$exname = $modelTokens->exname;
+
+			$apt = new APTApi;
+			$apt->address = $modelTokens->identify1;
+		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+		
+			$response = $apt->getWalletBalance();
+			if (empty($response['error'])) {		
+				if (!empty($response['data'])) {
+		
+					foreach ($response['data'] as $val) {
+		
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;		
+					}
+
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+					
+				}
+				
+			} else {
+				$error[] = $response['message'];
+			}
+			
+			$data[$modelTokens->identify1]['error'] = $error;
+
+			if ($array['type']==7 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 11, $modelTokens->id_token)) {
+					
+					}
+				}
+			}
+		}
+		
+		exit(json_encode([
+			'error'=>0,
+			'connect' => $status_connect,			
+			'data'=>$data,
+			'summ' => Exchange::formatValue($summ),
+			'sum_active' => Exchange::formatValue($sum_active),
+			'sum_trade' => Exchange::formatValue($sum_trade),
+			'grafema' => $grafema,
+		]));
+	}
+	
+	/** 
+	 * actionGetethbalance
+	 */
+	public function actionGetethbalance()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		
+		$input = file_get_contents('php://input');
+		$array = @json_decode($input, true);
+		$error = [];
+			
+		if (empty($array['type'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
+		}
+		
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+		
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+		
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
+			
+			if (empty($array['address'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing ETH Address Wallet')]));			
+			}
+
+			$eth = new ETHApi;
+			$eth->address = $array['address'];
+			
+			$save_tokens = ApiChatbot::saveTokens(8, $array['log_id'], $array['address'], '', '', '', '', $exname);
+
+			if (
+				empty($save_tokens) || 
+				!is_array($save_tokens) || 
+				!empty($save_tokens['error'])
+			) {
+				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+			}
+			
+		} else if ($array['type']==3) {	
+
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing ETH Account ID')]));
+			}
+			
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
+			}
+		}
+		
+		$arrayTokens = ApiChatbot::getEthTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		}
+
+		$currency = Exchange::getDefaultCurrency();
+		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
+		$summ = 0;
+		$sum_active = 0;
+		$sum_trade = 0;
+		$status_connect = 0;
+
+		foreach ($arrayTokens as $modelTokens) {
+		
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+
+			$exname = $modelTokens->exname;
+
+			$eth = new ETHApi;
+			$eth->address = $modelTokens->identify1;
+		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+		
+			$response = $eth->getWalletBalance();
+			if (empty($response['error'])) {		
+				if (!empty($response['data'])) {
+		
+					foreach ($response['data'] as $val) {
+		
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;					
+					}
+
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+					
+				}
+				
+			} else {
+				$error[] = $response['message'];
+			}
+
+			$data[$modelTokens->identify1]['error'] = $error;
+
+			if ($array['type']==8 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 13, $modelTokens->id_token)) {
+					
+					}
+				}
+			}
+		}
+		
+		exit(json_encode([
+			'error'=>0,
+			'connect' => $status_connect,			
+			'data'=>$data,
+			'summ' => Exchange::formatValue($summ),
+			'sum_active' => Exchange::formatValue($sum_active),
+			'sum_trade' => Exchange::formatValue($sum_trade),
+			'grafema' => $grafema,
 		]));
 	}
 
 	/** 
-	 * https://api.bank.ctfn.pro/v3/datas/getaddress
+	 * actionGettonbalance
 	 */
-	public function actionGetaddress()
+	public function actionGettonbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
-	
-		if (empty($array['address']) || empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
+		$error = [];
+			
+		if (empty($array['type'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
 		}
 		
 		if (empty($array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
 		} 
 		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
 		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
-
-		$save_tokens = ApiChatbot::saveTokens(1, $array['log_id'], $array['address']);
-		if (
-			empty($save_tokens) || 
-			!is_array($save_tokens) || 
-			!empty($save_tokens['error'])
-		) {
-			error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-		}
-
-		$data = [];
-		$summ = 0;
-		$currency = Exchange::getDefaultCurrency();
-		$grafema = Exchange::getGrafemCurrency($currency);
-		$pool1 = Exchange::getPoolInfo('TON/USDT');
-		$ton_apr = '';
-		if (!empty($pool1) && !empty($pool1['pool_info']) && !empty($pool1['pool_info']['apr'])) {
-			$ton_apr = $pool1['pool_info']['apr'];
-		}
-
-		$ton = TonApi::pstatic()->getTonBalance($array['address']);
-		if (empty($ton['error'])) {
-
-			if (empty($ton['empty'])) {
-
-				$data[0] = $ton['data'];
-
-				$ton_price = ApiChatbot::getPrice('ton', $currency, 2);	
-				if (empty($ton_price['error'])) {
-					$value = $ton_price['data']*$data[0]['balance'];
-					$class = 'middle_value';
-					if ($value<1) {
-						$class = 'small_value';
-					}
-					$summ += $value;
-					$data[0]['sort'] = $value;
-					$data[0]['currency_value'] = Exchange::formatValue($value);
-					$data[0]['class'] = $class;
-					$data[0]['apr'] = $ton_apr;
-					$data[0]['price'] = $ton_price['data'];
-					$data[0]['asset'] = $array['address'];
-				}
-			}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
 		}
 		
-		$pool2 = Exchange::getPoolInfo('AquaUSD/USDT');
-		$usdt_apr = '';
-		if (!empty($pool2) && !empty($pool2['pool_info']) && !empty($pool2['pool_info']['apr'])) {
-			$usdt_apr = $pool2['pool_info']['apr'];
-		}
-		
-		$jettons = TonApi::pstatic()->getJettonsBalance($array['address'], $currency);
-		if (empty($jettons['error'])) {
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+	
+		if ($array['type']==2) {
 			
-			if (empty($jettons['empty'])) {
-				foreach ($jettons['data'] as $jetton) {
-					
-					if ($jetton['symbolid']=='usdt') {
-						$jetton['apr'] = $usdt_apr;
-					} else {
-						$jetton['apr'] = '';
-					}					
-					
-					$jetton['asset'] = $array['address'];					
-					$summ += $jetton['sort'];
-					$data[] = $jetton;
-				}
-				
-				usort($data, [$this, 'cmp']);
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
+			
+			if (empty($array['address'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing ETH Address Wallet')]));			
+			}
+
+			$ton = new TonApi;
+			$ton->address = $array['address'];
+
+			$save_tokens = ApiChatbot::saveTokens(1, $array['log_id'], $array['address'], '', '', '', '', $exname);
+
+			if (
+				empty($save_tokens) || 
+				!is_array($save_tokens) || 
+				!empty($save_tokens['error'])
+			) {
+				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+			}
+	
+		} else if ($array['type']==3) {	
+
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing ETH Account ID')]));
+			}
+			
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
 			}
 		}
-		
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(1, $array['log_id'], 1)) {
-			$status_connect = 1;
-		}
-		
-		if (!empty($save_tokens['change_token'])) {
-			if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 1)) {
-				
-			}	
-		}
-		
-		$address = TonApi::pstatic()->getAddressParse($array['address']);
 
-		exit(json_encode([
-			'error'=>0, 
-			'data'=>$data,
-			'summ' => Exchange::formatValue($summ),
-			'grafema' => $grafema,
-			'connect' => $status_connect,
-			'address' => $address,
-		]));
-	}
-	
-	/**
-	 * actionTonconnected()
-	 */
-	public function actionTonconnected()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not ID')]));
-		}
-		
-		if (empty($array['sc'])) {
+		$arrayTokens = ApiChatbot::getTonTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
-		} 
-		
-		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
 		}
-		
-		$data = [];
-		$summ = 0;
+
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
-		$tokens = ApiChatbot::getTokens($array['log_id']);
-		if (empty($tokens) || empty($tokens['ton']) || empty($tokens['ton']['address'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
+		$data = [];
+		$summ = 0;
+		$sum_active = 0;
+		$sum_trade = 0;
+		$status_connect = 0;
+	
+		foreach ($arrayTokens as $modelTokens) {
 
-		$pool1 = Exchange::getPoolInfo('TON/USDT');
-		$ton_apr = '';
-		if (!empty($pool1) && !empty($pool1['pool_info']) && !empty($pool1['pool_info']['apr'])) {
-			$ton_apr = $pool1['pool_info']['apr'];
-		}
-			
-		$ton = TonApi::pstatic()->getTonBalance($tokens['ton']['address']);
-		if (empty($ton['error'])) {
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+	
+			$exname = $modelTokens->exname;
 
-			if (empty($ton['empty'])) {
+			$ton = new TonApi;
+			$ton->address = $modelTokens->identify1;		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
 
-				$data[0] = $ton['data'];
-				
-				$ton_price = ApiChatbot::getPrice('ton', $currency, 2);
-				if (empty($ton_price['error'])) {
-					$value = $ton_price['data']*$data[0]['balance'];
-					$class = 'middle_value';
-					if ($value<1) {
-						$class = 'small_value';
+			$response = $ton->getWalletBalance();
+			if (empty($response['error'])) {		
+				if (!empty($response['data'])) {
+		
+					foreach ($response['data'] as $val) {
+		
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;					
 					}
-					$summ += $value;
-					$data[0]['sort'] = $value;
-					$data[0]['currency_value'] = Exchange::formatValue($value);
-					$data[0]['class'] = $class;
-					$data[0]['apr'] = $ton_apr;
-					$data[0]['price'] = $ton_price['data'];
-					$data[0]['asset'] = $tokens['ton']['address'];
-				}
-			}
-		}
-		
-		$pool2 = Exchange::getPoolInfo('AquaUSD/USDT');
-		$usdt_apr = '';
-		if (!empty($pool2) && !empty($pool2['pool_info']) && !empty($pool2['pool_info']['apr'])) {
-			$usdt_apr = $pool2['pool_info']['apr'];
-		}
-		
-		$jettons = TonApi::pstatic()->getJettonsBalance($tokens['ton']['address'], $currency);
-		if (empty($jettons['error'])) {
-			
-			if (empty($jettons['empty'])) {
-				foreach ($jettons['data'] as $jetton) {
+
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
 					
-					if ($jetton['symbolid']=='usdt') {
-						$jetton['apr'] = $usdt_apr;
-					} else {
-						$jetton['apr'] = '';
-					}	
-					
-					$jetton['asset'] = $tokens['ton']['address'];
-					$summ += $jetton['sort'];
-					$data[] = $jetton;
 				}
 				
-				usort($data, [$this, 'cmp']);
+			} else {
+				$error[] = $response['message'];
+			}
+
+			$data[$modelTokens->identify1]['error'] = $error;
+
+			if ($array['type']==1 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 1, $modelTokens->id_token)) {
+					
+					}
+				}
 			}
 		}
 		
-		$address = TonApi::pstatic()->getAddressParse($tokens['ton']['address']);
+		$address = '';
+		$id = '';
+		if (!empty($ton->address)) {
+			$address = TonApi::pstatic()->getAddressParse($ton->address);
+			$id = $ton->address;
+		}
 
 		exit(json_encode([
-			'error'=>0, 
+			'error'=>0,
+			'connect' => $status_connect,			
 			'data'=>$data,
 			'summ' => Exchange::formatValue($summ),
+			'sum_active' => Exchange::formatValue($sum_active),
+			'sum_trade' => Exchange::formatValue($sum_trade),
 			'grafema' => $grafema,
-			'connect' => 1,
 			'address' => $address,
-		]));	
-	}
-	
-	/**
-	 * actionTondisconnect()
-	 */
-	public function actionTondisconnect()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
-		
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(1, $array['log_id'], 0)) {
-			$status_connect = 0;
-		}
-		
-		//if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 2)) {
-			
-		//}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'connect' => $status_connect,
-		]));
-	}
-	
-	/**
-	 * actionBybitdisconnect()
-	 */
-	public function actionBybitdisconnect()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
-
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(2, $array['log_id'], 0)) {
-			$status_connect = 0;
-		}
-		
-		//if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 4)) {
-			
-		//}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'connect' => $status_connect,
-		]));
-	}
-	
-	/**
-	 * actionOkxdisconnect()
-	 */
-	public function actionOkxdisconnect()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
-
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 0)) {
-			$status_connect = 0;
-		}
-		
-		//if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 4)) {
-			
-		//}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'connect' => $status_connect,
-		]));
-	}
-	
-	/**
-	 * actionOkxdisconnect()
-	 */
-	public function actionSoldisconnect()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
-
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(4, $array['log_id'], 0)) {
-			$status_connect = 0;
-		}
-		
-		//if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 8)) {
-			
-		//}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'connect' => $status_connect,
-		]));
-	}
-	
-	/**
-	 * actionSuidisconnect()
-	 */
-	public function actionSuidisconnect()
-	{
-		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		
-		$input = file_get_contents('php://input');
-		$array = @json_decode($input, true);
-	
-		if (empty($array['log_id'])) {
-			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not Address')]));
-		}
-
-		$status_connect = 0;
-		if (ApiChatbot::saveStatusConnect(5, $array['log_id'], 0)) {
-			$status_connect = 0;
-		}
-		
-		//if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 8)) {
-			
-		//}
-		
-		exit(json_encode([
-			'error'=>0, 
-			'connect' => $status_connect,
+			'id' => $id,
 		]));
 	}
 	
@@ -1691,6 +1342,8 @@ class DefaultController extends AppController
 
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
+		
+		$apr = '';
 
 		if (empty($array['log_id'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not ID')]));
@@ -1711,7 +1364,12 @@ class DefaultController extends AppController
 		if (empty($array['data'])) {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing Question')]));	
 		}
-		
+
+		$apr = 0;
+		if (!empty($array['coin'])) {
+			$apr = WalletApi::pstatic()->getAPR($array['coin']);			
+		}
+
 		if ($array['type']==3) {
 
 			$portfolio = [
@@ -1727,8 +1385,9 @@ class DefaultController extends AppController
 			}
 			
 			$portfolio = json_encode($portfolio);
-			
-			$answer = AiagentApi::pstatic()->getQuestion($array['data'], $portfolio);
+		
+			$answer = AiagentApi::pstatic()->getQuestion($array['data'], $array['coin'], $portfolio);
+			$answer['apr'] = $apr;
 			exit(json_encode($answer));	
 
 		} else if ($array['type']==4) {
@@ -1738,19 +1397,55 @@ class DefaultController extends AppController
 			
 		} else if ($array['type']==5) {
 
-			$answer = WalletApi::pstatic()->transferWallet($array);
+			$answer = WalletApi::pstatic()->sendButtonProcess($array['data'], $array['log_id']);
 			exit(json_encode($answer));
-			
-		} else if ($array['type']==6) {
 
-			$answer = WalletApi::pstatic()->depositWallet($array);
-			exit(json_encode($answer));
+		} else if ($array['type']==8) {
 			
-		} else if ($array['type']==7) {
+			$id_client = Yii::$app->user->getId();
+			$wallet = ApiChatbot::getWallet($id_client);
+			exit(json_encode($wallet));
+			
+		} else if ($array['type']==9) {
 
-			$answer = WalletApi::pstatic()->withdrawWallet($array);
+			
+			//print_r($array);
+			
+			/*
+			$portfolio = [
+				"ton" => [0 => ["active" => []]],
+				"bybit" => [0 => ["active" =>[], "trading"=>[]]],
+				"okx" => [0 => ["active" =>[], "trading"=>[]]],
+				"sol" => [0 => ["active" => []]],
+				"sui" => [0 => ["active" => []]],
+			];
+			
+			if (!empty($array['portfolio'])) {
+				$portfolio = $array['portfolio'];
+			}
+			
+			$portfolio = json_encode($portfolio);
+			
+			$answer = AiagentApi::pstatic()->getQuestion($array['data'], $portfolio);
+			*/
+			
+		} else if ($array['type']==10) {
+			
+			$answer = SUIApi2::pstatic()->transactionStatusSui($array['data']);
 			exit(json_encode($answer));
 			
+		} else if ($array['type']==11) {
+
+			$id_client = Yii::$app->user->getId();
+			$digest = WalletApi::pstatic()->getClaimallNaviRewards($id_client);
+			if (!empty($digest['error'])) {
+				exit(json_encode($digest));
+			}
+			
+			$wallet = ApiChatbot::getWallet($id_client);
+			$wallet['digest'] = $digest;
+			exit(json_encode($wallet));
+
 		} else {
 		
 			$answer = GPTApi2::pstatic()->getQuestion(json_encode($array['data']), $array['log_id'], $array['type']);
@@ -1762,7 +1457,76 @@ class DefaultController extends AppController
 			exit(json_encode($answer));
 		}
 	}
+	
+	/**
+	 * actionLaunchpools()
+	 */
+	public function actionLaunchpools()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+		$input = file_get_contents('php://input');
+		$array = @json_decode($input, true);
+
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not ID')]));
+		}
+	
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		$pools = LaunchpoolsApi::pstatic()->getPools();
+		if (empty($pools)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Api', 'Not Pools')]));	
+		}
+		
+		exit(json_encode($pools));
+	}
+	
+	/**
+	 * actionAptospools()
+	 */
+	public function actionAptospools()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+		$input = file_get_contents('php://input');
+		$array = @json_decode($input, true);
+
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not ID')]));
+		}
+	
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		if (empty($array['token'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		$pools = [];
+		
+		$apt = new AptospoolsApi;
+		$apt->token = $array['token'];
+		
+		$pools = $apt->getPools();
+		if (!empty($pools['error'])) {
+			exit(json_encode(['error'=>1, 'message'=>$pools['message']]));	
+		}
+		
+		exit(json_encode($pools['data']));
+	}
+	
 	/**
 	 * cmp($a=[], $b=[])
 	 */

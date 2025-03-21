@@ -45,6 +45,7 @@ Yii::$app->view->render('elements/__script',[
 	'userpic' => $userpic,
 	'wallet' => $wallet,
 	'lang' => $lang,
+	'grafema' => $grafema,
 ]);
 
 
@@ -68,6 +69,7 @@ echo Yii::$app->view->render('elements/__as_modal',[
 	'grafema' => $grafema,
 	'used_gpt1' => $used_gpt1,
 	'wallet' => $wallet,
+	'status' => $status,
 ]);
 
 // Modal staking calc
@@ -95,6 +97,12 @@ echo Yii::$app->view->render('elements/__sol_modal');
 
 // Modal Sui form
 echo Yii::$app->view->render('elements/__sui_modal');
+
+// Modal Apt form
+echo Yii::$app->view->render('elements/__apt_modal', ['id' => $id,]);
+
+// Modal ETH form
+echo Yii::$app->view->render('elements/__eth_modal');
 
 /*
 // console for ios

@@ -5,6 +5,7 @@ namespace frontend\modules\app\components;
 use Yii;
 use common\models\Exchange;
 use common\components\BaseFunctions;
+use frontend\modules\app\models\ApiChatbot;
 
 class SUIApi {
 	
@@ -67,7 +68,8 @@ class SUIApi {
 			];
 		}
 		
-		foreach ($result['data']['coins'] as $coin) {
+		$summ = 0;
+		foreach ($result['data']['coins'] as $key=>$coin) {
 			
 			if (empty($coin['balance'])) {
 				continue;
@@ -76,21 +78,86 @@ class SUIApi {
 			$amount = (int) $coin['balance'];
 			$decimals = BaseFunctions::getDecimalsNumber($coin['decimals']);
 			$balance = $amount / $decimals;
-			$balance = number_format($balance, 10, '.', '');
-			$balance = Exchange::formatValue($balance);
+			$balance = number_format($balance, 12, '.', '');
 			
-			$data[0][] = [
+			$value = 0;
+			$symbol = strtolower($coin['symbol']);
+			$symbolid = strtolower($symbol);
+			$coinid = strtolower($symbol).$key;
+			
+			$price = 0;
+			if (empty($coin['price'])) {
+				$price = ApiChatbot::getPrice($symbolid, $currency, 1);
+				if (empty($price['error']) && !empty($price['data'])) {
+					$value = $price['data']*$balance;	
+				}
+			} else {
+				$price['data'] = $coin['price'];
+				$value = $coin['price']*$balance;
+			}
+			
+			
+			$logo = '';
+			if (!empty($coin['logo'])) {
+				$logo = $coin['logo'];
+			}
+			
+			if (empty($logo)) {
+				$logo = '/images/cryptologo/default_coin.webp';
+				$img_name = strtolower($symbol);
+				$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
+				if (file_exists($path)) {
+					$logo = '/images/cryptologo/'.$img_name.'.webp';
+				}
+			}
+			
+			if (!empty($value)) {
+				if (is_float($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else if (is_int($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else {
+					$value = $value*1;
+					$value = number_format($value, 12, '.', '');
+				}
+			}
+			
+			if (!empty($balance)) {
+				if (is_float($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else if (is_int($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else {
+					$balance = $balance*1;
+					$balance = number_format($balance, 12, '.', '');
+				}
+			}
+					
+			$currency_value = Exchange::formatValue($value);
+			$class = 'middle_value';
+			if ($currency_value<1) {
+				$class = 'small_value';
+			}
+						
+			$address = $this->getAddressParse($this->address);
+			
+			$data[] = [
 				'balance' => $balance,
-				'name' => $coin['name'],
+				'name' =>$coin['name'],
 				'currency' => $currency,
-				'sort' => 0,
-				'currency_value' => 0,
-				'img' => !empty($coin['logo']) ? $coin['logo'] : '/images/cryptologo/sui.webp',
-				'symbol' => $coin['symbol'],
-				'symbolid' => strtolower($coin['symbol']),
+				'sort' => $value,
+				'currency_value' => $currency_value,
+				'img' => $logo,
+				'symbol' => $symbol,
+				'symbolid' => $symbolid,
+				'coinid' => $coinid,
 				'grafema' => $grafema,
-				'class' => '',
-				'price' => !empty($coin['price']) ? $coin['price'] : 0,
+				'class' => $class,
+				'price' => $price['data'],
+				'network' => Yii::t('Frontend', 'Wallet').' Sui',
+				'network_icon' => '/images/logos/sui2.png',
+				'apr' => '',
+				'asset' => $address,
 			];			
 		}
 
@@ -106,8 +173,6 @@ class SUIApi {
     public function getSuiBalance() 
 	{	
 		$api_url = $this->api_url.'='.$this->address;
-
-		$curl = curl_init();
 
 		$header = [
 			'Content-Type: application/json',

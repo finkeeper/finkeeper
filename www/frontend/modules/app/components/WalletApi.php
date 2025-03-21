@@ -8,6 +8,7 @@ use common\models\Tokens;
 use common\models\Exchange;
 use common\models\Userdata;
 use common\models\ChatbotLog;
+use common\models\Sendstatus;
 use common\components\BaseFunctions;
 
 class WalletApi {
@@ -56,13 +57,10 @@ class WalletApi {
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-		//curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
 		curl_setopt($curl, CURLOPT_PORT, 8443);
 		$response = curl_exec($curl);
 		curl_close($curl);
-
-		//error_log($response."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 
 		if (empty($response)) {
 			return [
@@ -220,14 +218,87 @@ class WalletApi {
     }
 	
 	/**
+	 * sendButtonProcess($data=[])
+	 */
+	public function sendButtonProcess($trnid=0, $log_id=0) 
+	{
+		if (empty($trnid)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Not ID Message'),
+				'code' => 116,
+			];
+		}
+		
+		if (empty($log_id)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Missing id'),
+				'code' => 117,
+			];
+		}
+		
+		$model = Sendstatus::findSendStatus($trnid);
+		if (empty($model)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Not Message'),
+				'code' => 118,
+			];
+		}
+		
+		$data = [
+			'log_id' => $log_id,
+			'amount' => $model->amount,
+			'address' => $model->address,
+			'token' => $model->type,
+		];
+		
+		$model->status = 1;
+		
+		if (!$model->save()) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Not status save'),
+				'code' => 118,
+			];
+		}
+		
+		if ($model->func==1) {
+
+			return $this->transferWallet($data);
+			
+		} else if ($model->func==2) {
+			
+			return $this->depositWallet($data);
+			
+		} else if ($model->func==3) {
+			
+			return $this->withdrawWallet($data);
+			
+		} else {
+			
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect ID Message'),
+				'code' => 119,
+			];
+		}
+		
+		$data = [];
+		
+	}
+	
+	
+	/**
 	 * transferWallet($data=[]) 
 	 */
     public function transferWallet($data=[]) 
 	{
 		if (
 			empty($data) || 
-			empty($data['data']['amount']) || 
-			empty($data['data']['address'])
+			empty($data['amount']) || 
+			empty($data['address'])
 		) {
 			return [
 				'error' => 1,
@@ -281,8 +352,8 @@ class WalletApi {
 		$decimals = BaseFunctions::getDecimalsNumber(9);
 		
 		$send = [
-			'recipient' => $data['data']['address'],
-			'amount' => strval($data['data']['amount']*$decimals),
+			'recipient' => $data['address'],
+			'amount' => strval($data['amount']*$decimals),
 			'mnemonic' => $mnm_value,
 		];
 		
@@ -418,8 +489,8 @@ class WalletApi {
 	{
 		if (
 			empty($data) || 
-			empty($data['data']['amount']) || 
-			empty($data['data']['token'])
+			empty($data['amount']) || 
+			empty($data['token'])
 		) {
 			return [
 				'error' => 1,
@@ -473,8 +544,8 @@ class WalletApi {
 		$decimals = BaseFunctions::getDecimalsNumber(9);
 		
 		$send = [
-			'token' => strtoupper($data['data']['token']),
-			'amount' => $data['data']['amount']*$decimals,
+			'token' => strtoupper($data['token']),
+			'amount' => $data['amount']*$decimals,
 			'mnemonic' => $mnm_value,
 		];
 
@@ -483,9 +554,9 @@ class WalletApi {
 			'Accept: application/json',
 			'Authorization: Basic '.$this->api_key,
 		];
-
+		
 		$api_url = $this->api_url.'navi/deposit/';
-	
+
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $api_url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -516,6 +587,10 @@ class WalletApi {
 		}
 		
 		$source = @json_decode($response, true);
+		
+		//print_r($source);
+	
+		
 		if (empty($source)) {
 			return [
 				'error' => 1,
@@ -542,7 +617,7 @@ class WalletApi {
 		
 		return [
 			'error' => 0,
-			'message' => $result['digest'],
+			'message' => $source['digest'],
 		];
 	}
 	
@@ -553,8 +628,8 @@ class WalletApi {
 	{
 		if (
 			empty($data) || 
-			empty($data['data']['amount']) || 
-			empty($data['data']['token'])
+			empty($data['amount']) || 
+			empty($data['token'])
 		) {
 			return [
 				'error' => 1,
@@ -608,8 +683,8 @@ class WalletApi {
 		$decimals = BaseFunctions::getDecimalsNumber(9);
 		
 		$send = [
-			'token' => strtoupper($data['data']['token']),
-			'amount' => $data['data']['amount']*$decimals,
+			'token' => strtoupper($data['token']),
+			'amount' => $data['amount']*$decimals,
 			'mnemonic' => $mnm_value,
 		];
 		
@@ -634,14 +709,362 @@ class WalletApi {
 		$response = curl_exec($curl);
 		curl_close($curl);
 		
+		if (empty($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No response'),
+				'code' => 121,
+			];
+		}
 		
+		if (!is_string($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect type response'),
+				'code' => 122,
+			];
+		}
 		
+		$source = @json_decode($response, true);
+		if (empty($source)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect json response'),
+				'code' => 123,
+			];
+		}
+
+		if (!is_array($source)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect decode json response'),
+				'code' => 124,
+			];
+		}
+
+		if (empty($source['digest'])) { 
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No transaction data'),
+				'code' => 131,
+			];
+		}
 		
-		
-		
-		
-		
+		return [
+			'error' => 0,
+			'message' => $source['digest'],
+		];
+	}
 	
+	/**
+	 * getAPR($coin='')
+	 */
+	public function getAPR($coin='')
+	{
+		if (empty($coin)) {
+			return false;
+		}
+		$header = [
+			'Content-Type: application/json',
+			'Authorization: Basic '.$this->api_key,
+		];
+
+		$api_url = $this->api_url.'navi/pool/'.strtoupper($coin);
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $api_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
+		curl_setopt($curl, CURLOPT_PORT, 8443);
+		$response = curl_exec($curl);
+		curl_close($curl);
+		
+		if (empty($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No response'),
+				'code' => 132,
+			];
+		}
+		
+		if (!is_string($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect type response'),
+				'code' => 133,
+			];
+		}
+		
+		$source = @json_decode($response, true);
+		if (empty($source)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect json response'),
+				'code' => 134,
+			];
+		}
+		
+		$apr = 0;
+		if (empty($source['base_supply_rate'])) {
+			return [
+				'error' => 0,
+				'message' => ['apr' => $apr],
+				'code' => 135,
+			];
+		}	
+		
+		$apr = $source['base_supply_rate'];
+		
+		if (!empty($source['boosted_supply_rate'])) {
+			
+			$apr += $source['boosted_supply_rate'];
+		}
+			
+		return Exchange::formatValue($apr, 1);	
+	}
+	
+	/** 
+	 * getNaviBalance()
+	 */
+	public function getNaviBalance($id)
+	{
+		if (empty($id)) {
+			return false;
+		}
+		
+		$mnm = $modelUserdata = Userdata::findOne([
+			'uid' => $id, 
+			'type' => 1,
+			'key' => 'mnm',
+		]);
+		
+		if (empty($mnm) || empty($mnm->value)) {
+			return false;			
+		}
+		
+		$enc = new Enc;
+		$mnm_value = $enc->decryptMC($mnm->value);
+		$send = [
+			'mnemonic' => $mnm_value,
+		];
+		
+		$header = [
+			'Content-Type: application/json',
+			'Authorization: Basic '.$this->api_key,
+		];
+
+		$api_url = $this->api_url.'navi/portfolio';
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $api_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($send));
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
+		curl_setopt($curl, CURLOPT_PORT, 8443);
+		$response = curl_exec($curl);
+		curl_close($curl);
+		
+		if (empty($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No response'),
+				'code' => 132,
+			];
+		}
+		
+		if (!is_string($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect type response'),
+				'code' => 133,
+			];
+		}
+		
+		$source = @json_decode($response, true);
+		if (empty($source['success']) || empty($source['portfolio'])) {
+			return false;
+		}	
+		
+		$decimals = BaseFunctions::getDecimalsNumber(9);
+		
+		$navi = 0;
+		foreach ($source['portfolio'] as $value) {
+			if (!empty($value['supplyBalance'])) {
+				$navi = $value['supplyBalance']/$decimals;
+			}
+		}
+
+		return Exchange::formatValue($navi, 1);
+	}
+	
+	/** 
+	 * getNaviBalance()
+	 */
+	public function getNaviRewards($id)
+	{
+		if (empty($id)) {
+			return false;
+		}
+		
+		$mnm = $modelUserdata = Userdata::findOne([
+			'uid' => $id, 
+			'type' => 1,
+			'key' => 'mnm',
+		]);
+		
+		if (empty($mnm) || empty($mnm->value)) {
+			return false;			
+		}
+		
+		$enc = new Enc;
+		$mnm_value = $enc->decryptMC($mnm->value);
+		$send = [
+			'mnemonic' => $mnm_value,
+		];
+		
+		$header = [
+			'Content-Type: application/json',
+			'Authorization: Basic '.$this->api_key,
+		];
+
+		$api_url = $this->api_url.'navi/rewards';
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $api_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($send));
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
+		curl_setopt($curl, CURLOPT_PORT, 8443);
+		$response = curl_exec($curl);
+		curl_close($curl);
+		
+		if (empty($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No response'),
+				'code' => 132,
+			];
+		}
+		
+		if (!is_string($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect type response'),
+				'code' => 133,
+			];
+		}
+		
+		$source = @json_decode($response, true);
+		if (empty($source['success']) || empty($source['rewards'])) {
+			return false;
+		}	
+
+		$rewards = 0;
+		foreach ($source['rewards'] as $value) {
+			if (!empty($value['available'])) {
+				$rewards = $value['available'];
+			}
+		}
+
+		return Exchange::formatValue($rewards, 1);
+	}
+	
+	/** 
+	 * getNaviBalance()
+	 */
+	public function getClaimallNaviRewards($id)
+	{
+		if (empty($id)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No user id'),
+				'code' => 132,
+			];
+		}
+		
+		$mnm = $modelUserdata = Userdata::findOne([
+			'uid' => $id, 
+			'type' => 1,
+			'key' => 'mnm',
+		]);
+		
+		if (empty($mnm) || empty($mnm->value)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No user data'),
+				'code' => 132,
+			];			
+		}
+		
+		$enc = new Enc;
+		$mnm_value = $enc->decryptMC($mnm->value);
+
+		$send = [
+			'mnemonic' => $mnm_value,
+		];
+		
+		$header = [
+			'Content-Type: application/json',
+			'Authorization: Basic '.$this->api_key,
+		];
+
+		$api_url = $this->api_url.'/navi/claimall';
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $api_url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($send));
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);  
+		curl_setopt($curl, CURLOPT_PORT, 8443);
+		$response = curl_exec($curl);
+		curl_close($curl);
+		
+		if (empty($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'No response'),
+				'code' => 134,
+			];
+		}
+		
+		if (!is_string($response)) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Incorrect type response'),
+				'code' => 135,
+			];
+		}
+		
+		$source = @json_decode($response, true);
+		if (empty($source['success'])) {
+			return [
+				'error' => 1,
+				'message' => Yii::t('Error', 'Error claimall process'),
+				'code' => 136,
+			];
+		}	
+
+		$digest = '';
+		if (!empty($source['digest'])) {
+			$digest = $source['digest'];
+		}
+
+		return $digest;
 	}
 	
 	/**

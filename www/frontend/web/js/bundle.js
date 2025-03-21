@@ -1896,7 +1896,1798 @@ eval("/* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ \
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 //"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @dedust/sdk */ \"./node_modules/@dedust/sdk/dist/index.js\");\n/* harmony import */ var _dedust_sdk__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _ton_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ton/core */ \"./node_modules/@ton/core/dist/index.js\");\n/* harmony import */ var _ton_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_ton_core__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_ton_ton__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ston-fi/sdk */ \"./node_modules/@ston-fi/sdk/dist/chunk-EJXT7F4T.js\");\n/* harmony import */ var _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ston-fi/sdk */ \"./node_modules/@ston-fi/sdk/dist/chunk-IDX7GLVT.js\");\nfunction _typeof(o) { \"@babel/helpers - typeof\"; return _typeof = \"function\" == typeof Symbol && \"symbol\" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && \"function\" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? \"symbol\" : typeof o; }, _typeof(o); }\nfunction _regeneratorRuntime() { \"use strict\"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = \"function\" == typeof Symbol ? Symbol : {}, a = i.iterator || \"@@iterator\", c = i.asyncIterator || \"@@asyncIterator\", u = i.toStringTag || \"@@toStringTag\"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, \"\"); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, \"_invoke\", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: \"normal\", arg: t.call(e, r) }; } catch (t) { return { type: \"throw\", arg: t }; } } e.wrap = wrap; var h = \"suspendedStart\", l = \"suspendedYield\", f = \"executing\", s = \"completed\", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { [\"next\", \"throw\", \"return\"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if (\"throw\" !== c.type) { var u = c.arg, h = u.value; return h && \"object\" == _typeof(h) && n.call(h, \"__await\") ? e.resolve(h.__await).then(function (t) { invoke(\"next\", t, i, a); }, function (t) { invoke(\"throw\", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke(\"throw\", t, i, a); }); } a(c.arg); } var r; o(this, \"_invoke\", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error(\"Generator is already running\"); if (o === s) { if (\"throw\" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if (\"next\" === n.method) n.sent = n._sent = n.arg;else if (\"throw\" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else \"return\" === n.method && n.abrupt(\"return\", n.arg); o = f; var p = tryCatch(e, r, n); if (\"normal\" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } \"throw\" === p.type && (o = s, n.method = \"throw\", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, \"throw\" === n && e.iterator[\"return\"] && (r.method = \"return\", r.arg = t, maybeInvokeDelegate(e, r), \"throw\" === r.method) || \"return\" !== n && (r.method = \"throw\", r.arg = new TypeError(\"The iterator does not provide a '\" + n + \"' method\")), y; var i = tryCatch(o, e.iterator, r.arg); if (\"throw\" === i.type) return r.method = \"throw\", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, \"return\" !== r.method && (r.method = \"next\", r.arg = t), r.delegate = null, y) : a : (r.method = \"throw\", r.arg = new TypeError(\"iterator result is not an object\"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = \"normal\", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: \"root\" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || \"\" === e) { var r = e[a]; if (r) return r.call(e); if (\"function\" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + \" is not iterable\"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, \"constructor\", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, \"constructor\", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, \"GeneratorFunction\"), e.isGeneratorFunction = function (t) { var e = \"function\" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || \"GeneratorFunction\" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, \"GeneratorFunction\")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, \"Generator\"), define(g, a, function () { return this; }), define(g, \"toString\", function () { return \"[object Generator]\"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = \"next\", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) \"t\" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if (\"throw\" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = \"throw\", a.arg = e, r.next = n, o && (r.method = \"next\", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if (\"root\" === i.tryLoc) return handle(\"end\"); if (i.tryLoc <= this.prev) { var c = n.call(i, \"catchLoc\"), u = n.call(i, \"finallyLoc\"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error(\"try statement without catch or finally\"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, \"finallyLoc\") && this.prev < o.finallyLoc) { var i = o; break; } } i && (\"break\" === t || \"continue\" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = \"next\", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if (\"throw\" === t.type) throw t.arg; return \"break\" === t.type || \"continue\" === t.type ? this.next = t.arg : \"return\" === t.type ? (this.rval = this.arg = t.arg, this.method = \"return\", this.next = \"end\") : \"normal\" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, \"catch\": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if (\"throw\" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error(\"illegal catch attempt\"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, \"next\" === this.method && (this.arg = t), y; } }, e; }\nfunction asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }\nfunction _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, \"next\", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, \"throw\", n); } _next(void 0); }); }; }\nfunction _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError(\"Cannot call a class as a function\"); }\nfunction _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, \"value\" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }\nfunction _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, \"prototype\", { writable: !1 }), e; }\nfunction _toPropertyKey(t) { var i = _toPrimitive(t, \"string\"); return \"symbol\" == _typeof(i) ? i : i + \"\"; }\nfunction _toPrimitive(t, r) { if (\"object\" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || \"default\"); if (\"object\" != _typeof(i)) return i; throw new TypeError(\"@@toPrimitive must return a primitive value.\"); } return (\"string\" === r ? String : Number)(t); }\n\ndocument.addEventListener(\"DOMContentLoaded\", function () {\n	var TonConnectSender = function () {\n		\n		function TonConnectSender(tonConnect, address) {\n			_classCallCheck(this, TonConnectSender);\n			this.tonConnect = tonConnect;\n			this.address = address;\n		}\n		\n		return _createClass(TonConnectSender, [{\n			key: \"send\",\n			value: function () {\n				var _send = _asyncToGenerator(_regeneratorRuntime().mark(function _callee(args) {\n					var _args$body;\n					return _regeneratorRuntime().wrap(function _callee$(_context) {\n						while (1) switch (_context.prev = _context.next) {\n							case 0:\n							_context.next = 2;\n							return this.tonConnect.sendTransaction({\n								validUntil: Date.now() + 1000000,\n								messages: [{\n									address: args.to.toString(),\n									amount: args.value.toString(),\n									payload: (_args$body = args.body) === null || _args$body === void 0 ? void 0 : _args$body.toBoc().toString(\"base64\"),\n									stateInit: args.init ? (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.beginCell)().store((0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.storeStateInit)(args.init)).endCell().toBoc().toString(\"base64\") : undefined\n								}]\n							});\n							case 2:\n							case \"end\":\n							return _context.stop();\n						}\n					}, _callee, this);\n				}));\n			\n				function send(_x) {\n					return _send.apply(this, arguments);\n				}\n			\n				return send;\n			}()\n		}]);\n	}();\n\n	var sender;\n	\n	function initializeSender(type) {\n		return _initializeSender.apply(this, arguments);\n	} \n	\n	// Инициализация TonClient и Factory\n	function _initializeSender() {\n		_initializeSender = _asyncToGenerator(_regeneratorRuntime().mark(function _callee2() {\n			var typesend = arguments[0];\n			var connectedWallet, connectedAddress;\n			return _regeneratorRuntime().wrap(function _callee2$(_context2) {\n				while (1) switch (_context2.prev = _context2.next) {\n					case 0:\n						_context2.prev = 0;\n						_context2.next = 3;\n						return tonConnectUI.connectWallet();\n					case 3:\n						connectedWallet = _context2.sent;\n						connectedAddress = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(connectedWallet.account.address);\n						sender = new TonConnectSender(tonConnectUI, connectedAddress);\n						console.log(\"Sender initialized with address:\", connectedAddress.toString());\n						_context2.next = 13;\n						\n						queryId = getQueryID();\n						if (typesend=='swaptonusdt') {\n							performStonSwapTonJetton(USDT_ADDRESS, userAmount, queryId);\n							//performSwapTonJetton(USDT);\n						} else if(typesend=='addtonusdt') {\n							userUSDTSend = toFloatDecimals(userUSDTSend/1000, 6);\n							addStonLiquidityJettonTon(USDT_ADDRESS, userTonSend, userUSDTSend, queryId);\n							//addLiquidityTONUSDT();\n						} else if(typesend=='swapusdtaqua') {\n							performSwapJettons();\n						} else if(typesend=='addusdtaqua') {\n							addLiquidityAQUAUSDT();\n						}\n						break;\n					case 9:\n						_context2.prev = 9;\n						_context2.t0 = _context2[\"catch\"](0);\n						console.error(\"Failed to initialize sender:\", _context2.t0);\n						alert(\"Error initializing sender. Please try again.\");\n					case 13:\n					case \"end\":\n					return _context2.stop();\n				}\n			}, _callee2, null, [[0, 9]]);\n		}));\n		return _initializeSender.apply(this, arguments);\n	}\n  \n	var tonClient = new _ton_ton__WEBPACK_IMPORTED_MODULE_2__.TonClient4({\n		endpoint: \"https://mainnet-v4.tonhubapi.com\"\n	});\n  \n	var factory = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Factory.createFromAddress(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.MAINNET_FACTORY_ADDR));\n	\n	var USDT_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(\"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs\");\n  \n	var AQUAUSD_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(\"EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K\");\n	\n	var STON_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(\"EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO\");\n	\n	var TON = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset[\"native\"](); \n	\n	// DECIMALS - 9\n	var USDT = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(USDT_ADDRESS); \n  \n	// DECIMALS - 6\n	var AQUAUSD = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(AQUAUSD_ADDRESS); \n	\n	function performSwapTonJetton(_x2, _x3, _x4) {\n		return _performSwapTonJetton.apply(this, arguments);\n	} \n	\n	function delay(ms) {\n		return new Promise(function (resolve) {\n			return setTimeout(resolve, ms);\n		});\n	}\n	\n	// !!!!!!!!!!!!!!!!!!!!!!!!! STON !!!!!!!!!!!!!!!!!!!!!!!!!\n	\n	// Ston Swap TON => USDT\n	function performStonSwapTonJetton(_x2, _x3, _x4) {\n		return _performStonSwapTonJetton.apply(this, arguments);\n	}\n	\n	function _performStonSwapTonJetton() {\n		_performStonSwapTonJetton = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(jetton, amount, queryId) {\n			var _txParams$body, dex, pton, currentWallet, readWallet, txParams, transaction, result;\n			return _regeneratorRuntime().wrap(function _callee3$(_context3) {\n				while (1) switch (_context3.prev = _context3.next) {\n					case 0:\n						_context3.prev = 0;\n						sendTransactionData('swaptonusdt', queryId, 1);\n						console.log(\"Ston swap initiated...\");\n						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());\n						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();\n						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n						readWallet = currentWallet.toString({\n							urlSafe: true\n						});\n						//userAmount = toFloatDecimals(userAmount,9);\n						//amount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount);\n						_context3.next = 8;\n						return dex.getSwapTonToJettonTxParams({\n							queryId: queryId,\n							// queryId here\n							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),\n							// swap amount of TON\n							askJettonAddress: jetton,\n							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.0003\"),\n							// but not less than 0.3 USDT - amount in USD\n							proxyTon: pton,\n							userWalletAddress: readWallet\n						});\n					case 8:\n						txParams = _context3.sent;\n						transaction = {\n							validUntil: Date.now() + 1000000,\n							messages: [{\n								address: txParams.to.toString(),\n								amount: txParams.value.toString(),\n								payload: (_txParams$body = txParams.body) === null || _txParams$body === void 0 ? void 0 : _txParams$body.toBoc().toString(\"base64\")\n							}]\n						};\n						_context3.next = 12;\n						return tonConnectUI.sendTransaction(transaction);\n					case 12:\n						result = _context3.sent;\n						sendTransactionData('swaptonusdt', queryId, 100);\n						console.log(\"Swap result:\", result);\n						alert(\"Ston swap completed successfully!\");\n						_context3.next = 21;\n						break;\n					case 17:\n						_context3.prev = 17;\n						_context3.t0 = _context3[\"catch\"](0);\n						sendTransactionData('swaptonusdt', queryId, 0);\n						console.error(\"Error during swap:\", _context3.t0);\n						alert(\"Ston swap failed. Please try again.\");\n					case 21:\n					case \"end\":\n					return _context3.stop();\n				}\n			}, _callee3, null, [[0, 17]]);\n		}));\n		return _performStonSwapTonJetton.apply(this, arguments);\n	} \n	\n	// Ston Swap Jetton Ton\n	function performStonSwapJettonTon(_x5, _x6, _x7) {\n		return _performStonSwapJettonTon.apply(this, arguments);\n	}\n\n	function _performStonSwapJettonTon() {\n		_performStonSwapJettonTon = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(jetton, amount, queryId) {\n			var _txParams$body2, dex, pton, currentWallet, readWallet, txParams, transaction, result;\n			return _regeneratorRuntime().wrap(function _callee4$(_context4) {\n				while (1) switch (_context4.prev = _context4.next) {\n					case 0:\n						_context4.prev = 0;\n						console.log(\"Ston swap initiated...\");\n						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());\n						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();\n						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n						readWallet = currentWallet.toString({\n							urlSafe: true\n						});\n						_context4.next = 8;\n						return dex.getSwapJettonToTonTxParams({\n							queryId: queryId,\n							// queryId here\n							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),\n							// swap amount of jetton\n							offerJettonAddress: jetton,\n							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.01\"),\n							// but not less than 0.01 TON - amount in TON\n							proxyTon: pton,\n							userWalletAddress: readWallet\n						});\n					case 8:\n						txParams = _context4.sent;\n						transaction = {\n							validUntil: Date.now() + 1000000,\n							messages: [{\n								address: txParams.to.toString(),\n								amount: txParams.value.toString(),\n								payload: (_txParams$body2 = txParams.body) === null || _txParams$body2 === void 0 ? void 0 : _txParams$body2.toBoc().toString(\"base64\")\n							}]\n						};\n						_context4.next = 12;\n						return tonConnectUI.sendTransaction(transaction);\n					case 12:\n						result = _context4.sent;\n						console.log(\"Swap result:\", result);\n						alert(\"Ston swap completed successfully!\");\n						_context4.next = 21;\n						break;\n					case 17:\n						_context4.prev = 17;\n						_context4.t0 = _context4[\"catch\"](0);\n						console.error(\"Error during swap:\", _context4.t0);\n						alert(\"Ston swap failed. Please try again.\");\n					case 21:\n					case \"end\":\n					return _context4.stop();\n				}\n			}, _callee4, null, [[0, 17]]);\n		}));\n		return _performStonSwapJettonTon.apply(this, arguments);\n	}\n\n	// Ston Swap Jettons\n	function performStonSwapJettons(_x8, _x9, _x10, _x11) {\n		return _performStonSwapJettons.apply(this, arguments);\n	} 	// 1 tx old pool\n\n	function _performStonSwapJettons() {\n		_performStonSwapJettons = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(jettonAddress1, jettonAddress2, amount, queryId) {\n			var _txParams$body3, dex, pton, currentWallet, readWallet, txParams, transaction, result;\n			return _regeneratorRuntime().wrap(function _callee5$(_context5) {\n				while (1) switch (_context5.prev = _context5.next) {\n					case 0:\n						_context5.prev = 0;\n						console.log(\"Ston swap initiated...\");\n						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());\n						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();\n						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n						readWallet = currentWallet.toString({\n							urlSafe: true\n						});\n						_context5.next = 8;\n						return dex.getSwapJettonToJettonTxParams({\n							queryId: queryId,\n							// queryId here\n							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),\n							// swap amount of jetton1\n							offerJettonAddress: jettonAddress1,\n							askJettonAddress: jettonAddress2,\n							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.0001\"),\n							// but not less than 0.01 jetton2\n							proxyTon: pton,\n							userWalletAddress: readWallet\n						});\n					case 8:\n						txParams = _context5.sent;\n						transaction = {\n							validUntil: Date.now() + 1000000,\n							messages: [{\n								address: txParams.to.toString(),\n								amount: txParams.value.toString(),\n								payload: (_txParams$body3 = txParams.body) === null || _txParams$body3 === void 0 ? void 0 : _txParams$body3.toBoc().toString(\"base64\")\n							}]\n						};\n						_context5.next = 12;\n						return tonConnectUI.sendTransaction(transaction);\n					case 12:\n						result = _context5.sent;\n						console.log(\"Swap result:\", result);\n						alert(\"Ston swap completed successfully!\");\n						_context5.next = 21;\n						break;\n					case 17:\n						_context5.prev = 17;\n						_context5.t0 = _context5[\"catch\"](0);\n						console.error(\"Error during swap:\", _context5.t0);\n						alert(\"Ston swap failed. Please try again.\");\n					case 21:\n					case \"end\":\n					return _context5.stop();\n				}\n			}, _callee5, null, [[0, 17]]);\n		}));\n		return _performStonSwapJettons.apply(this, arguments);\n	}\n\n	// Ston Add pool liquidity TON & USDT\n	function addStonLiquidityJettonTon(_x12, _x13, _x14, _x15) {\n		return _addStonLiquidityJettonTon.apply(this, arguments);\n	} \n	\n	function _addStonLiquidityJettonTon() {\n		_addStonLiquidityJettonTon = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(jetton, tonamount, jettonamount, queryId) {\n			var _tonTxParams$body, _jettonTxParams$body, dex, pton, currentWallet, readWallet, tonTxParams, jettonTxParams, transaction;\n			return _regeneratorRuntime().wrap(function _callee6$(_context6) {\n				while (1) switch (_context6.prev = _context6.next) {\n					case 0:\n						_context6.prev = 0;\n						sendTransactionData('addtonusdt', queryId, 1);\n						console.log(\"Ston add liquidity initiated...\");\n						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());\n						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();\n						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n						readWallet = currentWallet.toString({\n							urlSafe: true\n						});\n						_context6.next = 8;\n						return dex.getProvideLiquidityTonTxParams({\n							userWalletAddress: readWallet,\n							proxyTon: pton,\n							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(tonamount),\n							otherTokenAddress: jetton,\n							minLpOut: \"1\",\n							queryId: queryId\n						});\n					case 8:\n						tonTxParams = _context6.sent;\n						_context6.next = 11;\n						return dex.getProvideLiquidityJettonTxParams({\n							userWalletAddress: readWallet,\n							sendTokenAddress: jetton,\n							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(jettonamount),\n							otherTokenAddress: pton.address,\n							minLpOut: \"1\",\n							queryId: queryId\n						});\n					 case 11:\n						jettonTxParams = _context6.sent;\n						transaction = {\n							validUntil: Date.now() + 1000000,\n							messages: [{\n								address: tonTxParams.to.toString(),\n								amount: tonTxParams.value.toString(),\n								payload: (_tonTxParams$body = tonTxParams.body) === null || _tonTxParams$body === void 0 ? void 0 : _tonTxParams$body.toBoc().toString(\"base64\")\n							}, {\n								address: jettonTxParams.to.toString(),\n								amount: jettonTxParams.value.toString(),\n								payload: (_jettonTxParams$body = jettonTxParams.body) === null || _jettonTxParams$body === void 0 ? void 0 : _jettonTxParams$body.toBoc().toString(\"base64\")\n							}]\n						};\n						tonConnectUI.sendTransaction(transaction, function (error, result) {\n							if (error) {\n								sendTransactionData('addtonusdt', queryId, 0);\n								console.error(\"Error sending transaction:\", error);\n								alert(\"Ston add liquidity failed. Please try again.\");\n								return;\n							}\n							sendTransactionData('addtonusdt', queryId, 100);\n							console.log(\"Ston add liquidity result:\", result);\n							alert(\"Ston add liquidity completed successfully!\");\n						});\n						_context6.next = 20;\n						break;\n					case 16:\n						_context6.prev = 16;\n						_context6.t0 = _context6[\"catch\"](0);\n						sendTransactionData('addtonusdt', queryId, 0);\n						console.error(\"Unexpected error:\", _context6.t0);\n						alert(\"Ston add liquidity failed due to unexpected error.\");\n					case 20:\n					case \"end\":\n					return _context6.stop();\n				}\n			}, _callee6, null, [[0, 16]]);\n		}));\n		return _addStonLiquidityJettonTon.apply(this, arguments);\n	}\n\n	// !!!!!!!!!!!!!!!!!!!!!!!!! DeDust !!!!!!!!!!!!!!!!!!!!!!!!!\n	\n	// Swap TON => USDT\n	function performSwapTonJetton(_x2, _x3, _x4) {\n		return _performSwapTonJetton.apply(this, arguments);\n	} \n	function _performSwapTonJetton() {\n		_performSwapTonJetton = _asyncToGenerator(_regeneratorRuntime().mark(function _callee3(jetton, amount, queryId) {\n			var tonVault, amountIn, pool, result;\n			return _regeneratorRuntime().wrap(function _callee3$(_context3) {\n				while (1) switch (_context3.prev = _context3.next) {\n					case 0:\n						_context3.prev = 0;\n						console.log(\"Swap initiated...\");\n						_context3.t0 = tonClient;\n						queryId = getQueryID();\n						sendTransactionData('swaptonusdt', queryId, 1);\n						_context3.next = 5;\n						return factory.getNativeVault();\n					case 5:\n						_context3.t1 = _context3.sent;\n						tonVault = _context3.t0.open.call(_context3.t0, _context3.t1);\n						userAmount = toFloatDecimals(userAmount,9);\n						amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount); // 0.01 TON - amount\n						_context3.t2 = tonClient;\n						_context3.next = 11;\n						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [TON, jetton]);\n					case 11:\n						_context3.t3 = _context3.sent;\n						pool = _context3.t2.open.call(_context3.t2, _context3.t3);\n						_context3.next = 15;\n						return pool.getReadinessStatus();\n					case 15:\n						_context3.t4 = _context3.sent;\n						_context3.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;\n						if (!(_context3.t4 !== _context3.t5)) {\n							_context3.next = 19;\n							break;\n						}\n						sendTransactionData('swaptonusdt', queryId, 0);\n						throw new Error(\"Pool (TON, \".concat(jetton, \") does not exist.\"));\n					case 19:\n						_context3.next = 21;\n						return tonVault.getReadinessStatus();\n					case 21:\n						_context3.t6 = _context3.sent;\n						_context3.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;\n						if (!(_context3.t6 !== _context3.t7)) {\n							_context3.next = 25;\n							break;\n						}\n						sendTransactionData('swaptonusdt', queryId, 0);\n						throw new Error(\"Vault (TON) does not exist.\");\n					case 25:\n						_context3.next = 27;\n						return tonVault.sendSwap(sender, {\n							queryId: queryId,\n							// queryId\n							poolAddress: pool.address,\n							amount: amountIn,\n							gasAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(toFloatDecimals(swapCommission, 9))\n						});\n					case 27:\n						result = _context3.sent;\n						sendTransactionData('swaptonusdt', queryId, 100);\n						console.log(\"Swap result:\", result);\n						alert(\"Swap completed successfully!\");\n						_context3.next = 36;\n						break;\n					case 32:\n						_context3.prev = 32;\n						_context3.t8 = _context3[\"catch\"](0);\n						sendTransactionData('swaptonusdt', queryId, 0);\n						console.error(\"Error during swap:\", _context3.t8);\n						alert(\"Swap failed. Please try again.\");\n					case 36:\n					case \"end\":\n					return _context3.stop();\n				}\n			}, _callee3, null, [[0, 32]]);\n		}));\n		return _performSwapTonJetton.apply(this, arguments);\n	}\n	\n	// Swap USDT => AquaUSD\n	async function performSwapJettons() {\n		userAmount2 = userAmount2/1000;\n		queryId = getQueryID();\n\n		try {\n			console.log(\"Swap initiated...\");\n			sendTransactionData('swapusdtaqua', queryId, 1);\n			\n			const currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n\n			const amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount2);\n\n			let pool = tonClient.open(\n				await factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [USDT, AQUAUSD])\n			);\n\n			if ((await pool.getReadinessStatus()) !== _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY) {\n				console.log(\"VOLATILE POOL NOT FOUND! TRYING STABLE...\");\n				pool = tonClient.open(\n					await factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [USDT, AQUAUSD])\n				);\n				\n				if ((await pool.getReadinessStatus()) !== _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY) {\n				\n					pool = tonClient.open(\n						await factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE, [USDT, AQUAUSD]) // secondToken, firstToken\n					);\n					\n					if ((await pool.getReadinessStatus()) !== _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY) {\n						throw new Error(`Pool (${AQUAUSD}, ${USDT}) does not exist.`);\n					}\n				}\n			}\n\n			const root = tonClient.open(\n				_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS)\n			);\n			const wallet = tonClient.open(await root.getWallet(currentWallet));\n\n			const vault = tonClient.open(\n				await factory.getJettonVault(USDT_ADDRESS)\n			);\n\n			const result = await wallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.3\"), {\n				queryId: queryId, // queryId\n				amount: amountIn,\n				destination: vault.address,\n				responseAddress: currentWallet, // return gas to user\n				forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.25\"),\n				forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createSwapPayload({\n					poolAddress: pool.address,\n				}),\n			});\n			\n			sendTransactionData('swapusdtaqua', queryId, 100);\n\n			console.log(\"Swap result:\", result);\n			alert(\"Swap completed successfully!\");\n		} catch (error) {\n			\n			sendTransactionData('swapusdtaqua', queryId, 0);\n			console.error(\"Error during swap:\", error);\n			alert(\"Swap failed. Please try again.\");\n		}\n	}\n\n	// Add pool liquidity TON & USDT\n	function addLiquidityTONUSDT(_x5, _x6, _x7) {\n		return _addLiquidityTONUSDT.apply(this, arguments);\n	} \n  \n	function _addLiquidityTONUSDT() {\n		_addLiquidityTONUSDT = _asyncToGenerator(_regeneratorRuntime().mark(function _callee4(firstAmount, secondAmount, queryId) {\n			var currentWallet, tonAmount, usdtAmount, tonVault, usdtVault, assets, targetBalances, result, usdtRoot, usdtWallet, result2;\n			return _regeneratorRuntime().wrap(function _callee4$(_context4) {\n				while (1) switch (_context4.prev = _context4.next) {\n					case 0:\n						_context4.prev = 0;\n						console.log(\"Add liquidity initiated...\");\n						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n						userTonSend = toFloatDecimals(userTonSend, 9);\n						tonAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userTonSend); // 0.01 TON - firstAmount\n						userUSDTSend = toFloatDecimals(userUSDTSend/1000, 6);\n						usdtAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userUSDTSend); // 0.05 USDT - secondAmount\n						queryId = getQueryID();\n						sendTransactionData('addtonusdt', queryId, 1);\n						_context4.t0 = tonClient;\n						_context4.next = 8;\n						return factory.getNativeVault();\n					case 8:\n						_context4.t1 = _context4.sent;\n						tonVault = _context4.t0.open.call(_context4.t0, _context4.t1);\n						_context4.t2 = tonClient;\n						_context4.next = 13;\n						return factory.getJettonVault(USDT_ADDRESS);\n					case 13:\n						_context4.t3 = _context4.sent;\n						usdtVault = _context4.t2.open.call(_context4.t2, _context4.t3);\n						_context4.next = 17;\n						return tonVault.getReadinessStatus();\n					case 17:\n						_context4.t4 = _context4.sent;\n						_context4.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;\n						if (!(_context4.t4 !== _context4.t5)) {\n							_context4.next = 21;\n							break;\n						}\n						sendTransactionData('addtonusdt', queryId, 0);\n						throw new Error(\"Vault (TON) does not exist.\");\n					case 21:\n						_context4.next = 23;\n						return usdtVault.getReadinessStatus();\n					case 23:\n						_context4.t6 = _context4.sent;\n						_context4.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;\n						if (!(_context4.t6 !== _context4.t7)) {\n							_context4.next = 27;\n							break;\n						}\n						sendTransactionData('addtonusdt', queryId, 0);\n						throw new Error(\"Vault (USDT) does not exist.\");\n					case 27:\n						assets = [TON, USDT];\n						targetBalances = [tonAmount, usdtAmount]; // ADD TON\n						_context4.next = 31;\n						return tonVault.sendDepositLiquidity(sender, {\n							poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE,\n							assets: assets,\n							targetBalances: targetBalances,\n							amount: tonAmount + (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.2\")\n						});\n					case 31:\n						result = _context4.sent;\n						// ADD TON END\n						// ADD USDT\n						usdtRoot = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS));\n						_context4.t8 = tonClient;\n						_context4.next = 36;\n						return usdtRoot.getWallet(currentWallet);\n					case 36:\n						_context4.t9 = _context4.sent;\n						usdtWallet = _context4.t8.open.call(_context4.t8, _context4.t9);\n						_context4.next = 40;\n						return usdtWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.5\"), {\n							queryId: queryId,\n							// queryId\n							amount: usdtAmount,\n							destination: usdtVault.address,\n							responseAddress: currentWallet,\n							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.4\"),\n							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({\n								poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE,\n								assets: assets,\n								targetBalances: targetBalances\n							})\n						});\n					case 40:\n						result2 = _context4.sent;\n						// ADD USDT END\n\n						console.log(\"Add TON result:\", result);\n						console.log(\"Add USDT result:\", result2);\n						sendTransactionData('addtonusdt', queryId, 100);\n						alert(\"Add liquidity completed successfully!\");\n						_context4.next = 50;\n						break;\n					case 46:\n						_context4.prev = 46;\n						_context4.t10 = _context4[\"catch\"](0);\n						sendTransactionData('addtonusdt', queryId, 1);\n						console.error(\"Error during swap:\", _context4.t10);\n						alert(\"Add liquidity failed. Please try again.\");\n					case 50:\n					case \"end\":\n					return _context4.stop();\n				}\n			}, _callee4, null, [[0, 46]]);\n		}));\n		return _addLiquidityTONUSDT.apply(this, arguments);\n	}\n	\n	// Add pool liquidity AquaUSD & USDT\n	async function addLiquidityAQUAUSDT() {\n		try {\n			console.log(\"Add liquidity initiated...\");\n			\n			const currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);\n\n			userUSDTSend2 = toFloatDecimals(userUSDTSend2/1000, 6);\n			usdtAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userUSDTSend2); // 0.05 USDT - secondAmount\n						\n			userAQUASend2 = toFloatDecimals(userAQUASend2/1000, 6);\n			aquaAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAQUASend2); // 0.05 AquaUSD - firstAmount\n			\n			queryId = getQueryID();\n			sendTransactionData('addusdtaqua', queryId, 1);\n\n			const aquaVault = tonClient.open(\n				await factory.getJettonVault(AQUAUSD_ADDRESS)\n			);\n\n			const usdtVault = tonClient.open(\n				await factory.getJettonVault(USDT_ADDRESS)\n			);\n\n			if ((await aquaVault.getReadinessStatus()) !== _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY) {\n				throw new Error(\"Vault (AquaUSD) does not exist.\");\n			}\n\n			if ((await usdtVault.getReadinessStatus()) !== _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY) {\n				sendTransactionData('addusdtaqua', queryId, 0);\n				throw new Error(\"Vault (TON) does not exist.\");\n			}\n\n			const assets = [AQUAUSD, USDT];\n			const targetBalances = [aquaAmount, usdtAmount];\n\n			// ADD AQUA\n			const aquaRoot = tonClient.open(\n				_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(AQUAUSD_ADDRESS)\n			);\n			const aquaWallet = tonClient.open(\n				await aquaRoot.getWallet(currentWallet)\n			);\n\n			const result = await aquaWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.55\"), {\n				queryId: queryId,\n				amount: aquaAmount,\n				destination: aquaVault.address,\n				responseAddress: currentWallet,\n				forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.45\"),\n				forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({\n					poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE,\n					assets,\n					targetBalances,\n				}),\n			});\n			// ADD AQUA END\n\n			await delay(5000);\n\n			// ADD USDT\n			const usdtRoot = tonClient.open(\n				_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS)\n			);\n			const usdtWallet = tonClient.open(\n				await usdtRoot.getWallet(currentWallet)\n			);\n\n			const result2 = await usdtWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.55\"), {\n				queryId: queryId,\n				amount: usdtAmount,\n				destination: usdtVault.address,\n				responseAddress: currentWallet,\n				forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(\"0.45\"),\n				forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({\n					poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE,\n					assets,\n					targetBalances,\n				}),\n			});\n			// ADD USDT END\n\n			sendTransactionData('addusdtaqua', queryId, 100);\n			console.log(\"Add AquaUSD result:\", result);\n			console.log(\"Add USDT result:\", result2);\n			alert(\"Add liquidity completed successfully!\");\n		} catch (error) {\n			sendTransactionData('addusdtaqua', queryId, 0);\n			console.error(\"Error during swap:\", error);\n			alert(\"Add liquidity failed. Please try again.\");\n		}\n	}\n\n	// Связываем кнопку Swap TON-USDT с функцией performSwapTonJetton\n	document.addEventListener(\"click\", event => {\n		var el = document.getElementById('swap-tonusdt-button');\n		if (el && el.contains(event.target)) {\n			if (typeof tonConnectUI!==\"undefined\" && tonConnectUI!==undefined && tonConnectUI) {\n				tonConnectUI.disconnect();\n			}\n\n			initializeSender('swaptonusdt');\n		}\n	});\n	\n	// Связываем кнопку Swap USDT-AQUA с функцией performSwapJettons\n	document.addEventListener(\"click\", event => {\n		var el = document.getElementById('swap-usdtaqua-button');\n		if (el && el.contains(event.target)) {\n			if (typeof tonConnectUI!==\"undefined\" && tonConnectUI!==undefined && tonConnectUI) {\n				tonConnectUI.disconnect();\n			}\n\n			initializeSender('swapusdtaqua');\n		}\n	});\n	\n	// Связываем кнопку USDT/AquaUSDT с функцией addLiquidityAQUAUSDT\n	document.addEventListener(\"click\", event => {\n		var el = document.getElementById('usdtaqua-add-liquidity-button');\n		if (el && el.contains(event.target)) {\n			if (typeof tonConnectUI!==\"undefined\" && tonConnectUI!==undefined && tonConnectUI) {\n				tonConnectUI.disconnect();\n			}\n\n			initializeSender('addusdtaqua');\n		}\n	});\n	\n	// Связываем кнопку TON/USDT Add с функцией addLiquidityTonUsdt\n	document.addEventListener(\"click\", event => {\n		var el = document.getElementById('tonusdt-add-liquidity-button');\n		if (el && el.contains(event.target)) {\n			if (typeof tonConnectUI!==\"undefined\" && tonConnectUI!==undefined && tonConnectUI) {\n				tonConnectUI.disconnect();\n			}\n\n			initializeSender('addtonusdt');\n		}\n	});\n	\n});");
+//eval("
+
+__webpack_require__.r(__webpack_exports__);
+var _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/@dedust/sdk/dist/index.js");
+var _dedust_sdk__WEBPACK_IMPORTED_MODULE_0___default = __webpack_require__.n(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__);
+var _ton_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/@ton/core/dist/index.js");
+var _ton_core__WEBPACK_IMPORTED_MODULE_1___default = __webpack_require__.n(_ton_core__WEBPACK_IMPORTED_MODULE_1__);
+var _ton_ton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./node_modules/@ton/ton/dist/index.js");
+var _ton_ton__WEBPACK_IMPORTED_MODULE_2___default = __webpack_require__.n(_ton_ton__WEBPACK_IMPORTED_MODULE_2__);
+var _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./node_modules/@ston-fi/sdk/dist/chunk-EJXT7F4T.js");
+var _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./node_modules/@ston-fi/sdk/dist/chunk-IDX7GLVT.js");
+var _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./node_modules/@ston-fi/sdk/dist/chunk-KANJLTYX.js");
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+	var USDT_ADDRESS_ORIG = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+	
+	var TON_ADDRESS_ORIG = "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c";
+	
+	var USDT_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(USDT_ADDRESS_ORIG);
+	
+	var AQUAUSD_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse("EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K");
+	
+	var STON_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse("EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO");
+	
+	var TON_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(TON_ADDRESS_ORIG);
+	
+	var STONFI_ROUTER_ADDR = "EQDQ6j53q21HuZtw6oclm7z4LU2cG6S2OKvpSSMH548d7kJT";
+	
+	var STONFI_ROUTER_ADDR2 = "EQCS4UEa5UaJLzOyyKieqQOQ2P9M-7kXpkO5HnP3Bv250cN3";
+	
+	var pTON_ADDRESS = "EQBnGWMCf3-FZZq1W4IWcWiGAc3PHuZ0_H-7sad2oY00o83S";
+	
+	var POOL_ADDRESS_ORIG = "EQCGScrZe1xbyWqWDvdI6mzP-GAcAWFv6ZXuaJOuSqemxku4";
+	
+	var USDT_TON_FARM = "EQDyswfVhGlOue4_a9cAVuDSP0ldWP53jK2jL9qXfPWGhZP4";
+	
+	var TonConnectSender = function () {
+		
+		function TonConnectSender(tonConnect, address) {
+			_classCallCheck(this, TonConnectSender);
+			this.tonConnect = tonConnect;
+			this.address = address;
+		}
+		
+		return _createClass(TonConnectSender, [{
+			key: "send",
+			value: function () {
+				var _send = _asyncToGenerator(_regeneratorRuntime().mark(function _callee(args) {
+					var _args$body;
+					return _regeneratorRuntime().wrap(function _callee$(_context) {
+						while (1) switch (_context.prev = _context.next) {
+							case 0:
+								_context.next = 2;
+								return this.tonConnect.sendTransaction({
+									validUntil: Date.now() + 1000000,
+									messages: [{
+										address: args.to.toString(),
+										amount: args.value.toString(),
+										payload: (_args$body = args.body) === null || _args$body === void 0 ? void 0 : _args$body.toBoc().toString("base64"),
+										stateInit: args.init ? (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.beginCell)().store((0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.storeStateInit)(args.init)).endCell().toBoc().toString("base64") : undefined
+									}]
+								});
+							case 2:
+							case "end":
+							return _context.stop();
+						}
+					}, _callee, this);
+				}));
+				function send(_x) {
+					return _send.apply(this, arguments);
+				}
+				return send;
+			}()	  
+		}]);	
+	}();
+
+	var sender;
+	
+	function initializeSender() {
+		return _initializeSender.apply(this, arguments);
+	}
+
+	function _initializeSender() {
+		_initializeSender = _asyncToGenerator(_regeneratorRuntime().mark(function _callee2() {
+			var typesend = arguments[0];
+			var connectedWallet, connectedAddress;
+			return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+				while (1) switch (_context2.prev = _context2.next) {
+					case 0:
+						_context2.prev = 0;
+						_context2.next = 3;
+						return tonConnectUI.connectWallet();
+					case 3:
+						connectedWallet = _context2.sent;
+						connectedAddress = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(connectedWallet.account.address);
+						sender = new TonConnectSender(tonConnectUI, connectedAddress);
+						console.log("Sender initialized with address:", connectedAddress.toString());
+						_context2.next = 13;
+						
+						queryId = getQueryID();
+						if (typesend=='swaptonusdt') {
+							performStonSwapTonJetton(USDT_ADDRESS, userAmount, queryId);
+							performSwapTonJetton(USDT);
+						} else if(typesend=='addtonusdt') {
+							userUSDTSend = toFloatDecimals(userUSDTSend/1000, 6);
+							addStonLiquidityJettonTon(USDT_ADDRESS, userTonSend, userUSDTSend, queryId);
+							//addLiquidityTONUSDT();
+						} else if(typesend=='swapusdtaqua') {
+							performSwapJettons();
+						} else if(typesend=='addusdtaqua') {
+							addLiquidityAQUAUSDT();
+						} else if(typesend=='addmultitonusdt') {
+	
+							if (typeof userTonDeposit==="undefined" || userTonDeposit===undefined || !userTonDeposit) {
+								addNotify("Missing number of ton or usdt tokens", "error");
+								return false;
+							}
+
+							var url = "https://api.ston.fi/v1/liquidity_provision/simulate?provision_type=Balanced";
+							
+							url += "&pool_address=" + POOL_ADDRESS_ORIG;
+							url += "&token_a=" + TON_ADDRESS_ORIG;
+							url += "&token_b=" + USDT_ADDRESS_ORIG;
+							
+							url += "&token_a_units=" + userTonDeposit*1000000000;
+							url += "&token_b_units=" + userUSDTDeposit*1000000;
+							url += "&slippage_tolerance=0.001";
+
+							fetch(url, {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json"
+								}
+							})
+							.then(response => {
+								if (!response.ok) {
+									console.log("Not connect pools");
+								}
+								return response.json();
+							})
+							.then(data => {
+								
+								if (typeof data==="undefined" || data===undefined || !data) {
+									addNotify("Not pools data", "error");
+									return false;
+								}
+								
+								if (typeof data.min_lp_units==="undefined" || data.min_lp_units===undefined || !data.min_lp_units) {
+									addNotify("Not lp tokens data", "error");
+									return false;
+								}
+								
+								/*
+								0.51
+								0.001297
+								0.01237673
+								0.0222970482
+								
+								orig: 0.024716633
+								10%: 0.0024716633
+								orig-10%: 0.0222449697
+								
+								*/
+								
+								var userLPToken = parseInt(data.min_lp_units)/1000000000;
+								//console.log('orig: ' + userLPToken);
+								
+								var percent = userLPToken*0.1;
+								//console.log('10%: ' + percent);
+								
+								userLPToken = userLPToken-percent;
+								//console.log('orig-10%: ' + userLPToken);
+				
+								console.log(userTonDeposit);
+								//console.log(typeof userTonDeposit);
+								console.log(userUSDTDeposit);
+								//console.log(typeof userUSDTDeposit);
+								console.log(userLPToken);
+								//console.log(typeof userLPToken);
+								//return false;
+		
+								performStonSwapnAddLiquiditynFarmJettonTon(
+									USDT_ADDRESS, // jetton address
+									userTonDeposit, // 0.01 ton amount
+									userUSDTDeposit, //0.000036 usdt amount
+									USDT_TON_FARM, // USDT/TON Farm v3
+									POOL_ADDRESS_ORIG, // USDT/TON pool LP token address
+									userLPToken, // usdt/ton lp tokens amount
+									queryId
+								);		
+							})
+							.catch(error => {
+								console.log(error);	
+							});
+
+						} else if(typesend=='removemultitonusdt') {
+							
+							revertStonSwapnAddLiquiditynFarmJettonTon(queryId);
+	
+						}
+		
+						break;
+					case 9:
+						_context2.prev = 9;
+						_context2.t0 = _context2["catch"](0);
+						console.error("Failed to initialize sender:", _context2.t0);
+						alert("Error initializing sender. Please try again.");
+					case 13:
+					case "end":
+						return _context2.stop();
+				}
+			}, _callee2, null, [[0, 9]]);
+		}));
+		return _initializeSender.apply(this, arguments);
+	}
+	
+	var tonClient = new _ton_ton__WEBPACK_IMPORTED_MODULE_2__.TonClient4({
+		endpoint: "https://mainnet-v4.tonhubapi.com"
+	});
+	
+	var factory = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Factory.createFromAddress(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.MAINNET_FACTORY_ADDR));
+
+	var TON = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset["native"](); // DECIMALS - 9
+	
+	var USDT = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(USDT_ADDRESS); // DECIMALS - 6
+	
+	var AQUAUSD = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(AQUAUSD_ADDRESS); // DECIMALS - 9
+	
+	function delay(ms) {
+		return new Promise(function (resolve) {
+			return setTimeout(resolve, ms);
+		});
+	}
+	
+	// !!!!!!!!!!!!!!!!!!!!!!!!! STON !!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	// Ston Swap TON => USDT
+	function performStonSwapTonJetton(_x2, _x3, _x4) {
+		return _performStonSwapTonJetton.apply(this, arguments);
+	}
+	
+	function _performStonSwapTonJetton() {
+		_performStonSwapTonJetton = _asyncToGenerator(_regeneratorRuntime().mark(function _callee3(jetton, amount, queryId) {
+			var _txParams$body, dex, pton, currentWallet, readWallet, txParams, transaction, result;
+			return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+				while (1) switch (_context3.prev = _context3.next) {
+					case 0:
+						_context3.prev = 0;
+						sendTransactionData('swaptonusdt', queryId, 1);
+						console.log("Ston swap initiated...");
+						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());
+						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						//userAmount = toFloatDecimals(userAmount,9);
+						//amount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount);
+						_context3.next = 8;
+						return dex.getSwapTonToJettonTxParams({
+							queryId: queryId,
+							// queryId here
+							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),
+							// swap amount of TON
+							askJettonAddress: jetton,
+							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.0003"),
+							// but not less than 0.3 USDT - amount in USD
+							proxyTon: pton,
+							userWalletAddress: readWallet
+						});
+					case 8:
+						txParams = _context3.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: txParams.to.toString(),
+								amount: txParams.value.toString(),
+								payload: (_txParams$body = txParams.body) === null || _txParams$body === void 0 ? void 0 : _txParams$body.toBoc().toString("base64")
+							}]
+						};
+						_context3.next = 12;
+						return tonConnectUI.sendTransaction(transaction);
+					case 12:
+						result = _context3.sent;
+						sendTransactionData('swaptonusdt', queryId, 100);
+						console.log("Swap result:", result);
+						alert("Ston swap completed successfully!");
+						_context3.next = 21;
+						break;
+					case 17:
+						_context3.prev = 17;
+						_context3.t0 = _context3["catch"](0);
+						sendTransactionData('swaptonusdt', queryId, 0);
+						console.error("Error during swap:", _context3.t0);
+						alert("Ston swap failed. Please try again.");
+					case 21:
+					case "end":
+					return _context3.stop();
+				}
+			}, _callee3, null, [[0, 17]]);
+		}));
+		return _performStonSwapTonJetton.apply(this, arguments);
+	} 
+	
+	// Ston Swap Jetton Ton
+	function performStonSwapJettonTon(_x5, _x6, _x7) {
+		return _performStonSwapJettonTon.apply(this, arguments);
+	}
+
+	function _performStonSwapJettonTon() {
+		_performStonSwapJettonTon = _asyncToGenerator(_regeneratorRuntime().mark(function _callee4(jetton, amount, queryId) {
+			var _txParams$body2, dex, pton, currentWallet, readWallet, txParams, transaction, result;
+			return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+				while (1) switch (_context4.prev = _context4.next) {
+					case 0:
+						_context4.prev = 0;
+						console.log("Ston swap initiated...");
+						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());
+						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						_context4.next = 8;
+						return dex.getSwapJettonToTonTxParams({
+							queryId: queryId,
+							// queryId here
+							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),
+							// swap amount of jetton
+							offerJettonAddress: jetton,
+							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.01"),
+							// but not less than 0.01 TON - amount in TON
+							proxyTon: pton,
+							userWalletAddress: readWallet
+						});
+					case 8:
+						txParams = _context4.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: txParams.to.toString(),
+								amount: txParams.value.toString(),
+								payload: (_txParams$body2 = txParams.body) === null || _txParams$body2 === void 0 ? void 0 : _txParams$body2.toBoc().toString("base64")
+							}]
+						};
+						_context4.next = 12;
+						return tonConnectUI.sendTransaction(transaction);
+					case 12:
+						result = _context4.sent;
+						console.log("Swap result:", result);
+						alert("Ston swap completed successfully!");
+						_context4.next = 21;
+						break;
+					case 17:
+						_context4.prev = 17;
+						_context4.t0 = _context4["catch"](0);
+						console.error("Error during swap:", _context4.t0);
+						alert("Ston swap failed. Please try again.");
+					case 21:
+					case "end":
+					return _context4.stop();
+				}
+			}, _callee4, null, [[0, 17]]);
+		}));
+		return _performStonSwapJettonTon.apply(this, arguments);
+	}
+
+	// Ston Swap Jettons
+	function performStonSwapJettons(_x8, _x9, _x10, _x11) {
+		return _performStonSwapJettons.apply(this, arguments);
+	} 	// 1 tx old pool
+
+	function _performStonSwapJettons() {
+		_performStonSwapJettons = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(jettonAddress1, jettonAddress2, amount, queryId) {
+			var _txParams$body3, dex, pton, currentWallet, readWallet, txParams, transaction, result;
+			return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+				while (1) switch (_context5.prev = _context5.next) {
+					case 0:
+						_context5.prev = 0;
+						console.log("Ston swap initiated...");
+						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());
+						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						_context5.next = 8;
+						return dex.getSwapJettonToJettonTxParams({
+							queryId: queryId,
+							// queryId here
+							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(amount),
+							// swap amount of jetton1
+							offerJettonAddress: jettonAddress1,
+							askJettonAddress: jettonAddress2,
+							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.0001"),
+							// but not less than 0.01 jetton2
+							proxyTon: pton,
+							userWalletAddress: readWallet
+						});
+					case 8:
+						txParams = _context5.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: txParams.to.toString(),
+								amount: txParams.value.toString(),
+								payload: (_txParams$body3 = txParams.body) === null || _txParams$body3 === void 0 ? void 0 : _txParams$body3.toBoc().toString("base64")
+							}]
+						};
+						_context5.next = 12;
+						return tonConnectUI.sendTransaction(transaction);
+					case 12:
+						result = _context5.sent;
+						console.log("Swap result:", result);
+						alert("Ston swap completed successfully!");
+						_context5.next = 21;
+						break;
+					case 17:
+						_context5.prev = 17;
+						_context5.t0 = _context5["catch"](0);
+						console.error("Error during swap:", _context5.t0);
+						alert("Ston swap failed. Please try again.");
+					case 21:
+					case "end":
+					return _context5.stop();
+				}
+			}, _callee5, null, [[0, 17]]);
+		}));
+		return _performStonSwapJettons.apply(this, arguments);
+	}
+	
+	// Ston Add pool liquidity TON & USDT
+	function addStonLiquidityJettonTon(_x12, _x13, _x14, _x15) {
+		return _addStonLiquidityJettonTon.apply(this, arguments);
+	} 
+	
+	function _addStonLiquidityJettonTon() {
+		_addStonLiquidityJettonTon = _asyncToGenerator(_regeneratorRuntime().mark(function _callee6(jetton, tonamount, jettonamount, queryId) {
+			var _tonTxParams$body, _jettonTxParams$body, dex, pton, currentWallet, readWallet, tonTxParams, jettonTxParams, transaction;
+			return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+				while (1) switch (_context6.prev = _context6.next) {
+					case 0:
+						_context6.prev = 0;
+						sendTransactionData('addtonusdt', queryId, 1);
+						console.log("Ston add liquidity initiated...");
+						dex = tonClient.open(new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v1.Router());
+						pton = new _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v1();
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						_context6.next = 8;
+						return dex.getProvideLiquidityTonTxParams({
+							userWalletAddress: readWallet,
+							proxyTon: pton,
+							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(tonamount),
+							otherTokenAddress: jetton,
+							minLpOut: "1",
+							queryId: queryId
+						});
+					case 8:
+						tonTxParams = _context6.sent;
+						_context6.next = 11;
+						return dex.getProvideLiquidityJettonTxParams({
+							userWalletAddress: readWallet,
+							sendTokenAddress: jetton,
+							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(jettonamount),
+							otherTokenAddress: pton.address,
+							minLpOut: "1",
+							queryId: queryId
+						});
+					 case 11:
+						jettonTxParams = _context6.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: tonTxParams.to.toString(),
+								amount: tonTxParams.value.toString(),
+								payload: (_tonTxParams$body = tonTxParams.body) === null || _tonTxParams$body === void 0 ? void 0 : _tonTxParams$body.toBoc().toString("base64")
+							}, {
+								address: jettonTxParams.to.toString(),
+								amount: jettonTxParams.value.toString(),
+								payload: (_jettonTxParams$body = jettonTxParams.body) === null || _jettonTxParams$body === void 0 ? void 0 : _jettonTxParams$body.toBoc().toString("base64")
+							}]
+						};
+						tonConnectUI.sendTransaction(transaction, function (error, result) {
+							if (error) {
+								sendTransactionData('addtonusdt', queryId, 0);
+								console.error("Error sending transaction:", error);
+								alert("Ston add liquidity failed. Please try again.");
+								return;
+							}
+							sendTransactionData('addtonusdt', queryId, 100);
+							console.log("Ston add liquidity result:", result);
+							alert("Ston add liquidity completed successfully!");
+						});
+						_context6.next = 20;
+						break;
+					case 16:
+						_context6.prev = 16;
+						_context6.t0 = _context6["catch"](0);
+						sendTransactionData('addtonusdt', queryId, 0);
+						console.error("Unexpected error:", _context6.t0);
+						alert("Ston add liquidity failed due to unexpected error.");
+					case 20:
+					case "end":
+					return _context6.stop();
+				}
+			}, _callee6, null, [[0, 16]]);
+		}));
+		return _addStonLiquidityJettonTon.apply(this, arguments);
+	}
+	
+	// !!!!!!!!!!!!!!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!!!!!!!!!!!
+
+	function performStonSwapnAddLiquiditynFarmJettonTon(_x16, _x17, _x18, _x19, _x20, _x21, _x22) {
+		return _performStonSwapnAddLiquiditynFarmJettonTon.apply(this, arguments);
+	}
+	
+	function _performStonSwapnAddLiquiditynFarmJettonTon() {
+		_performStonSwapnAddLiquiditynFarmJettonTon = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(jetton, tonamount, jettonamount, farmaddr, lpaddr, lpamount, queryId) {
+			var _swapTxParams$body, _lpJettonTxParams$bod, _lpTonTxParams$body, _farmTxParams$body, dex, pton, farm, currentWallet, readWallet, swapTxParams, lpJettonTxParams, lpTonTxParams, farmTxParams, transaction;
+			return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+				while (1) switch (_context7.prev = _context7.next) {
+					case 0:
+						_context7.prev = 0;
+						console.log("Ston multiple actions initiated...");
+						sendTransactionData('addmultitonusdt', queryId, 1);
+					
+						dex = tonClient.open(_ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v2_1.Router.create(STONFI_ROUTER_ADDR2));
+						pton = _ston_fi_sdk__WEBPACK_IMPORTED_MODULE_4__.pTON.v2_1.create(pTON_ADDRESS);
+						farm = tonClient.open(_ston_fi_sdk__WEBPACK_IMPORTED_MODULE_5__.FARM.v3.NftMinter.create(farmaddr));
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						_context7.next = 9;
+						return dex.getSwapTonToJettonTxParams({
+							queryId: queryId,
+							offerAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(tonamount),
+							askJettonAddress: jetton,
+							minAskAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.00001"),
+							proxyTon: pton,
+							userWalletAddress: readWallet
+						});
+					case 9:
+						swapTxParams = _context7.sent;
+						_context7.next = 12;
+						return dex.getProvideLiquidityJettonTxParams({
+							userWalletAddress: readWallet,
+							sendTokenAddress: jetton,
+							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(jettonamount),
+							otherTokenAddress: pton.address,
+							minLpOut: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.00001"),
+							queryId: queryId
+						});
+					case 12:
+						lpJettonTxParams = _context7.sent;
+						_context7.next = 15;
+						return dex.getProvideLiquidityTonTxParams({
+							userWalletAddress: readWallet,
+							proxyTon: pton,
+							sendAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(tonamount),
+							otherTokenAddress: jetton,
+							minLpOut: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.00001"),
+							queryId: queryId
+						});
+					case 15:
+						lpTonTxParams = _context7.sent;
+						_context7.next = 18;
+						return farm.getStakeTxParams({
+							userWalletAddress: readWallet,
+							jettonAddress: lpaddr,
+							jettonAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(lpamount),
+							queryId: queryId
+						});
+					case 18:
+						farmTxParams = _context7.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: swapTxParams.to.toString(),
+								amount: swapTxParams.value.toString(),
+								payload: (_swapTxParams$body = swapTxParams.body) === null || _swapTxParams$body === void 0 ? void 0 : _swapTxParams$body.toBoc().toString("base64")
+							}, {
+								address: lpJettonTxParams.to.toString(),
+								amount: lpJettonTxParams.value.toString(),
+								payload: (_lpJettonTxParams$bod = lpJettonTxParams.body) === null || _lpJettonTxParams$bod === void 0 ? void 0 : _lpJettonTxParams$bod.toBoc().toString("base64")
+							}, {
+								address: lpTonTxParams.to.toString(),
+								amount: lpTonTxParams.value.toString(),
+								payload: (_lpTonTxParams$body = lpTonTxParams.body) === null || _lpTonTxParams$body === void 0 ? void 0 : _lpTonTxParams$body.toBoc().toString("base64")
+							}, {
+								address: farmTxParams.to.toString(),
+								amount: farmTxParams.value.toString(),
+								payload: (_farmTxParams$body = farmTxParams.body) === null || _farmTxParams$body === void 0 ? void 0 : _farmTxParams$body.toBoc().toString("base64")
+							}]
+						};
+						tonConnectUI.sendTransaction(transaction, function (error, result) {
+							if (error) {
+								console.error("Error sending transaction:", error);
+								alert("Ston multi actions failed. Please try again.");
+								sendTransactionData('addmultitonusdt', queryId, 0);
+								return;
+							}
+							console.log("Ston multi actions result:", result);
+							alert("Ston multi actions completed successfully!");
+							sendTransactionData('addmultitonusdt', queryId, 100);
+						});
+						_context7.next = 27;
+						break;
+					case 23:
+						_context7.prev = 23;
+						_context7.t0 = _context7["catch"](0);
+						console.error("Unexpected error:", _context7.t0);
+						alert("Ston multi actions failed due to unexpected error.");
+						sendTransactionData('addmultitonusdt', queryId, 0);
+					case 27:
+					case "end":
+					return _context7.stop();
+				}
+			}, _callee7, null, [[0, 23]]);
+		}));
+		return _performStonSwapnAddLiquiditynFarmJettonTon.apply(this, arguments);
+	}
+	
+	function fetchFarmingPositions(_x23) {
+		return _fetchFarmingPositions.apply(this, arguments);
+	} // 1 tx revert multiple actions
+	
+	function _fetchFarmingPositions() {
+		_fetchFarmingPositions = _asyncToGenerator(_regeneratorRuntime().mark(function _callee8(readWallet) {
+			var response, data, filteredAddresses;
+			return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+				while (1) switch (_context8.prev = _context8.next) {
+					case 0:
+						_context8.prev = 0;
+						_context8.next = 3;
+						return fetch("https://api.ston.fi/v1/wallets/".concat(readWallet, "/farms?dex_v2=true"), {
+							headers: {
+								accept: "application/json"
+							}
+						});
+					case 3:
+						response = _context8.sent;
+						if (response.ok) {
+							_context8.next = 6;
+							break;
+						}
+						throw new Error("HTTP error! Status: ".concat(response.status));
+					case 6:
+						_context8.next = 8;
+						return response.json();
+					case 8:
+						data = _context8.sent;
+						filteredAddresses = data.farm_list.filter(function (farm) {
+							return farm.minter_address === "EQDyswfVhGlOue4_a9cAVuDSP0ldWP53jK2jL9qXfPWGhZP4";
+						}).flatMap(function (farm) {
+							return farm.nft_infos.filter(function (nft) {
+								return nft.status === "active";
+							}).map(function (nft) {
+								return nft.address;
+							});
+						});
+						if (!(filteredAddresses.length === 0)) {
+							_context8.next = 13;
+							break;
+						}
+						console.log("Active farming positions not found");
+						return _context8.abrupt("return", []);
+					case 13:
+						return _context8.abrupt("return", filteredAddresses);
+					case 16:
+						_context8.prev = 16;
+						_context8.t0 = _context8["catch"](0);
+						console.error("Error:", _context8.t0);
+						return _context8.abrupt("return", []);
+					case 20:
+					case "end":
+					return _context8.stop();
+				}
+			}, _callee8, null, [[0, 16]]);
+		}));
+		return _fetchFarmingPositions.apply(this, arguments);
+	}
+	
+	// !!!!!!!!!!!!!!!!!!!!!!!!! DeDust !!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	// Swap TON => USDT
+	function performSwapTonJetton(_x2, _x3, _x4) {
+		return _performSwapTonJetton.apply(this, arguments);
+	} 
+	function _performSwapTonJetton() {
+		_performSwapTonJetton = _asyncToGenerator(_regeneratorRuntime().mark(function _callee3(jetton, amount, queryId) {
+			var tonVault, amountIn, pool, result;
+			return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+				while (1) switch (_context3.prev = _context3.next) {
+					case 0:
+						_context3.prev = 0;
+						console.log("Swap initiated...");
+						_context3.t0 = tonClient;
+						queryId = getQueryID();
+						sendTransactionData('swaptonusdt', queryId, 1);
+						_context3.next = 5;
+						return factory.getNativeVault();
+					case 5:
+						_context3.t1 = _context3.sent;
+						tonVault = _context3.t0.open.call(_context3.t0, _context3.t1);
+						userAmount = toFloatDecimals(userAmount,9);
+						amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount); // 0.01 TON - amount
+						_context3.t2 = tonClient;
+						_context3.next = 11;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [TON, jetton]);
+					case 11:
+						_context3.t3 = _context3.sent;
+						pool = _context3.t2.open.call(_context3.t2, _context3.t3);
+						_context3.next = 15;
+						return pool.getReadinessStatus();
+					case 15:
+						_context3.t4 = _context3.sent;
+						_context3.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context3.t4 !== _context3.t5)) {
+							_context3.next = 19;
+							break;
+						}
+						sendTransactionData('swaptonusdt', queryId, 0);
+						throw new Error("Pool (TON, ".concat(jetton, ") does not exist."));
+					case 19:
+						_context3.next = 21;
+						return tonVault.getReadinessStatus();
+					case 21:
+						_context3.t6 = _context3.sent;
+						_context3.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context3.t6 !== _context3.t7)) {
+							_context3.next = 25;
+							break;
+						}
+						sendTransactionData('swaptonusdt', queryId, 0);
+						throw new Error("Vault (TON) does not exist.");
+					case 25:
+						_context3.next = 27;
+						return tonVault.sendSwap(sender, {
+							queryId: queryId,
+							// queryId
+							poolAddress: pool.address,
+							amount: amountIn,
+							gasAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(toFloatDecimals(swapCommission, 9))
+						});
+					case 27:
+						result = _context3.sent;
+						sendTransactionData('swaptonusdt', queryId, 100);
+						console.log("Swap result:", result);
+						alert("Swap completed successfully!");
+						_context3.next = 36;
+						break;
+					case 32:
+						_context3.prev = 32;
+						_context3.t8 = _context3["catch"](0);
+						sendTransactionData('swaptonusdt', queryId, 0);
+						console.error("Error during swap:", _context3.t8);
+						alert("Swap failed. Please try again.");
+					case 36:
+					case "end":
+					return _context3.stop();
+				}
+			}, _callee3, null, [[0, 32]]);
+		}));
+		return _performSwapTonJetton.apply(this, arguments);
+	}
+	
+	// Swap USDT => AquaUSD
+	function performSwapJettons(_x31, _x32, _x33, _x34) {
+		return _performSwapJettons.apply(this, arguments);
+	}
+	
+	function _performSwapJettons() {
+		_performSwapJettons = _asyncToGenerator(_regeneratorRuntime().mark(function _callee12(jettonAddress1, jettonAddress2, amount, queryId) {
+			var JETTON_ADDRESS_F, JETTON_ADDRESS_S, jetton_f, jetton_s, currentWallet, amountIn, pool, root, wallet, vault, result;
+			return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+				while (1) switch (_context12.prev = _context12.next) {
+					case 0:
+						_context12.prev = 0;
+						queryId = getQueryID();
+						sendTransactionData('swapusdtaqua', queryId, 1);
+						console.log("Swap initiated...");
+						JETTON_ADDRESS_F = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(jettonAddress1);
+						JETTON_ADDRESS_S = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(jettonAddress2);
+						jetton_f = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(JETTON_ADDRESS_F);
+						jetton_s = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(JETTON_ADDRESS_S);
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						userAmount2 = userAmount2/1000;
+						amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAmount2); // 0.0001 jetton = 0.1 USDT - amount - 9 decimals
+						_context12.t0 = tonClient;
+						_context12.next = 11;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [jetton_f, jetton_s]);
+					case 11:
+						_context12.t1 = _context12.sent;
+						pool = _context12.t0.open.call(_context12.t0, _context12.t1);
+						_context12.next = 15;
+						return pool.getReadinessStatus();
+					case 15:
+						_context12.t2 = _context12.sent;
+						_context12.t3 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context12.t2 !== _context12.t3)) {
+							_context12.next = 40;
+							break;
+						}
+						console.log("VOLATILE POOL NOT FOUND! TRYING STABLE...");
+						_context12.t4 = tonClient;
+						_context12.next = 22;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE, [jetton_f, jetton_s]);
+					case 22:
+						_context12.t5 = _context12.sent;
+						pool = _context12.t4.open.call(_context12.t4, _context12.t5);
+						_context12.next = 26;
+						return pool.getReadinessStatus();
+					case 26:
+						_context12.t6 = _context12.sent;
+						_context12.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context12.t6 !== _context12.t7)) {
+							_context12.next = 40;
+							break;
+						}
+						_context12.t8 = tonClient;
+						_context12.next = 32;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE, [jetton_s, jetton_f]);
+					case 32:
+						_context12.t9 = _context12.sent;
+						pool = _context12.t8.open.call(_context12.t8, _context12.t9);
+						_context12.next = 36;
+						return pool.getReadinessStatus();
+					case 36:
+						_context12.t10 = _context12.sent;
+						_context12.t11 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context12.t10 !== _context12.t11)) {
+							_context12.next = 40;
+							break;
+						}
+						throw new Error("Pool (".concat(jetton_f, ", ").concat(jetton_s, ") does not exist."));
+					case 40:
+						root = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(JETTON_ADDRESS_F));
+						_context12.t12 = tonClient;
+						_context12.next = 44;
+						return root.getWallet(currentWallet);
+					case 44:
+						_context12.t13 = _context12.sent;
+						wallet = _context12.t12.open.call(_context12.t12, _context12.t13);
+						_context12.t14 = tonClient;
+						_context12.next = 49;
+						return factory.getJettonVault(JETTON_ADDRESS_F);
+					case 49:
+						_context12.t15 = _context12.sent;
+						vault = _context12.t14.open.call(_context12.t14, _context12.t15);
+						_context12.next = 53;
+						return wallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.3"), {
+							queryId: queryId,
+							// queryId
+							amount: amountIn,
+							destination: vault.address,
+							responseAddress: currentWallet,
+							// return gas to user
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.25"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createSwapPayload({
+								poolAddress: pool.address
+							})
+						});
+					case 53:
+						result = _context12.sent;
+						console.log("Swap result:", result);
+						sendTransactionData('swapusdtaqua', queryId, 100);						
+						alert("Swap completed successfully!");
+						_context12.next = 62;
+						break;
+					case 58:
+						_context12.prev = 58;
+						_context12.t16 = _context12["catch"](0);
+						console.error("Error during swap:", _context12.t16);
+						sendTransactionData('swapusdtaqua', queryId, 0);
+						alert("Swap failed. Please try again.");
+					case 62:
+					case "end":
+					return _context12.stop();
+				}
+			}, _callee12, null, [[0, 58]]);
+		}));
+		return _performSwapJettons.apply(this, arguments);
+	}
+	
+	// Add pool liquidity TON & USDT
+	function addLiquidityTONUSDT(_x5, _x6, _x7) {
+		return _addLiquidityTONUSDT.apply(this, arguments);
+	} 
+  
+	function _addLiquidityTONUSDT() {
+		_addLiquidityTONUSDT = _asyncToGenerator(_regeneratorRuntime().mark(function _callee4(firstAmount, secondAmount, queryId) {
+			var currentWallet, tonAmount, usdtAmount, tonVault, usdtVault, assets, targetBalances, result, usdtRoot, usdtWallet, result2;
+			return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+				while (1) switch (_context4.prev = _context4.next) {
+					case 0:
+						_context4.prev = 0;
+						console.log("Add liquidity initiated...");
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						userTonSend = toFloatDecimals(userTonSend, 9);
+						tonAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userTonSend); // 0.01 TON - firstAmount
+						userUSDTSend = toFloatDecimals(userUSDTSend/1000, 6);
+						usdtAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userUSDTSend); // 0.05 USDT - secondAmount
+						queryId = getQueryID();
+						sendTransactionData('addtonusdt', queryId, 1);
+						_context4.t0 = tonClient;
+						_context4.next = 8;
+						return factory.getNativeVault();
+					case 8:
+						_context4.t1 = _context4.sent;
+						tonVault = _context4.t0.open.call(_context4.t0, _context4.t1);
+						_context4.t2 = tonClient;
+						_context4.next = 13;
+						return factory.getJettonVault(USDT_ADDRESS);
+					case 13:
+						_context4.t3 = _context4.sent;
+						usdtVault = _context4.t2.open.call(_context4.t2, _context4.t3);
+						_context4.next = 17;
+						return tonVault.getReadinessStatus();
+					case 17:
+						_context4.t4 = _context4.sent;
+						_context4.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context4.t4 !== _context4.t5)) {
+							_context4.next = 21;
+							break;
+						}
+						sendTransactionData('addtonusdt', queryId, 0);
+						throw new Error("Vault (TON) does not exist.");
+					case 21:
+						_context4.next = 23;
+						return usdtVault.getReadinessStatus();
+					case 23:
+						_context4.t6 = _context4.sent;
+						_context4.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context4.t6 !== _context4.t7)) {
+							_context4.next = 27;
+							break;
+						}
+						sendTransactionData('addtonusdt', queryId, 0);
+						throw new Error("Vault (USDT) does not exist.");
+					case 27:
+						assets = [TON, USDT];
+						targetBalances = [tonAmount, usdtAmount]; // ADD TON
+						_context4.next = 31;
+						return tonVault.sendDepositLiquidity(sender, {
+							poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE,
+							assets: assets,
+							targetBalances: targetBalances,
+							amount: tonAmount + (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.2")
+						});
+					case 31:
+						result = _context4.sent;
+						// ADD TON END
+						// ADD USDT
+						usdtRoot = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS));
+						_context4.t8 = tonClient;
+						_context4.next = 36;
+						return usdtRoot.getWallet(currentWallet);
+					case 36:
+						_context4.t9 = _context4.sent;
+						usdtWallet = _context4.t8.open.call(_context4.t8, _context4.t9);
+						_context4.next = 40;
+						return usdtWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.5"), {
+							queryId: queryId,
+							// queryId
+							amount: usdtAmount,
+							destination: usdtVault.address,
+							responseAddress: currentWallet,
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.4"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({
+								poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE,
+								assets: assets,
+								targetBalances: targetBalances
+							})
+						});
+					case 40:
+						result2 = _context4.sent;
+						// ADD USDT END
+
+						console.log("Add TON result:", result);
+						console.log("Add USDT result:", result2);
+						sendTransactionData('addtonusdt', queryId, 100);
+						alert("Add liquidity completed successfully!");
+						_context4.next = 50;
+						break;
+					case 46:
+						_context4.prev = 46;
+						_context4.t10 = _context4["catch"](0);
+						sendTransactionData('addtonusdt', queryId, 1);
+						console.error("Error during swap:", _context4.t10);
+						alert("Add liquidity failed. Please try again.");
+					case 50:
+					case "end":
+					return _context4.stop();
+				}
+			}, _callee4, null, [[0, 46]]);
+		}));
+		return _addLiquidityTONUSDT.apply(this, arguments);
+	}
+
+	// Add pool liquidity AquaUSD & USDT
+	function addLiquidityAQUAUSDT(_x40, _x41, _x42) {
+		return _addLiquidityAQUAUSDT.apply(this, arguments);
+	}
+	
+	function _addLiquidityAQUAUSDT() {
+		_addLiquidityAQUAUSDT = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15(firstAmount, secondAmount, queryId) {
+			var currentWallet, aquaAmount, usdtAmount, aquaVault, usdtVault, assets, targetBalances, aquaRoot, aquaWallet, result, usdtRoot, usdtWallet, result2;
+			return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+				while (1) switch (_context15.prev = _context15.next) {
+					case 0:
+						_context15.prev = 0;
+						console.log("Add liquidity initiated...");
+
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						
+						userAQUASend2 = toFloatDecimals(userAQUASend2/1000, 6);
+						aquaAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userAQUASend2); // 0.05 AquaUSD - firstAmount
+						
+						userUSDTSend2 = toFloatDecimals(userUSDTSend2/1000, 6);
+						usdtAmount = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)(userUSDTSend2); // 0.05 USDT - secondAmount
+						
+						queryId = getQueryID();
+						sendTransactionData('addusdtaqua', queryId, 1);
+						
+						_context15.t0 = tonClient;
+						_context15.next = 8;
+						return factory.getJettonVault(AQUAUSD_ADDRESS);
+					case 8:
+						_context15.t1 = _context15.sent;
+						aquaVault = _context15.t0.open.call(_context15.t0, _context15.t1);
+						_context15.t2 = tonClient;
+						_context15.next = 13;
+						return factory.getJettonVault(USDT_ADDRESS);
+					case 13:
+						_context15.t3 = _context15.sent;
+						usdtVault = _context15.t2.open.call(_context15.t2, _context15.t3);
+						_context15.next = 17;
+						return aquaVault.getReadinessStatus();
+					case 17:
+						_context15.t4 = _context15.sent;
+						_context15.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context15.t4 !== _context15.t5)) {
+							_context15.next = 21;
+							break;
+						}
+						sendTransactionData('addusdtaqua', queryId, 0);
+						throw new Error("Vault (AquaUSD) does not exist.");
+					case 21:
+						_context15.next = 23;
+						return usdtVault.getReadinessStatus();
+					case 23:
+						_context15.t6 = _context15.sent;
+						_context15.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context15.t6 !== _context15.t7)) {
+							_context15.next = 27;
+							break;
+						}
+						throw new Error("Vault (TON) does not exist.");
+					case 27:
+						assets = [AQUAUSD, USDT];
+						targetBalances = [aquaAmount, usdtAmount]; // ADD AQUA
+						aquaRoot = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(AQUAUSD_ADDRESS));
+						_context15.t8 = tonClient;
+						_context15.next = 33;
+						return aquaRoot.getWallet(currentWallet);
+					case 33:
+						_context15.t9 = _context15.sent;
+						aquaWallet = _context15.t8.open.call(_context15.t8, _context15.t9);
+						_context15.next = 37;
+						return aquaWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.55"), {
+							queryId: 337,
+							// queryId
+							amount: aquaAmount,
+							destination: aquaVault.address,
+							responseAddress: currentWallet,
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.45"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({
+								poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE,
+								assets: assets,
+								targetBalances: targetBalances
+							})
+						});
+					case 37:
+						result = _context15.sent;
+						_context15.next = 40;
+						return delay(5000);
+					case 40:
+						// ADD USDT
+						usdtRoot = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS));
+						_context15.t10 = tonClient;
+						_context15.next = 44;
+						return usdtRoot.getWallet(currentWallet);
+					case 44:
+						_context15.t11 = _context15.sent;
+						usdtWallet = _context15.t10.open.call(_context15.t10, _context15.t11);
+						_context15.next = 48;
+						return usdtWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.55"), {
+							queryId: 337,
+							// queryId
+							amount: usdtAmount,
+							destination: usdtVault.address,
+							responseAddress: currentWallet,
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.45"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createDepositLiquidityPayload({
+								poolType: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE,
+								assets: assets,
+								targetBalances: targetBalances
+							})
+						});
+					case 48:
+						result2 = _context15.sent;
+						// ADD USDT END
+
+						console.log("Add AquaUSD result:", result);
+						console.log("Add USDT result:", result2);
+						sendTransactionData('addusdtaqua', queryId, 100);
+						alert("Add liquidity completed successfully!");
+						_context15.next = 58;
+						break;
+					case 54:
+						_context15.prev = 54;
+						_context15.t12 = _context15["catch"](0);
+						console.error("Error during swap:", _context15.t12);
+						sendTransactionData('addusdtaqua', queryId, 0);
+						alert("Add liquidity failed. Please try again.");
+					case 58:
+					case "end":
+					return _context15.stop();
+				}
+			}, _callee15, null, [[0, 54]]);
+		}));
+		return _addLiquidityAQUAUSDT.apply(this, arguments);
+	}
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!! NEW !!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	function revertStonSwapnAddLiquiditynFarmJettonTon(_x24) {
+		return _revertStonSwapnAddLiquiditynFarmJettonTon.apply(this, arguments);
+	}
+	
+	function _revertStonSwapnAddLiquiditynFarmJettonTon() {
+		_revertStonSwapnAddLiquiditynFarmJettonTon = _asyncToGenerator(_regeneratorRuntime().mark(function _callee9(queryId) {
+			var _unstakeFromFarmParam, _unstakeFromLPParams$, dex, currentWallet, readWallet, addresses, farmNftAddress, farmNft, pool, lpWallet, lpWalletData, unstakeFromFarmParams, unstakeFromLPParams, transaction;
+			return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+				while (1) switch (_context9.prev = _context9.next) {
+					case 0:
+						_context9.prev = 0;
+						console.log("Ston reverting multiple actions initiated...");
+						sendTransactionData('removemultitonusdt', queryId, 1);
+						dex = tonClient.open(_ston_fi_sdk__WEBPACK_IMPORTED_MODULE_3__.DEX.v2_1.Router.create(STONFI_ROUTER_ADDR2));
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						readWallet = currentWallet.toString({
+							urlSafe: true
+						});
+						_context9.next = 7;
+						return fetchFarmingPositions(readWallet);
+					case 7:
+						addresses = _context9.sent;
+						if (!(!addresses || addresses.length === 0)) {
+							_context9.next = 11;
+							break;
+						}
+						console.log("Active farming positions not found");
+						sendTransactionData('removemultitonusdt', queryId, 0);
+						return _context9.abrupt("return");
+					case 11:
+						farmNftAddress = addresses[0];
+						farmNft = tonClient.open(_ston_fi_sdk__WEBPACK_IMPORTED_MODULE_5__.FARM.v3.NftItem.create(farmNftAddress));
+						_context9.t0 = tonClient;
+						_context9.next = 16;
+						return dex.getPool({
+							token0: USDT_ADDRESS,
+							token1: pTON_ADDRESS
+						});
+					case 16:
+						_context9.t1 = _context9.sent;
+						pool = _context9.t0.open.call(_context9.t0, _context9.t1);
+						_context9.t2 = tonClient;
+						_context9.next = 21;
+						return pool.getJettonWallet({
+							ownerAddress: readWallet
+						});
+					case 21:
+						_context9.t3 = _context9.sent;
+						lpWallet = _context9.t2.open.call(_context9.t2, _context9.t3);
+						_context9.next = 25;
+						return lpWallet.getWalletData();
+					case 25:
+						lpWalletData = _context9.sent;
+						_context9.next = 28;
+						return farmNft.getUnstakeTxParams({
+							queryId: queryId
+						});
+					case 28:
+						unstakeFromFarmParams = _context9.sent;
+						_context9.next = 31;
+						return pool.getBurnTxParams({
+							amount: lpWalletData.balance,
+							userWalletAddress: readWallet,
+							queryId: queryId
+						});
+					case 31:
+						unstakeFromLPParams = _context9.sent;
+						transaction = {
+							validUntil: Date.now() + 1000000,
+							messages: [{
+								address: unstakeFromFarmParams.to.toString(),
+								amount: unstakeFromFarmParams.value.toString(),
+								payload: (_unstakeFromFarmParam = unstakeFromFarmParams.body) === null || _unstakeFromFarmParam === void 0 ? void 0 : _unstakeFromFarmParam.toBoc().toString("base64")
+							}, {
+								address: unstakeFromLPParams.to.toString(),
+								amount: unstakeFromLPParams.value.toString(),
+								payload: (_unstakeFromLPParams$ = unstakeFromLPParams.body) === null || _unstakeFromLPParams$ === void 0 ? void 0 : _unstakeFromLPParams$.toBoc().toString("base64")
+							}]
+						};
+						tonConnectUI.sendTransaction(transaction, function (error, result) {
+							if (error) {
+								console.error("Error sending transaction:", error);
+								sendTransactionData('removemultitonusdt', queryId, 0);
+								alert("Ston revert multi actions failed. Please try again.");
+								return;
+							}
+							console.log("Ston revert multi actions result:", result);
+							sendTransactionData('removemultitonusdt', queryId, 100);
+							alert("Ston revert multi actions completed successfully!");
+						});
+						_context9.next = 40;
+						break;
+					case 36:
+						_context9.prev = 36;
+						_context9.t4 = _context9["catch"](0);
+						console.error("Unexpected error:", _context9.t4);
+						sendTransactionData('removemultitonusdt', queryId, 0);
+						alert("Ston revert multi actions failed due to unexpected error.");
+					case 40:
+					case "end":
+					return _context9.stop();
+				}
+			}, _callee9, null, [[0, 36]]);
+		}));
+		return _revertStonSwapnAddLiquiditynFarmJettonTon.apply(this, arguments);
+	}
+
+	function performSwapJettonTon(_x28, _x29, _x30) {
+		return _performSwapJettonTon.apply(this, arguments);
+	}
+	
+	function _performSwapJettonTon() {
+		_performSwapJettonTon = _asyncToGenerator(_regeneratorRuntime().mark(function _callee11(jettonAddress, amount, queryId) {
+			var JETTON_ADDRESS, jetton, tonVault, currentWallet, amountIn, pool, poolAddress, root, wallet, vault, result;
+			return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+				while (1) switch (_context11.prev = _context11.next) {
+					case 0:
+						_context11.prev = 0;
+						console.log("Swap initiated...");
+						JETTON_ADDRESS = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(jettonAddress);
+						jetton = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.Asset.jetton(JETTON_ADDRESS);
+						_context11.t0 = tonClient;
+						_context11.next = 7;
+						return factory.getNativeVault();
+					case 7:
+						_context11.t1 = _context11.sent;
+						tonVault = _context11.t0.open.call(_context11.t0, _context11.t1);
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.0001"); // 0.0001 jetton = 0.1 USDT - amount - 9 decimals
+						_context11.t2 = tonClient;
+						_context11.next = 14;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [jetton, TON]);
+					case 14:
+						_context11.t3 = _context11.sent;
+						pool = _context11.t2.open.call(_context11.t2, _context11.t3);
+						poolAddress = pool.address;
+						_context11.next = 19;
+						return pool.getReadinessStatus();
+					case 19:
+						_context11.t4 = _context11.sent;
+						_context11.t5 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context11.t4 !== _context11.t5)) {
+							_context11.next = 23;
+							break;
+						}
+						throw new Error("Pool (".concat(jetton, ", TON) does not exist."));
+					case 23:
+						_context11.next = 25;
+						return tonVault.getReadinessStatus();
+					case 25:
+						_context11.t6 = _context11.sent;
+						_context11.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context11.t6 !== _context11.t7)) {
+							_context11.next = 29;
+							break;
+						}
+						throw new Error("Vault (TON) does not exist.");
+					case 29:
+						root = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(JETTON_ADDRESS));
+						_context11.t8 = tonClient;
+						_context11.next = 33;
+						return root.getWallet(currentWallet);
+					case 33:
+						_context11.t9 = _context11.sent;
+						wallet = _context11.t8.open.call(_context11.t8, _context11.t9);
+						_context11.t10 = tonClient;
+						_context11.next = 38;
+						return factory.getJettonVault(JETTON_ADDRESS);
+					case 38:
+						_context11.t11 = _context11.sent;
+						vault = _context11.t10.open.call(_context11.t10, _context11.t11);
+						_context11.next = 42;
+						return wallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.3"), {
+							queryId: 337,
+							// queryId
+							amount: amountIn,
+							destination: vault.address,
+							responseAddress: currentWallet,
+							// return gas to user
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.25"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createSwapPayload({
+								poolAddress: poolAddress
+							})
+						});
+					case 42:
+						result = _context11.sent;
+						console.log("Swap result:", result);
+						alert("Swap completed successfully!");
+						_context11.next = 51;
+						break;
+					case 47:
+						_context11.prev = 47;
+						_context11.t12 = _context11["catch"](0);
+						console.error("Error during swap:", _context11.t12);
+						alert("Swap failed. Please try again.");
+					case 51:
+					case "end":
+						return _context11.stop();
+				}
+			}, _callee11, null, [[0, 47]]);
+		}));
+		return _performSwapJettonTon.apply(this, arguments);
+	}
+
+	function performSwapTonAqua(_x35, _x36) {
+		return _performSwapTonAqua.apply(this, arguments);
+	}
+	
+	function _performSwapTonAqua() {
+		_performSwapTonAqua = _asyncToGenerator(_regeneratorRuntime().mark(function _callee13(amount, queryId) {
+			var currentWallet, tonVault, usdtVault, usdtRoot, usdtWallet, amountIn, amountIn2, pool, pool2, result, result2;
+			return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+				while (1) switch (_context13.prev = _context13.next) {
+					case 0:
+						_context13.prev = 0;
+						console.log("Swap initiated...");
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						_context13.t0 = tonClient;
+						_context13.next = 6;
+						return factory.getNativeVault();
+					case 6:
+						_context13.t1 = _context13.sent;
+						tonVault = _context13.t0.open.call(_context13.t0, _context13.t1);
+						_context13.t2 = tonClient;
+						_context13.next = 11;
+						return factory.getJettonVault(USDT_ADDRESS);
+					case 11:
+						_context13.t3 = _context13.sent;
+						usdtVault = _context13.t2.open.call(_context13.t2, _context13.t3);
+						usdtRoot = tonClient.open(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.JettonRoot.createFromAddress(USDT_ADDRESS));
+						_context13.t4 = tonClient;
+						_context13.next = 17;
+						return usdtRoot.getWallet(currentWallet);
+					case 17:
+						_context13.t5 = _context13.sent;
+						usdtWallet = _context13.t4.open.call(_context13.t4, _context13.t5);
+						amountIn = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.01"); // 0.01 TON - amount
+						amountIn2 = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.00005"); // 0.05 USDT - amount
+						_context13.t6 = tonClient;
+						_context13.next = 24;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [TON, USDT]);
+					case 24:
+						_context13.t7 = _context13.sent;
+						pool = _context13.t6.open.call(_context13.t6, _context13.t7);
+						_context13.t8 = tonClient;
+						_context13.next = 29;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE, [AQUAUSD, USDT]);
+					case 29:
+						_context13.t9 = _context13.sent;
+						pool2 = _context13.t8.open.call(_context13.t8, _context13.t9);
+						_context13.next = 33;
+						return pool.getReadinessStatus();
+					case 33:
+						_context13.t10 = _context13.sent;
+						_context13.t11 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context13.t10 !== _context13.t11)) {
+							_context13.next = 37;
+							break;
+						}
+						throw new Error("Pool (TON, USDT) does not exist.");
+					case 37:
+						_context13.next = 39;
+						return pool2.getReadinessStatus();
+					case 39:
+						_context13.t12 = _context13.sent;
+						_context13.t13 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context13.t12 !== _context13.t13)) {
+							_context13.next = 43;
+							break;
+						}
+						throw new Error("Pool (USDT, AQUAUSD) does not exist.");
+					case 43:
+						_context13.next = 45;
+						return tonVault.getReadinessStatus();
+					case 45:
+						_context13.t14 = _context13.sent;
+						_context13.t15 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context13.t14 !== _context13.t15)) {
+							_context13.next = 49;
+							break;
+						}
+						throw new Error("Vault (TON) does not exist.");
+					case 49:
+						_context13.next = 51;
+						return usdtVault.getReadinessStatus();
+					case 51:
+						_context13.t16 = _context13.sent;
+						_context13.t17 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context13.t16 !== _context13.t17)) {
+							_context13.next = 55;
+							break;
+						}
+						throw new Error("Vault (USDT) does not exist.");
+					case 55:
+						_context13.next = 57;
+						return tonVault.sendSwap(sender, {
+							queryId: 337,
+							// queryId
+							poolAddress: pool.address,
+							amount: amountIn,
+							gasAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.1")
+						});
+					case 57:
+						result = _context13.sent;
+						_context13.next = 60;
+						return delay(1000);
+					case 60:
+						_context13.next = 62;
+						return usdtWallet.sendTransfer(sender, (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.3"), {
+							queryId: 337,
+							// queryId
+							amount: amountIn2,
+							destination: usdtVault.address,
+							responseAddress: currentWallet,
+							// return gas to user
+							forwardAmount: (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.25"),
+							forwardPayload: _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.VaultJetton.createSwapPayload({
+								poolAddress: pool2.address
+							})
+						});
+					case 62:
+						result2 = _context13.sent;
+						console.log("Swap result:", result);
+						console.log("Swap result2:", result2);
+						alert("Swap completed successfully!");
+						_context13.next = 72;
+						break;
+					case 68:
+						_context13.prev = 68;
+						_context13.t18 = _context13["catch"](0);
+						console.error("Error during swap:", _context13.t18);
+						alert("Swap failed. Please try again.");
+					case 72:
+					case "end":
+					return _context13.stop();
+				}
+			}, _callee13, null, [[0, 68]]);
+		}));
+		return _performSwapTonAqua.apply(this, arguments);
+	}
+
+	function removeLiquidity(_x43, _x44, _x45) {
+		return _removeLiquidity.apply(this, arguments);
+	}
+	
+	function _removeLiquidity() {
+		_removeLiquidity = _asyncToGenerator(_regeneratorRuntime().mark(function _callee16(firstToken, secondToken, queryId) {
+			var currentWallet, pool, lpWallet, result;
+			return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+				while (1) switch (_context16.prev = _context16.next) {
+					case 0:
+						_context16.prev = 0;
+						console.log("Withdraw liquidity initiated...");
+						currentWallet = _ton_ton__WEBPACK_IMPORTED_MODULE_2__.Address.parse(tonConnectUI.account.address);
+						_context16.t0 = tonClient;
+						_context16.next = 6;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.VOLATILE, [firstToken, secondToken]);
+					case 6:
+						_context16.t1 = _context16.sent;
+						pool = _context16.t0.open.call(_context16.t0, _context16.t1);
+						_context16.next = 10;
+						return pool.getReadinessStatus();
+					case 10:
+						_context16.t2 = _context16.sent;
+						_context16.t3 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context16.t2 !== _context16.t3)) {
+							_context16.next = 25;
+							break;
+						}
+						console.log("VOLATILE POOL NOT FOUND! TRYING STABLE...");
+						_context16.t4 = tonClient;
+						_context16.next = 17;
+						return factory.getPool(_dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.PoolType.STABLE, [firstToken, secondToken]);
+					case 17:
+						_context16.t5 = _context16.sent;
+						pool = _context16.t4.open.call(_context16.t4, _context16.t5);
+						_context16.next = 21;
+						return pool.getReadinessStatus();
+					case 21:
+						_context16.t6 = _context16.sent;
+						_context16.t7 = _dedust_sdk__WEBPACK_IMPORTED_MODULE_0__.ReadinessStatus.READY;
+						if (!(_context16.t6 !== _context16.t7)) {
+							_context16.next = 25;
+							break;
+						}
+						throw new Error("Pool (".concat(firstToken, ", ").concat(secondToken, ") does not exist."));
+					case 25:
+						_context16.t8 = tonClient;
+						_context16.next = 28;
+						return pool.getWallet(currentWallet);
+					case 28:
+						_context16.t9 = _context16.sent;
+						_context16.next = 31;
+						return _context16.t8.open.call(_context16.t8, _context16.t9);
+					case 31:
+						lpWallet = _context16.sent;
+						_context16.t10 = lpWallet;
+						_context16.t11 = sender;
+						_context16.t12 = (0,_ton_core__WEBPACK_IMPORTED_MODULE_1__.toNano)("0.5");
+						_context16.t13 = queryId;
+						_context16.next = 38;
+						return lpWallet.getBalance();
+					case 38:
+						_context16.t14 = _context16.sent;
+						_context16.t15 = {
+							queryId: _context16.t13,
+							amount: _context16.t14
+						};
+						_context16.next = 42;
+						return _context16.t10.sendBurn.call(_context16.t10, _context16.t11, _context16.t12, _context16.t15);
+					case 42:
+						result = _context16.sent;
+						console.log("Liquidity remove result:", result);
+						alert("Remove completed successfully!");
+						_context16.next = 51;
+						break;
+					case 47:
+						_context16.prev = 47;
+						_context16.t16 = _context16["catch"](0);
+						console.error("Error during liquidity remove:", _context16.t16);
+						alert("Remove failed. Please try again.");
+					case 51:
+					case "end":
+					return _context16.stop();
+				}
+			}, _callee16, null, [[0, 47]]);
+		}));
+		return _removeLiquidity.apply(this, arguments);
+	}
+	
+	function calculateLPTokens(deposit1, deposit2, reserve1, reserve2, lp_total_supply) {
+    
+		// Определяем минимальный коэффициент депозита
+		var ratio1 = deposit1 / reserve1;
+		var ratio2 = deposit2 / reserve2;
+		var min_ratio = Math.min(ratio1, ratio2);
+    
+		// Рассчитываем количество новых LP-токенов
+		var lp_new = lp_total_supply * min_ratio;
+		
+		lp_new = (lp_new/4)*3;
+		lp_new = formatValue(lp_new);
+		lp_new = parseFloat(lp_new);
+	
+		return lp_new;
+	}
+
+	// Связываем кнопку Go с функцией performStonSwapnAddLiquiditynFarmJettonTon
+	document.addEventListener("click", event => {
+
+		var el = document.getElementById('as2856-add-liquidity');
+		if (el && el.contains(event.target)) {
+			
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('addmultitonusdt');
+		}
+	});
+	
+	// Связываем кнопку Revert с функцией revertStonSwapnAddLiquiditynFarmJettonTon
+	document.addEventListener("click", event => {
+
+		var el = document.getElementById('as2856-remove-liquidity');
+		if (el && el.contains(event.target)) {
+			
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('removemultitonusdt');
+		}
+	});
+
+	/*
+	// Связываем кнопку Swap TON-USDT с функцией performSwapTonJetton
+	document.addEventListener("click", event => {
+		var el = document.getElementById('swap-tonusdt-button');
+		if (el && el.contains(event.target)) {
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('swaptonusdt');
+		}
+	});
+	
+	// Связываем кнопку TON/USDT Add с функцией addLiquidityTonUsdt
+	document.addEventListener("click", event => {
+		var el = document.getElementById('tonusdt-add-liquidity-button');
+		if (el && el.contains(event.target)) {
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('addtonusdt');
+		}
+	});
+	*/
+
+	// Связываем кнопку Swap USDT-AQUA с функцией performSwapJettons
+	document.addEventListener("click", event => {
+		var el = document.getElementById('swap-usdtaqua-button');
+		if (el && el.contains(event.target)) {
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('swapusdtaqua');
+		}
+	});
+
+	// Связываем кнопку USDT/AquaUSDT с функцией addLiquidityAQUAUSDT
+	document.addEventListener("click", event => {
+		var el = document.getElementById('usdtaqua-add-liquidity-button');
+		if (el && el.contains(event.target)) {
+			if (typeof tonConnectUI!=="undefined" && tonConnectUI!==undefined && tonConnectUI) {
+				tonConnectUI.disconnect();
+			}
+
+			initializeSender('addusdtaqua');
+		}
+	});
+
+	/*
+	// !!!!!!!!!!!!!!!!!!!!! STON !!!!!!!!!!!!!!!!!!!!!!!!
+
+	// Связываем кнопку Swap TON-USDT с функцией performStonSwapTonJetton
+	var swapButtonSton = document.getElementById("stonswap-tonusdt-button");
+	swapButtonSton.addEventListener("click", function () {
+		return performStonSwapTonJetton(USDT_ADDRESS, "0.1", 337);
+	});
+
+	// Связываем кнопку Swap TON-USDT с функцией performStonSwapTonJetton
+	var swapButtonSton2 = document.getElementById("stonswap-usdtton-button");
+	swapButtonSton2.addEventListener("click", function () {
+		return performStonSwapJettonTon(USDT_ADDRESS, "0.0005", 337);
+	});
+
+	// Связываем кнопку Swap TON-USDT с функцией performStonSwapJettons
+	var swapButtonSton3 = document.getElementById("stonswap-usdtston-button");
+	swapButtonSton3.addEventListener("click", function () {
+		return performStonSwapJettons(USDT_ADDRESS, STON_ADDRESS, "0.0005", 337);
+	});
+
+	// Связываем кнопку Add liquidity с функцией addLiquidityButtonSton
+	var addLiquidityButtonSton = document.getElementById("ston-tonusdt-add-liquidity-button");
+	addLiquidityButtonSton.addEventListener("click", function () {
+		return addStonLiquidityJettonTon(USDT_ADDRESS, "0.01", "0.00005", 337);
+	});
+
+	// Связываем кнопку Go с функцией performStonSwapnAddLiquiditynFarmJettonTon
+	var multiButtonSton = document.getElementById("ston-multi-button");
+	multiButtonSton.addEventListener("click", function () {
+		return performStonSwapnAddLiquiditynFarmJettonTon(
+			// STON_ADDRESS, // jetton address
+			// "0.01", // ton amount
+			// "0.01457", // ston amount
+			// "EQATBSfNArrEFmchmy1XabKmxMNp9KezscqjPzfmstCU7VXO", // STON/TON Farm v3
+			// "EQDcFD0T-3TIe7sF3MelkkRh9eDJ73N76-5WhCt8h8IY_5iu", // STON/pTON pool LP token address
+			// "0.011", // ton/ston lp tokens amount
+			// 337 // queryId
+			USDT_ADDRESS,
+			// jetton address
+			"0.01",
+			// ton amount
+			"0.000036",
+			// usdt amount
+			"EQDyswfVhGlOue4_a9cAVuDSP0ldWP53jK2jL9qXfPWGhZP4",
+			// USDT/TON Farm v3
+			"EQCGScrZe1xbyWqWDvdI6mzP-GAcAWFv6ZXuaJOuSqemxku4",
+			// USDT/TON pool LP token address
+			"0.0004",
+			// usdt/ton lp tokens amount
+			337 // queryId
+		);
+	});
+
+	// Связываем кнопку Revert с функцией revertStonSwapnAddLiquiditynFarmJettonTon
+	var multiRevertButtonSton = document.getElementById("ston-multi-revert-button");
+	multiRevertButtonSton.addEventListener("click", function () {
+		return revertStonSwapnAddLiquiditynFarmJettonTon(337 // queryId
+		);
+	});
+
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	// DeDust
+	// Связываем кнопку Swap TON-USDT с функцией performSwapTonJetton
+	var swapButton = document.getElementById("swap-tonusdt-button");
+	swapButton.addEventListener("click", function () {
+		return performSwapTonJetton(USDT);
+	});
+
+	// Связываем кнопку Swap USDT-TON с функцией performSwapJettonTon
+	var swapButton3 = document.getElementById("swap-usdtton-button");
+	swapButton3.addEventListener("click", function () {
+		return performSwapJettonTon("EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs");
+	});
+	var swapButton4 = document.getElementById("swap-usdtaqua-button");
+	swapButton4.addEventListener("click", function () {
+		return performSwapJettons("EQAWDyxARSl3ol2G1RMLMwepr3v6Ter5ls3jiAlheKshgg0K",
+		// AQUAUSD_ADDRESS
+		"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+		// USDT_ADDRESS
+		"0.0001", 337999);
+	});
+
+	// Связываем кнопку Swap TON-AquaUSD с функцией performSwapTonAqua
+	var swapButton2 = document.getElementById("swap-tonaqua-button");
+	swapButton2.addEventListener("click", performSwapTonAqua);
+
+	// Связываем кнопку TON/USDT Add с функцией addLiquidityTonUsdt
+	var addButton = document.getElementById("tonusdt-add-liquidity-button");
+	addButton.addEventListener("click", addLiquidityTONUSDT);
+
+	// Связываем кнопку Aqua/USDT Add с функцией addLiquidityTonUsdt
+	var addButton2 = document.getElementById("aquausd-add-liquidity-button");
+	addButton2.addEventListener("click", addLiquidityAQUAUSDT);
+
+	// Связываем кнопку TON/USDT Remove с функцией removeLiquidity
+	var delButton = document.getElementById("tonusdt-remove-liquidity-button");
+	delButton.addEventListener("click", function () {
+		return removeLiquidity(TON, USDT);
+	});
+
+	// Связываем кнопку Aqua/USDT Remove с функцией removeLiquidity
+	var delButton2 = document.getElementById("aquausd-remove-liquidity-button");
+	delButton2.addEventListener("click", function () {
+		return removeLiquidity(USDT, AQUAUSD);
+	});
+	*/
+});
+
+//# sourceURL=webpack://front/./src/script.js?
+
+//");
 
 /***/ }),
 
@@ -2214,6 +4005,28 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-5ZFQVHEP.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-5ZFQVHEP.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FARM: () => (/* binding */ FARM)\n/* harmony export */ });\n/* harmony import */ var _chunk_Q3AAE3DG_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-Q3AAE3DG.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-Q3AAE3DG.js\");\n/* harmony import */ var _chunk_GWMBLPLS_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-GWMBLPLS.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-GWMBLPLS.js\");\n\n\n\n// src/contracts/farm/v3/index.ts\nvar FARM = {\n  NftItem: _chunk_Q3AAE3DG_js__WEBPACK_IMPORTED_MODULE_0__.FarmNftItemV3,\n  NftMinter: _chunk_GWMBLPLS_js__WEBPACK_IMPORTED_MODULE_1__.FarmNftMinterV3\n};\n\n\n//# sourceMappingURL=chunk-5ZFQVHEP.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-5ZFQVHEP.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FARM_OP_CODES: () => (/* binding */ FARM_OP_CODES),\n/* harmony export */   FARM_VERSION: () => (/* binding */ FARM_VERSION)\n/* harmony export */ });\n// src/contracts/farm/constants.ts\nvar FARM_OP_CODES = {\n  STAKE: 1858722917,\n  CLAIM_REWARDS: 2027548937,\n  UNSTAKE: 3106497952\n};\nvar FARM_VERSION = {\n  v1: \"v1\",\n  v2: \"v2\",\n  v3: \"v3\"\n};\n\n\n//# sourceMappingURL=chunk-6FG2AV4K.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js?");
+
+/***/ }),
+
 /***/ "./node_modules/@ston-fi/sdk/dist/chunk-6OHMCTKH.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@ston-fi/sdk/dist/chunk-6OHMCTKH.js ***!
@@ -2266,6 +4079,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   PoolV2_2: () => (/* binding */ PoolV2_2)\n/* harmony export */ });\n/* harmony import */ var _chunk_YVUQNHKD_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-YVUQNHKD.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-YVUQNHKD.js\");\n/* harmony import */ var _chunk_J7V3YIRW_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-J7V3YIRW.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-J7V3YIRW.js\");\n/* harmony import */ var _chunk_JYQGYVZZ_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-JYQGYVZZ.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-JYQGYVZZ.js\");\n\n\n\n\n// src/contracts/dex/v2_2/pool/PoolV2_2.ts\nvar PoolV2_2 = class extends _chunk_JYQGYVZZ_js__WEBPACK_IMPORTED_MODULE_0__.BasePoolV2_2 {\n  static CPI = _chunk_YVUQNHKD_js__WEBPACK_IMPORTED_MODULE_1__.CPIPoolV2_2;\n  static Stable = _chunk_J7V3YIRW_js__WEBPACK_IMPORTED_MODULE_2__.StablePoolV2_2;\n};\n\n\n//# sourceMappingURL=chunk-A4D7QDDP.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-A4D7QDDP.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-AHUCDZ6E.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-AHUCDZ6E.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FARM: () => (/* binding */ FARM)\n/* harmony export */ });\n/* harmony import */ var _chunk_WS2KZKI3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-WS2KZKI3.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-WS2KZKI3.js\");\n/* harmony import */ var _chunk_YO7XABC7_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-YO7XABC7.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-YO7XABC7.js\");\n\n\n\n// src/contracts/farm/v2/index.ts\nvar FARM = {\n  NftItem: _chunk_WS2KZKI3_js__WEBPACK_IMPORTED_MODULE_0__.FarmNftItemV2,\n  NftMinter: _chunk_YO7XABC7_js__WEBPACK_IMPORTED_MODULE_1__.FarmNftMinterV2\n};\n\n\n//# sourceMappingURL=chunk-AHUCDZ6E.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-AHUCDZ6E.js?");
 
 /***/ }),
 
@@ -2324,6 +4148,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-DLUNBCNR.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-DLUNBCNR.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftMinterV1: () => (/* binding */ FarmNftMinterV1)\n/* harmony export */ });\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n/* harmony import */ var _chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-S2MQPWHB.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-S2MQPWHB.js\");\n/* harmony import */ var _chunk_6OHMCTKH_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./chunk-6OHMCTKH.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6OHMCTKH.js\");\n/* harmony import */ var _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-3QLJQGLC.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-3QLJQGLC.js\");\n/* harmony import */ var _chunk_5Z5Z5A3U_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-5Z5Z5A3U.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-5Z5Z5A3U.js\");\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n\n\n\n\n\n\n// src/contracts/farm/v1/FarmNftMinterV1.ts\n\nvar FarmNftMinterV1 = class _FarmNftMinterV1 extends _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__.Contract {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_VERSION.v1;\n  static gasConstants = {\n    stake: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.3\"),\n    stakeForward: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.25\")\n  };\n  gasConstants;\n  constructor(address, { gasConstants, ...options } = {}) {\n    super(address, options);\n    this.gasConstants = {\n      ..._FarmNftMinterV1.gasConstants,\n      ...gasConstants\n    };\n  }\n  async createStakeBody() {\n    return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.STAKE, 32).endCell();\n  }\n  /**\n   * Build all data required to execute a jetton `stake` transaction\n   *\n   * @param {Address | string} params.userWalletAddress - User's address\n   * @param {Address | string} params.jettonAddress - Jetton address of token to be staked\n   * @param {bigint | number} params.jettonAmount - Amount of tokens to be staked (in basic token units)\n   * @param {bigint | number | string | undefined} params.gasAmount - Optional; Custom transaction gas amount (in nanoTons)\n   * @param {bigint | number | string | undefined} params.forwardGasAmount - Optional; Custom transaction forward gas amount (in nanoTons)\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} containing all data required to execute a jetton `stake` transaction\n   */\n  async getStakeTxParams(provider, params) {\n    const [jettonWalletAddress, forwardPayload] = await Promise.all([\n      provider.open(_chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_3__.JettonMinter.create(params.jettonAddress)).getWalletAddress(params.userWalletAddress),\n      this.createStakeBody()\n    ]);\n    const forwardTonAmount = BigInt(\n      params.forwardGasAmount ?? this.gasConstants.stakeForward\n    );\n    const body = (0,_chunk_5Z5Z5A3U_js__WEBPACK_IMPORTED_MODULE_4__.createJettonTransferMessage)({\n      queryId: params.queryId ?? 0,\n      amount: params.jettonAmount,\n      destination: this.address,\n      responseDestination: params.userWalletAddress,\n      forwardTonAmount,\n      forwardPayload\n    });\n    const value = BigInt(params.gasAmount ?? this.gasConstants.stake);\n    return {\n      to: jettonWalletAddress,\n      value,\n      body\n    };\n  }\n  async sendStake(provider, via, params) {\n    const txParams = await this.getStakeTxParams(provider, params);\n    return via.send(txParams);\n  }\n  /**\n   * @returns structure containing current state of the minter\n   *\n   * @property {bigint} nextItemIndex - Index of the next nft in this collection\n   * @property {bigint} lastUpdateTime - Last time farming values were updated\n   * @property {number} status - Status of the contract: uninitialized `0`, active `1`, paused `3`\n   * @property {bigint} depositedNanorewards - Deposited rewards in nanounits\n   * @property {bigint} currentStakedTokens - Number of staked tokens in basic token units\n   * @property {bigint} accruedPerUnitNanorewards - Number of accrued nanorewards per basic stake token unit\n   * @property {bigint} accruedNanorewards - Total number of accrued rewards in nanounits\n   * @property {bigint} claimedNanorewards - Number of claimed rewards in nanounits\n   * @property {bigint} contractUniqueId - Minter id\n   * @property {bigint} nanorewardsPer24h - Total number of accrued rewards per 24h in nanounits\n   * @property {boolean} soulboundItems - Whether minted NFTs are soulbound\n   * @property {bigint} minStakeTime - Minimum staking time\n   * @property {Address} stakingTokenWallet - Minter's staking jetton wallet\n   * @property {Address} rewardTokenWallet - Minter's reward jetton wallet\n   */\n  async getFarmingMinterData(provider) {\n    const result = await provider.get(\"get_farming_minter_data\", []);\n    return {\n      nextItemIndex: result.stack.readBigNumber(),\n      lastUpdateTime: result.stack.readBigNumber(),\n      status: result.stack.readNumber(),\n      depositedNanorewards: result.stack.readBigNumber(),\n      currentStakedTokens: result.stack.readBigNumber(),\n      accruedPerUnitNanorewards: result.stack.readBigNumber(),\n      accruedNanorewards: result.stack.readBigNumber(),\n      claimedNanorewards: result.stack.readBigNumber(),\n      contractUniqueId: result.stack.readBigNumber(),\n      nanorewardsPer24h: result.stack.readBigNumber(),\n      soulboundItems: result.stack.readBoolean(),\n      minStakeTime: result.stack.readBigNumber(),\n      stakingTokenWallet: result.stack.readAddress(),\n      rewardTokenWallet: result.stack.readAddress()\n    };\n  }\n  /**\n   * @returns {Address} address of minter for staking jetton that is used for farming\n   */\n  async getStakingJettonAddress(provider) {\n    const { stakingTokenWallet: stakingTokenWalletAddress } = await this.getFarmingMinterData(provider);\n    const { jettonMasterAddress } = await provider.open(_chunk_6OHMCTKH_js__WEBPACK_IMPORTED_MODULE_5__.JettonWallet.create(stakingTokenWalletAddress)).getWalletData();\n    return jettonMasterAddress;\n  }\n};\n\n\n//# sourceMappingURL=chunk-DLUNBCNR.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-DLUNBCNR.js?");
+
+/***/ }),
+
 /***/ "./node_modules/@ston-fi/sdk/dist/chunk-EJXT7F4T.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@ston-fi/sdk/dist/chunk-EJXT7F4T.js ***!
@@ -2343,6 +4178,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   DEX_OP_CODES: () => (/* binding */ DEX_OP_CODES),\n/* harmony export */   ROUTER_ADDRESS: () => (/* binding */ ROUTER_ADDRESS)\n/* harmony export */ });\n// src/contracts/dex/v1/constants.ts\nvar DEX_OP_CODES = {\n  SWAP: 630424929,\n  PROVIDE_LP: 4244235663,\n  DIRECT_ADD_LIQUIDITY: 1291331587,\n  REFUND_ME: 200537159,\n  RESET_GAS: 1117846339,\n  COLLECT_FEES: 533429565,\n  BURN: 1499400124\n};\nvar ROUTER_ADDRESS = \"EQB3ncyBUTjZUA5EnFKR5_EnOMI9V1tTEAAPaiU71gc4TiUt\";\n\n\n//# sourceMappingURL=chunk-G6J4NHH6.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-G6J4NHH6.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-GWMBLPLS.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-GWMBLPLS.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftMinterV3: () => (/* binding */ FarmNftMinterV3)\n/* harmony export */ });\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n/* harmony import */ var _chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-S2MQPWHB.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-S2MQPWHB.js\");\n/* harmony import */ var _chunk_6OHMCTKH_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./chunk-6OHMCTKH.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6OHMCTKH.js\");\n/* harmony import */ var _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-3QLJQGLC.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-3QLJQGLC.js\");\n/* harmony import */ var _chunk_5Z5Z5A3U_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./chunk-5Z5Z5A3U.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-5Z5Z5A3U.js\");\n/* harmony import */ var _chunk_HNMPFVZW_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-HNMPFVZW.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-HNMPFVZW.js\");\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n\n\n\n\n\n\n\n// src/contracts/farm/v3/FarmNftMinterV3.ts\n\nvar FarmNftMinterV3 = class _FarmNftMinterV3 extends _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__.Contract {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_VERSION.v3;\n  static gasConstants = {\n    stakeFwdBase: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.21\"),\n    stakeFwdPerPool: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.015\"),\n    stake: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.1\")\n  };\n  gasConstants;\n  constructor(address, { gasConstants, ...options } = {}) {\n    super(address, options);\n    this.gasConstants = {\n      ..._FarmNftMinterV3.gasConstants,\n      ...gasConstants\n    };\n  }\n  async createStakeBody(params) {\n    return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.STAKE, 32).storeAddress(\n      params?.ownerAddress ? (0,_chunk_HNMPFVZW_js__WEBPACK_IMPORTED_MODULE_3__.toAddress)(params.ownerAddress) : void 0\n    ).endCell();\n  }\n  /**\n   * Build all data required to execute a jetton `stake` transaction\n   *\n   * @param {Address | string} params.userWalletAddress - User's address\n   * @param {Address | string} params.jettonAddress - Jetton address of token to be staked\n   * @param {bigint | number} params.jettonAmount - Amount of tokens to be staked (in basic token units)\n   * @param {number | undefined} params.poolCount - Optional; Number of deployed farm reward pools; If undefined value will get onchain\n   * @param {Address | string} params.ownerAddress - Optional; custom owner of stake; if undefined stake owner is sender address\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} containing all data required to execute a jetton `stake` transaction\n   */\n  async getStakeTxParams(provider, params) {\n    const [jettonWalletAddress, forwardPayload, poolCount] = await Promise.all([\n      provider.open(_chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_4__.JettonMinter.create(params.jettonAddress)).getWalletAddress(params.userWalletAddress),\n      this.createStakeBody({\n        ownerAddress: params.ownerAddress\n      }),\n      (async () => params.poolCount ?? (await this.getFarmingMinterData(provider)).poolCount)()\n    ]);\n    const forwardTonAmount = this.gasConstants.stakeFwdBase + this.gasConstants.stakeFwdPerPool * BigInt(poolCount + 1);\n    const body = (0,_chunk_5Z5Z5A3U_js__WEBPACK_IMPORTED_MODULE_5__.createJettonTransferMessage)({\n      queryId: params.queryId ?? 0,\n      amount: params.jettonAmount,\n      destination: this.address,\n      responseDestination: params.userWalletAddress,\n      forwardTonAmount,\n      forwardPayload\n    });\n    const value = forwardTonAmount + this.gasConstants.stake;\n    return {\n      to: jettonWalletAddress,\n      value,\n      body\n    };\n  }\n  async sendStake(provider, via, params) {\n    const txParams = await this.getStakeTxParams(provider, params);\n    return via.send(txParams);\n  }\n  /**\n   * @returns {Address} address of minter for staking jetton that is used for farming\n   */\n  async getStakingJettonAddress(provider) {\n    const { stakingTokenWallet: stakingTokenWalletAddress } = await this.getFarmingMinterData(provider);\n    const { jettonMasterAddress } = await provider.open(_chunk_6OHMCTKH_js__WEBPACK_IMPORTED_MODULE_6__.JettonWallet.create(stakingTokenWalletAddress)).getWalletData();\n    return jettonMasterAddress;\n  }\n  /**\n   * @returns structure containing pending data\n   *\n   * @property {bigint} changeCustodianTs - Timestamp when 'change_custodian' was initiated\n   * @property {bigint} sendMsgTs - Timestamp when 'send_raw_msg' was initiated\n   * @property {bigint} codeUpgradeTs - Timestamp when 'code_upgrade' was initiated\n   * @property {Address} newCustodian - New custodian that will be set after confirmation\n   * @property {Cell} pendingMsg - Pending msg that will be sends after confirmation\n   * @property {Cell} newCode - New contract code that will be set after confirmation\n   * @property {Cell} newStorage - New contract storage that will be set after confirmation\n   */\n  async getPendingData(provider) {\n    const result = await provider.get(\"get_pending_data\", []);\n    return {\n      changeCustodianTs: result.stack.readBigNumber(),\n      sendMsgTs: result.stack.readBigNumber(),\n      codeUpgradeTs: result.stack.readBigNumber(),\n      newCustodian: result.stack.readAddressOpt(),\n      pendingMsg: result.stack.readCell(),\n      newCode: result.stack.readCell(),\n      newStorage: result.stack.readCell()\n    };\n  }\n  /**\n   * @returns structure containing version data\n   *\n   * @property {number} major - Major version; breaking changes in api\n   * @property {number} minor - Minor version; non-breaking new functionality\n   * @property {string} development - Development version; can contain breaking changes\n   */\n  async getVersion(provider) {\n    const result = await provider.get(\"get_version\", []);\n    return {\n      major: result.stack.readNumber(),\n      minor: result.stack.readNumber(),\n      development: result.stack.readString()\n    };\n  }\n  /**\n   * @returns structure containing current state of the minter\n   *\n   * @property {bigint} nextItemIndex - Index of the next nft in this collection\n   * @property {number} status - Status of the contract: uninitialized `0`, operational `1`, pause_all `2`, frozen `3`, retired `4`,\n   * @property {number} poolCount - Pools count\n   * @property {bigint} currentStakedTokens - Number of staked tokens in basic token units\n   * @property {bigint} contractUniqueId - Minter id\n   * @property {bigint} minStakeTime - Minimum staking time\n   * @property {Address} stakingTokenWallet - Minter's staking jetton wallet\n   * @property {Address} custodianAddress - Custodian address\n   * @property {boolean} canChangeCustodian - If can change custodian\n   * @property {boolean} canSendRawMsg - If admin can send arbitrary raw msg from Minter\n   * @property {Map<number, FarmDataAccrued>} farmDataAccrued - Accrued data for pools\n   * @property {Map<number, FarmDataParameters>} farmDataParameters - Pools parameters\n   */\n  async getFarmingMinterData(provider) {\n    const result = await provider.get(\"get_farming_minter_data\", []);\n    return {\n      nextItemIndex: result.stack.readBigNumber(),\n      status: result.stack.readNumber(),\n      poolCount: result.stack.readNumber(),\n      currentStakedTokens: result.stack.readBigNumber(),\n      contractUniqueId: result.stack.readBigNumber(),\n      minStakeTime: result.stack.readBigNumber(),\n      stakingTokenWallet: result.stack.readAddress(),\n      custodianAddress: result.stack.readAddress(),\n      canChangeCustodian: result.stack.readBoolean(),\n      canSendRawMsg: result.stack.readBoolean(),\n      farmDataAccrued: (() => {\n        const dict = result.stack.readCellOpt()?.asSlice().loadDictDirect(_ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Keys.Uint(8), _ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Values.Cell());\n        const farmDataAccrued = /* @__PURE__ */ new Map();\n        if (dict) {\n          for (const poolIndex of dict.keys()) {\n            const cell = dict.get(poolIndex);\n            if (cell === void 0) {\n              throw new Error(\n                `Failed to parse farmDataAccrued from dict: ${dict}`\n              );\n            }\n            const slice = cell.beginParse();\n            const accruedData = {\n              depositedNanorewards: slice.loadUintBig(150),\n              accruedPerUnitNanorewards: slice.loadUintBig(150),\n              accruedFeeNanorewards: slice.loadUintBig(150),\n              claimedNanorewards: slice.loadUintBig(150),\n              claimedFeeNanorewards: slice.loadUintBig(150),\n              accruedNanorewards: slice.loadUintBig(150),\n              lastUpdateTime: slice.loadUintBig(64)\n            };\n            farmDataAccrued.set(poolIndex, accruedData);\n          }\n        }\n        return farmDataAccrued;\n      })(),\n      farmDataParameters: (() => {\n        const dict = result.stack.readCellOpt()?.asSlice().loadDictDirect(_ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Keys.Uint(8), _ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Values.Cell());\n        const farmDataParameters = /* @__PURE__ */ new Map();\n        if (dict) {\n          for (const poolIndex of dict.keys()) {\n            const cell = dict.get(poolIndex);\n            if (cell === void 0) {\n              throw new Error(\n                `Failed to parse farmDataParameters from dict: ${dict}`\n              );\n            }\n            const slice = cell.beginParse();\n            const parametersData = {\n              adminFee: slice.loadUintBig(16),\n              nanorewardsPer24h: slice.loadUintBig(150),\n              unrestrictedDepositRewards: slice.loadBit(),\n              rewardTokenWallet: slice.loadAddress(),\n              canChangeFee: slice.loadBit(),\n              status: slice.loadUint(8)\n            };\n            farmDataParameters.set(poolIndex, parametersData);\n          }\n        }\n        return farmDataParameters;\n      })()\n    };\n  }\n};\n\n\n//# sourceMappingURL=chunk-GWMBLPLS.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-GWMBLPLS.js?");
 
 /***/ }),
 
@@ -2379,6 +4225,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-JKFNM5A4.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-JKFNM5A4.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   createSbtDestroyMessage: () => (/* binding */ createSbtDestroyMessage)\n/* harmony export */ });\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n// src/utils/createSbtDestroyMessage.ts\n\nfunction createSbtDestroyMessage(params) {\n  return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(520377210, 32).storeUint(params?.queryId ?? 0, 64).endCell();\n}\n\n\n//# sourceMappingURL=chunk-JKFNM5A4.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-JKFNM5A4.js?");
+
+/***/ }),
+
 /***/ "./node_modules/@ston-fi/sdk/dist/chunk-JYQGYVZZ.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@ston-fi/sdk/dist/chunk-JYQGYVZZ.js ***!
@@ -2398,6 +4255,28 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   StablePoolV2_1: () => (/* binding */ StablePoolV2_1)\n/* harmony export */ });\n/* harmony import */ var _chunk_VMF7QIJP_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-VMF7QIJP.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-VMF7QIJP.js\");\n/* harmony import */ var _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-4TOJF52Q.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-4TOJF52Q.js\");\n\n\n\n// src/contracts/dex/v2_1/pool/StablePoolV2_1.ts\nvar StablePoolV2_1 = class extends _chunk_VMF7QIJP_js__WEBPACK_IMPORTED_MODULE_0__.BasePoolV2_1 {\n  static dexType = _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__.DEX_TYPE.Stable;\n  async getPoolData(provider) {\n    const data = await this.implGetPoolData(provider);\n    return {\n      ...data.commonPoolData,\n      amp: data.stack.readBigNumber()\n    };\n  }\n};\n\n\n//# sourceMappingURL=chunk-K43I34KX.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-K43I34KX.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-KANJLTYX.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-KANJLTYX.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FARM: () => (/* binding */ FARM4)\n/* harmony export */ });\n/* harmony import */ var _chunk_AHUCDZ6E_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-AHUCDZ6E.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-AHUCDZ6E.js\");\n/* harmony import */ var _chunk_5ZFQVHEP_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-5ZFQVHEP.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-5ZFQVHEP.js\");\n/* harmony import */ var _chunk_ZCZHJEB6_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-ZCZHJEB6.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-ZCZHJEB6.js\");\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n\n\n\n\n\n// src/contracts/farm/index.ts\nvar FARM4 = {\n  [_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_0__.FARM_VERSION.v1]: _chunk_ZCZHJEB6_js__WEBPACK_IMPORTED_MODULE_1__.FARM,\n  [_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_0__.FARM_VERSION.v2]: _chunk_AHUCDZ6E_js__WEBPACK_IMPORTED_MODULE_2__.FARM,\n  [_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_0__.FARM_VERSION.v3]: _chunk_5ZFQVHEP_js__WEBPACK_IMPORTED_MODULE_3__.FARM\n};\n\n\n//# sourceMappingURL=chunk-KANJLTYX.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-KANJLTYX.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-LHIXCZLN.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-LHIXCZLN.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftItemV1: () => (/* binding */ FarmNftItemV1)\n/* harmony export */ });\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n/* harmony import */ var _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-3QLJQGLC.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-3QLJQGLC.js\");\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n\n\n\n// src/contracts/farm/v1/FarmNftItemV1.ts\n\nvar FarmNftItemV1 = class _FarmNftItemV1 extends _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__.Contract {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_VERSION.v1;\n  static gasConstants = {\n    claimRewards: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.3\"),\n    unstake: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.4\"),\n    destroy: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.05\")\n  };\n  gasConstants;\n  constructor(address, { gasConstants, ...options } = {}) {\n    super(address, options);\n    this.gasConstants = {\n      ..._FarmNftItemV1.gasConstants,\n      ...gasConstants\n    };\n  }\n  async createClaimRewardsBody(params) {\n    return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.CLAIM_REWARDS, 32).storeUint(BigInt(params?.queryId ?? 0), 64).endCell();\n  }\n  /**\n   * Build all data required to execute a `claim_rewards` transaction.\n   *\n   * @param {bigint | number | string | undefined} params.gasAmount - Optional; Custom transaction gas amount (in nanoTons)\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `claim_rewards` transaction.\n   */\n  async getClaimRewardsTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createClaimRewardsBody({\n      queryId: params?.queryId\n    });\n    const value = BigInt(params?.gasAmount ?? this.gasConstants.claimRewards);\n    return { to, value, body };\n  }\n  async sendClaimRewards(provider, via, params) {\n    const txParams = await this.getClaimRewardsTxParams(provider, params);\n    return via.send(txParams);\n  }\n  async createUnstakeBody(params) {\n    return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.UNSTAKE, 32).storeUint(BigInt(params?.queryId ?? 0), 64).endCell();\n  }\n  /**\n   * Build all data required to execute a `unstake` transaction.\n   *\n   * @param {bigint | number | string | undefined} params.gasAmount - Optional; Custom transaction gas amount (in nanoTons)\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `unstake` transaction.\n   */\n  async getUnstakeTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createUnstakeBody({\n      queryId: params?.queryId\n    });\n    const value = BigInt(params?.gasAmount ?? this.gasConstants.unstake);\n    return { to, value, body };\n  }\n  async sendUnstake(provider, via, params) {\n    const txParams = await this.getUnstakeTxParams(provider, params);\n    return via.send(txParams);\n  }\n  /**\n   * @returns structure containing current state of the farm NFT\n   *\n   * @property {number} status Status of the contract: uninitialized `0`, active `1`, unstaked `2`, claiming `3`\n   * @property {boolean} isSoulbound If nft is soulbound\n   * @property {bigint} stakedTokens Amount of staked tokens\n   * @property {bigint} claimedPerUnitNanorewards `accrued_per_unit_nanorewards` at the time the user made the stake or last claimed rewards\n   */\n  async getFarmingData(provider) {\n    const result = await provider.get(\"get_farming_data\", []);\n    return {\n      status: result.stack.readNumber(),\n      isSoulbound: result.stack.readBoolean(),\n      stakedTokens: result.stack.readBigNumber(),\n      claimedPerUnitNanorewards: result.stack.readBigNumber()\n    };\n  }\n};\n\n\n//# sourceMappingURL=chunk-LHIXCZLN.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-LHIXCZLN.js?");
 
 /***/ }),
 
@@ -2464,6 +4343,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   CPIRouterV2_2: () => (/* binding */ CPIRouterV2_2)\n/* harmony export */ });\n/* harmony import */ var _chunk_YVUQNHKD_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-YVUQNHKD.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-YVUQNHKD.js\");\n/* harmony import */ var _chunk_B6QQTFKH_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-B6QQTFKH.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-B6QQTFKH.js\");\n/* harmony import */ var _chunk_7VXXLUOI_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-7VXXLUOI.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-7VXXLUOI.js\");\n/* harmony import */ var _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-4TOJF52Q.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-4TOJF52Q.js\");\n/* harmony import */ var _chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-S2MQPWHB.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-S2MQPWHB.js\");\n\n\n\n\n\n\n// src/contracts/dex/v2_2/router/CPIRouterV2_2.ts\nvar CPIRouterV2_2 = class extends _chunk_7VXXLUOI_js__WEBPACK_IMPORTED_MODULE_0__.CPIRouterV2_1 {\n  static version = _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__.DEX_VERSION.v2_2;\n  async getPool(provider, params) {\n    const poolAddress = await this.getPoolAddressByJettonMinters(\n      provider,\n      params\n    );\n    return _chunk_YVUQNHKD_js__WEBPACK_IMPORTED_MODULE_2__.CPIPoolV2_2.create(poolAddress);\n  }\n  async getVault(provider, params) {\n    const tokenMinter = provider.open(_chunk_S2MQPWHB_js__WEBPACK_IMPORTED_MODULE_3__.JettonMinter.create(params.tokenMinter));\n    const vaultAddress = await this.getVaultAddress(provider, {\n      user: params.user,\n      tokenWallet: await tokenMinter.getWalletAddress(this.address)\n    });\n    return _chunk_B6QQTFKH_js__WEBPACK_IMPORTED_MODULE_4__.VaultV2_2.create(vaultAddress);\n  }\n};\n\n\n//# sourceMappingURL=chunk-PKEMI3A5.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-PKEMI3A5.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-Q3AAE3DG.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-Q3AAE3DG.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftItemV3: () => (/* binding */ FarmNftItemV3)\n/* harmony export */ });\n/* harmony import */ var _chunk_GWMBLPLS_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chunk-GWMBLPLS.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-GWMBLPLS.js\");\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n/* harmony import */ var _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-3QLJQGLC.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-3QLJQGLC.js\");\n/* harmony import */ var _chunk_JKFNM5A4_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./chunk-JKFNM5A4.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-JKFNM5A4.js\");\n/* harmony import */ var _ton_ton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ton/ton */ \"./node_modules/@ton/ton/dist/index.js\");\n\n\n\n\n\n// src/contracts/farm/v3/FarmNftItemV3.ts\n\nvar FarmNftItemV3 = class _FarmNftItemV3 extends _chunk_3QLJQGLC_js__WEBPACK_IMPORTED_MODULE_1__.Contract {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_VERSION.v3;\n  static gasConstants = {\n    claimRewardsBase: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.35\"),\n    claimRewardsPerPool: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.13\"),\n    unstakeBase: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.45\"),\n    unstakePerPool: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.13\"),\n    destroy: (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.toNano)(\"0.05\")\n  };\n  gasConstants;\n  constructor(address, { gasConstants, ...options } = {}) {\n    super(address, options);\n    this.gasConstants = {\n      ..._FarmNftItemV3.gasConstants,\n      ...gasConstants\n    };\n  }\n  async createClaimRewardsBody(params) {\n    const builder = (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)();\n    builder.storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.CLAIM_REWARDS, 32);\n    builder.storeUint(params.queryId ?? 0, 64);\n    if (params.claimAll) {\n      builder.storeUint(1, 1);\n      builder.storeUint(0, 8);\n    } else {\n      builder.storeUint(0, 1);\n      builder.storeUint(params.poolIndex, 8);\n    }\n    return builder.endCell();\n  }\n  /**\n   * Build all data required to execute a `claim_rewards` transaction.\n   *\n   * @param {number | undefined} params.poolCount - Optional; Number of deployed farm reward pools; If undefined value will get onchain\n   * @param {number | undefined} params.poolIndex - Optional; farm reward pool index used for claiming; If undefined claim rewards from all pools\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `claim_rewards` transaction.\n   */\n  async getClaimRewardsTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createClaimRewardsBody({\n      queryId: params?.queryId,\n      claimAll: params?.poolIndex === void 0,\n      poolIndex: params?.poolIndex ?? 0\n    });\n    const poolCount = params?.poolCount ?? await this.getPoolCount(provider);\n    const value = this.gasConstants.claimRewardsBase + this.gasConstants.claimRewardsPerPool * BigInt(poolCount - 1);\n    return { to, value, body };\n  }\n  async sendClaimRewards(provider, via, params) {\n    const txParams = await this.getClaimRewardsTxParams(provider, params);\n    return via.send(txParams);\n  }\n  async createUnstakeBody(params) {\n    return (0,_ton_ton__WEBPACK_IMPORTED_MODULE_0__.beginCell)().storeUint(_chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_2__.FARM_OP_CODES.UNSTAKE, 32).storeUint(params?.queryId ?? 0, 64).endCell();\n  }\n  /**\n   * Build all data required to execute a `unstake` transaction.\n   *\n   * @param {number | undefined} params.poolCount -  Optional; Number of deployed farm reward pools; If undefined value will get onchain\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `unstake` transaction.\n   */\n  async getUnstakeTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createUnstakeBody({\n      queryId: params?.queryId\n    });\n    const poolCount = params?.poolCount ?? await this.getPoolCount(provider);\n    const value = this.gasConstants.unstakeBase + this.gasConstants.unstakePerPool * BigInt(poolCount - 1);\n    return { to, value, body };\n  }\n  async sendUnstake(provider, via, params) {\n    const txParams = await this.getUnstakeTxParams(provider, params);\n    return via.send(txParams);\n  }\n  async createDestroyBody(params) {\n    return (0,_chunk_JKFNM5A4_js__WEBPACK_IMPORTED_MODULE_3__.createSbtDestroyMessage)({\n      queryId: params?.queryId ?? 0\n    });\n  }\n  /**\n   * Build all data required to execute a `destroy` transaction.\n   *\n   * @param {bigint | string | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `destroy` transaction.\n   */\n  async getDestroyTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createDestroyBody({\n      queryId: params?.queryId\n    });\n    const value = this.gasConstants.destroy;\n    return { to, value, body };\n  }\n  async sendDestroy(provider, via, params) {\n    const txParams = await this.getDestroyTxParams(provider, params);\n    return via.send(txParams);\n  }\n  /**\n   * @returns structure containing current state of the farm NFT\n   *\n   * @property {number} status Status of the contract: uninitialized (0), active (1), unstaked (2), claiming (3), unstaked_pending (4)\n   * @property {bigint} revokeTime Timestamp of unstake\n   * @property {bigint} stakedTokens Amount of staked tokens\n   * @property {bigint} stakeDate Timestamp in which the owner started staking\n   * @property {Map<number, bigint>} claimedPerUnit `accrued_per_unit_nanorewards amounts` for each pool at the time of last claim for this user\n   * @property {Address} ownerAddress Owner address of farm nft\n   */\n  async getFarmingData(provider) {\n    const result = await provider.get(\"get_farming_data\", []);\n    return {\n      status: result.stack.readNumber(),\n      revokeTime: result.stack.readBigNumber(),\n      stakedTokens: result.stack.readBigNumber(),\n      stakeDate: result.stack.readBigNumber(),\n      claimedPerUnit: (() => {\n        const dict = result.stack.readCellOpt()?.asSlice().loadDictDirect(\n          _ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Keys.Uint(8),\n          _ton_ton__WEBPACK_IMPORTED_MODULE_0__.Dictionary.Values.BigUint(150)\n        );\n        const claimedPerUnit = /* @__PURE__ */ new Map();\n        if (dict) {\n          for (const poolIndex of dict.keys()) {\n            const accruedPerUnitNanorewards = dict.get(poolIndex);\n            if (accruedPerUnitNanorewards === void 0) {\n              throw new Error(\n                `Failed to parse claimedPerUnit from dict: ${dict}`\n              );\n            }\n            claimedPerUnit.set(Number(poolIndex), accruedPerUnitNanorewards);\n          }\n        }\n        return claimedPerUnit;\n      })(),\n      ownerAddress: result.stack.readAddress()\n    };\n  }\n  async getPoolCount(provider) {\n    const result = await provider.get(\"get_nft_data\", []);\n    const nftItemData = {\n      isInitialized: result.stack.readBoolean(),\n      index: result.stack.readNumber(),\n      minterAddress: result.stack.readAddress()\n    };\n    const { poolCount } = await provider.open(_chunk_GWMBLPLS_js__WEBPACK_IMPORTED_MODULE_4__.FarmNftMinterV3.create(nftItemData.minterAddress)).getFarmingMinterData();\n    return poolCount;\n  }\n};\n\n\n//# sourceMappingURL=chunk-Q3AAE3DG.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-Q3AAE3DG.js?");
 
 /***/ }),
 
@@ -2555,6 +4445,28 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-WS2KZKI3.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-WS2KZKI3.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftItemV2: () => (/* binding */ FarmNftItemV2)\n/* harmony export */ });\n/* harmony import */ var _chunk_LHIXCZLN_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-LHIXCZLN.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-LHIXCZLN.js\");\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n/* harmony import */ var _chunk_JKFNM5A4_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-JKFNM5A4.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-JKFNM5A4.js\");\n\n\n\n\n// src/contracts/farm/v2/FarmNftItemV2.ts\nvar FarmNftItemV2 = class extends _chunk_LHIXCZLN_js__WEBPACK_IMPORTED_MODULE_0__.FarmNftItemV1 {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_1__.FARM_VERSION.v2;\n  async createDestroyBody(params) {\n    return (0,_chunk_JKFNM5A4_js__WEBPACK_IMPORTED_MODULE_2__.createSbtDestroyMessage)({\n      queryId: params?.queryId ?? 0\n    });\n  }\n  /**\n   * Build all data required to execute a `destroy` transaction.\n   *\n   * @param {bigint | number | string | undefined} params.gasAmount - Optional; amount of gas for the transaction (in nanoTons)\n   * @param {bigint | number | undefined} params.queryId - Optional; query id\n   *\n   * @returns {SenderArguments} all data required to execute a `destroy` transaction.\n   */\n  async getDestroyTxParams(provider, params) {\n    const to = this.address;\n    const body = await this.createDestroyBody({\n      queryId: params?.queryId\n    });\n    const value = BigInt(params?.gasAmount ?? this.gasConstants.destroy);\n    return { to, value, body };\n  }\n  async sendDestroy(provider, via, params) {\n    const txParams = await this.getDestroyTxParams(provider, params);\n    return via.send(txParams);\n  }\n  /**\n   * @returns structure containing current state of the farm NFT\n   *\n   * @property {number} status Status of the contract: uninitialized `0`, active `1`, unstaked `2`, claiming `3`\n   * @property {bigint} revokeTime Timestamp of unstake\n   * @property {bigint} stakedTokens Amount of staked tokens\n   * @property {bigint} claimedPerUnitNanorewards `accrued_per_unit_nanorewards` at the time the user made the stake or last claimed rewards\n   * @property {bigint} stakeDate Timestamp in which the owner started staking\n   * @property {boolean} isSoulbound If nft is soulbound; Always true in V2\n   */\n  async getFarmingData(provider) {\n    const result = await provider.get(\"get_farming_data\", []);\n    return {\n      status: result.stack.readNumber(),\n      revokeTime: result.stack.readBigNumber(),\n      stakedTokens: result.stack.readBigNumber(),\n      claimedPerUnitNanorewards: result.stack.readBigNumber(),\n      stakeDate: result.stack.readBigNumber(),\n      isSoulbound: true\n      // NFTs are always soulbound in V2\n    };\n  }\n};\n\n\n//# sourceMappingURL=chunk-WS2KZKI3.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-WS2KZKI3.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-YO7XABC7.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-YO7XABC7.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FarmNftMinterV2: () => (/* binding */ FarmNftMinterV2)\n/* harmony export */ });\n/* harmony import */ var _chunk_DLUNBCNR_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-DLUNBCNR.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-DLUNBCNR.js\");\n/* harmony import */ var _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-6FG2AV4K.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-6FG2AV4K.js\");\n\n\n\n// src/contracts/farm/v2/FarmNftMinterV2.ts\nvar FarmNftMinterV2 = class extends _chunk_DLUNBCNR_js__WEBPACK_IMPORTED_MODULE_0__.FarmNftMinterV1 {\n  static version = _chunk_6FG2AV4K_js__WEBPACK_IMPORTED_MODULE_1__.FARM_VERSION.v2;\n  /**\n   * @returns structure containing pending data\n   *\n   * @property {bigint} changeCustodianTs - Timestamp when 'change_custodian' was initiated\n   * @property {bigint} sendMsgTs - Timestamp when 'send_raw_msg' was initiated\n   * @property {bigint} codeUpgradeTs - Timestamp when 'code_upgrade' was initiated\n   * @property {Address} newCustodian - New custodian that will be set after confirmation\n   * @property {Cell} pendingMsg - Pending msg that will be sends after confirmation\n   * @property {Cell} newCode - New contract code that will be set after confirmation\n   * @property {Cell} newStorage - New contract storage that will be set after confirmation\n   */\n  async getPendingData(provider) {\n    const result = await provider.get(\"get_pending_data\", []);\n    return {\n      changeCustodianTs: result.stack.readBigNumber(),\n      sendMsgTs: result.stack.readBigNumber(),\n      codeUpgradeTs: result.stack.readBigNumber(),\n      newCustodian: result.stack.readAddressOpt(),\n      pendingMsg: result.stack.readCell(),\n      newCode: result.stack.readCell(),\n      newStorage: result.stack.readCell()\n    };\n  }\n  /**\n   * @returns structure containing version data\n   *\n   * @property {number} major - Major version; breaking changes in api\n   * @property {number} minor - Minor version; non-breaking new functionality\n   * @property {string} development - Development version; can contain breaking changes\n   */\n  async getVersion(provider) {\n    const result = await provider.get(\"get_version\", []);\n    return {\n      major: result.stack.readNumber(),\n      minor: result.stack.readNumber(),\n      development: result.stack.readString()\n    };\n  }\n  /**\n   * @returns structure containing current state of the minter\n   *\n   * @property {bigint} nextItemIndex - Index of the next nft in this collection\n   * @property {bigint} lastUpdateTime - Last time farming values were updated\n   * @property {number} status - Status of the contract: uninitialized `0`, active `1`, paused `3`\n   * @property {bigint} depositedNanorewards - Deposited rewards in nanounits\n   * @property {bigint} currentStakedTokens - Number of staked tokens in basic token units\n   * @property {bigint} accruedPerUnitNanorewards - Number of accrued nanorewards per basic stake token unit\n   * @property {bigint} claimedFeeNanorewards - Claimed fees\n   * @property {bigint} accruedFeeNanorewards - Accrued fees\n   * @property {bigint} accruedNanorewards - Total number of accrued rewards in nanounits\n   * @property {bigint} claimedNanorewards - Number of claimed rewards in nanounits\n   * @property {bigint} contractUniqueId - Minter id\n   * @property {bigint} nanorewardsPer24h - Total number of accrued rewards per 24h in nanounits\n   * @property {bigint} adminFee - Admin fee; divider is 10000\n   * @property {bigint} minStakeTime - Minimum staking time\n   * @property {Address} stakingTokenWallet - Minter's staking jetton wallet\n   * @property {Address} rewardTokenWallet - Minter's reward jetton wallet\n   * @property {Address} custodianAddress - Custodian address\n   * @property {boolean} canChangeCustodian - If can change custodian\n   * @property {boolean} canSendRawMsg - If can send raw msg\n   * @property {boolean} canChangeFee - If can change fee\n   * @property {boolean} unrestrictedDepositRewards - If rewards can be deposited by anyone\n   * @property {boolean} soulboundItems - Whether minted NFTs are soulbound; Always true in V2\n   */\n  async getFarmingMinterData(provider) {\n    const result = await provider.get(\"get_farming_minter_data\", []);\n    return {\n      nextItemIndex: result.stack.readBigNumber(),\n      lastUpdateTime: result.stack.readBigNumber(),\n      status: result.stack.readNumber(),\n      depositedNanorewards: result.stack.readBigNumber(),\n      currentStakedTokens: result.stack.readBigNumber(),\n      accruedPerUnitNanorewards: result.stack.readBigNumber(),\n      claimedFeeNanorewards: result.stack.readBigNumber(),\n      accruedFeeNanorewards: result.stack.readBigNumber(),\n      accruedNanorewards: result.stack.readBigNumber(),\n      claimedNanorewards: result.stack.readBigNumber(),\n      contractUniqueId: result.stack.readBigNumber(),\n      nanorewardsPer24h: result.stack.readBigNumber(),\n      adminFee: result.stack.readBigNumber(),\n      minStakeTime: result.stack.readBigNumber(),\n      stakingTokenWallet: result.stack.readAddress(),\n      rewardTokenWallet: result.stack.readAddress(),\n      custodianAddress: result.stack.readAddressOpt(),\n      canChangeCustodian: result.stack.readBoolean(),\n      canSendRawMsg: result.stack.readBoolean(),\n      canChangeFee: result.stack.readBoolean(),\n      unrestrictedDepositRewards: result.stack.readBoolean(),\n      // NFTs are always soulbound in V2\n      soulboundItems: true\n    };\n  }\n};\n\n\n//# sourceMappingURL=chunk-YO7XABC7.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-YO7XABC7.js?");
+
+/***/ }),
+
 /***/ "./node_modules/@ston-fi/sdk/dist/chunk-YVUQNHKD.js":
 /*!**********************************************************!*\
   !*** ./node_modules/@ston-fi/sdk/dist/chunk-YVUQNHKD.js ***!
@@ -2563,6 +4475,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   CPIPoolV2_2: () => (/* binding */ CPIPoolV2_2)\n/* harmony export */ });\n/* harmony import */ var _chunk_M6J4GSRJ_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chunk-M6J4GSRJ.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-M6J4GSRJ.js\");\n/* harmony import */ var _chunk_5E5B5DUT_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-5E5B5DUT.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-5E5B5DUT.js\");\n/* harmony import */ var _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-4TOJF52Q.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-4TOJF52Q.js\");\n\n\n\n\n// src/contracts/dex/v2_2/pool/CPIPoolV2_2.ts\nvar CPIPoolV2_2 = class extends _chunk_5E5B5DUT_js__WEBPACK_IMPORTED_MODULE_0__.CPIPoolV2_1 {\n  static version = _chunk_4TOJF52Q_js__WEBPACK_IMPORTED_MODULE_1__.DEX_VERSION.v2_2;\n  async getLpAccount(provider, params) {\n    const lpAccountAddress = await this.getLpAccountAddress(provider, params);\n    return _chunk_M6J4GSRJ_js__WEBPACK_IMPORTED_MODULE_2__.LpAccountV2_2.create(lpAccountAddress);\n  }\n};\n\n\n//# sourceMappingURL=chunk-YVUQNHKD.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-YVUQNHKD.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@ston-fi/sdk/dist/chunk-ZCZHJEB6.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@ston-fi/sdk/dist/chunk-ZCZHJEB6.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   FARM: () => (/* binding */ FARM)\n/* harmony export */ });\n/* harmony import */ var _chunk_LHIXCZLN_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chunk-LHIXCZLN.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-LHIXCZLN.js\");\n/* harmony import */ var _chunk_DLUNBCNR_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chunk-DLUNBCNR.js */ \"./node_modules/@ston-fi/sdk/dist/chunk-DLUNBCNR.js\");\n\n\n\n// src/contracts/farm/v1/index.ts\nvar FARM = {\n  NftItem: _chunk_LHIXCZLN_js__WEBPACK_IMPORTED_MODULE_0__.FarmNftItemV1,\n  NftMinter: _chunk_DLUNBCNR_js__WEBPACK_IMPORTED_MODULE_1__.FarmNftMinterV1\n};\n\n\n//# sourceMappingURL=chunk-ZCZHJEB6.js.map\n\n//# sourceURL=webpack://front/./node_modules/@ston-fi/sdk/dist/chunk-ZCZHJEB6.js?");
 
 /***/ }),
 

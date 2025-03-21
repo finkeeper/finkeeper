@@ -6,6 +6,7 @@ use Yii;
 use common\models\Exchange;
 use common\components\SOL;
 use common\components\BaseFunctions;
+use frontend\modules\app\models\ApiChatbot;
 
 class SOLApi {
 	
@@ -40,27 +41,14 @@ class SOLApi {
 	}
 
 	/**
-	 * getWalletBalance($params='')
+	 * getWalletBalance()
 	 */
     public function getWalletBalance() 
 	{
 		$currency = Exchange::getDefaultCurrency();
 		$grafema = Exchange::getGrafemCurrency($currency);
 		$data = [];
-		
-		$data[0] = [
-			'balance' => 0,
-			'name' => 'Sol',
-			'currency' => $currency,
-			'sort' => 0,
-			'currency_value' => 0,
-			'img' => '/images/cryptologo/sol.webp',
-			'symbol' => 'SOL',
-			'symbolid' => 'sol',
-			'grafema' => $grafema,
-			'class' => '',
-		];
-		
+
 		if (empty($this->address)) {
 			return [
 				'error' => 1,
@@ -86,20 +74,174 @@ class SOLApi {
 			];
 		}
 		
+		$value = 0;
+		$price = [];
 		$amount = (int) $result['data'];
 		$decimals = BaseFunctions::getDecimalsNumber($this->decimals);
-		$solbalance = $amount / $decimals;
+		$balance = $amount / $decimals;
+		$balance = number_format($balance, 12, '.', '');
 
-		$solbalance = number_format($solbalance, 10, '.', '');
+		if (!empty($balance)) {
+			if (is_float($balance)) {
+				$balance = number_format($balance, 12, '.', '');
+			} else if (is_int($balance)) {
+				$balance = number_format($balance, 12, '.', '');
+			} else {
+				$balance = $balance*1;
+				$balance = number_format($balance, 12, '.', '');
+			}
+		}
 		
-		$data[0]['balance'] = Exchange::formatValue($solbalance);
+		if (empty($result['price'])) {
+			$price = ApiChatbot::getPrice('sol', $currency, 1);
+			if (!empty($price['error']) || empty($price['data'])) {
+				$price['data'] = 0;
+			}
+		} else {
+			$price['data'] = $result['price'];
+		}
+		
+		if (empty($result['value'])) {
+			$value = $price['data']*$balance;	
+		} else {	
+			$value = $result['value'];
+		}
+
+		$currency_value = Exchange::formatValue($value);
+		$class = 'middle_value';
+		if ($currency_value<1) {
+			$class = 'small_value';
+		}
+		
+		$address = $this->getAddressParse($this->address);
+		
+		$data[] = [
+			'balance' => $balance,
+			'name' => 'Sol',
+			'currency' => $currency,
+			'sort' => $value,
+			'currency_value' => $currency_value,
+			'img' => '/images/cryptologo/sol.webp',
+			'symbol' => 'SOL',
+			'symbolid' => 'sol',
+			'coinid' => 'sol00',
+			'grafema' => $grafema,
+			'class' => $class,
+			'price' => $price['data'],
+			'network' => Yii::t('Frontend', 'Wallet').' Solana',
+			'network_icon' => '/images/logos/sol2.png',
+			'apr' => '',
+			'asset' => $address,
+		];
+			
+		$result =  $this->getTokenAccountsByOwner($this->address);
+		if (!empty($result['error'])) {
+			return [
+				'error' => 1,
+				'message' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No balance'),
+				'data' => $data,
+			];
+		}
+		
+		if (empty($result) || empty($result['data'])) {
+			return [
+				'error' => 0,
+				'message' => Yii::t('Api', 'Not SOL Active'),
+				'data' => $data,
+			];
+		}
+
+		foreach ($result['data'] as $key=>$val) {
+		
+			$value = 0;
+			$price = [];
+			$symbol = $val['symbol'];
+			$symbolid = strtolower($symbol);
+			$coinid = strtolower($symbolid).'1'.$key;
+			$balance = number_format($val['coin_balance'], 12, '.', '');
+			
+			if (!empty($balance)) {
+				if (is_float($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else if (is_int($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else {
+					$balance = $balance*1;
+					$balance = number_format($balance, 12, '.', '');
+				}
+			}
+			
+			if (empty($val['price'])) {
+				$price = ApiChatbot::getPrice($symbolid, $currency, 1);
+				if (!empty($price['error']) || empty($price['data'])) {
+					$price['data'] = 0;
+				}
+			} else {
+				$price['data'] = $val['price'];
+			}
+			
+			if (empty($val['value'])) {
+				$value = $price['data']*$balance;	
+			} else {	
+				$value = $val['attributes']['value'];
+			}
+			
+			if (!empty($value)) {
+				if (is_float($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else if (is_int($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else {
+					$value = $value*1;
+					$value = number_format($value, 12, '.', '');
+				}
+			}
+			
+			$img = '/images/cryptologo/default_coin.webp';
+			if (!empty($val['image'])) {
+				$img = $val['image'];
+			} else {
+				$img_name = strtolower($symbol).'.webp';
+				$path = getcwd().'/images/cryptologo/'.$img_name;
+				if (file_exists($path)) {
+					$img = '/images/cryptologo/'.$img_name;
+				}
+			}
+			
+			$currency_value = Exchange::formatValue($value);
+			$class = 'middle_value';
+			if ($currency_value<1) {
+				$class = 'small_value';
+			}
+			
+			$address = $this->getAddressParse($this->address);
+			
+			$data[] = [
+				'balance' => $balance,
+				'name' => $val['name'],
+				'currency' => $currency,
+				'sort' => $value,
+				'currency_value' => $currency_value,
+				'img' => $img,
+				'symbol' => $symbol,
+				'symbolid' => $symbolid,
+				'coinid' => $coinid,
+				'grafema' => $grafema,
+				'class' => $class,
+				'price' => $price['data'],
+				'network' => Yii::t('Frontend', 'Wallet').' Solana',
+				'network_icon' => '/images/logos/sol2.png',
+				'apr' => '',
+				'asset' => $address,
+			];
+		}
 		
 		return [
 			'error' => 0,
 			'data' => $data,
 		];
-    }
-	
+	}
+
 	/**
 	 * getSolBalance()
 	 */
@@ -170,62 +312,6 @@ class SOLApi {
 			'error' => 0,
 			'data' => $data['result']['value'],	
 		];
-	}
-	
-	/**
-	 * getJettonsBalance()
-	 */
-    public function getTokenBalance() 
-	{
-		$currency = Exchange::getDefaultCurrency();
-		$grafema = Exchange::getGrafemCurrency($currency);
-		$data = [];
-
-		if (empty($this->address)) {
-			return [
-				'error' => 1,
-				'message' => Yii::t('Error', 'Not Address'),
-				'data' => $data,
-			];
-		}
-		
-		$result =  $this->getTokenAccountsByOwner($this->address);
-		if (!empty($result['error'])) {
-			return [
-				'error' => 1,
-				'message' => !empty($result['message']) ? $result['message'] : Yii::t('Error', 'No token'),
-				'data' => $data,
-			];
-		}
-
-		foreach ($result['data'] as $value) {
-			
-			if (empty($value['price'])) {
-				$price = SOL::pstatic()->getPrice($value['mint']);
-				if (empty($price['error']) && !empty($price['data'])) {
-					$value['price'] = $price['data'];
-				}
-			}
-
-			$data[] = [
-				'balance' => $value['coin_balance'],
-				'price' => $value['price'],
-				'name' => $value['name'],
-				'currency' => $currency,
-				'sort' => $value['coin_balance'],
-				'currency_value' => 0,
-				'img' => $value['image'],
-				'symbol' => strtoupper($value['symbol']),
-				'symbolid' => strtolower($value['symbol']),
-				'grafema' => $grafema,
-				'class' => '',
-			];
-		}
-
-		return [
-			'error' => 0,
-			'data' => $data,
-		];	
 	}
 	
 	/**
@@ -343,6 +429,8 @@ class SOLApi {
 				'decimals' => $coininfo['data']['decimals'],
 				'price' => $coininfo['data']['price'],
 				'currency' => $coininfo['data']['currency'],
+				'network' => Yii::t('Frontend', 'Wallet').' Solana',
+				'network_icon' => '/images/logos/sol2.png',
 			];
 		}
 
@@ -560,6 +648,14 @@ class SOLApi {
 			'error' => 0,
 			'data' => $data,
 		];
+	}
+	
+	/**
+	 * getAddressParse($address='')
+	 */ 
+	public function getAddressParse($address='')
+	{
+		return $address;
 	}
 
 	/**

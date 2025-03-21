@@ -26,41 +26,15 @@ use yii\bootstrap5\Html;
 							</div>
 						</div>
 						
-						<div id="sol-wallet-connect-button" class="wallet-connect-button">
-							<span class="mdi mdi-wifi-off"></span>
-							<div tabindex="0" role="button" id="sol-wallet-click-button" class="areal-click-button"></div>
-							<div class="backdrop-connect-button" style="display:none">
-								<span class="far fa-hourglass fa-spin"></span>
-							</div>
-						</div>
-						
-						<div id="sui-wallet-connect-button" class="wallet-connect-button">
-							<span class="mdi mdi-wifi-off"></span>
-							<div tabindex="0" role="button" id="sui-wallet-click-button" class="areal-click-button"></div>
-							<div class="backdrop-connect-button" style="display:none">
-								<span class="far fa-hourglass fa-spin"></span>
-							</div>
-						</div>
-						
-						<div id="bybit-exchange-connect-button" class="wallet-connect-button">
-							<span class="mdi mdi-wifi-off"></span>
-							<div tabindex="0" role="button" id="bybit-exchange-click-button" class="areal-click-button"></div>
-							<div class="backdrop-connect-button" style="display:none">
-								<span class="far fa-hourglass fa-spin"></span>
-							</div>
-						</div>
-						
-						<div id="okx-exchange-connect-button" class="wallet-connect-button">
-							<span class="mdi mdi-wifi-off"></span>
-							<div tabindex="0" role="button" id="okx-exchange-click-button" class="areal-click-button"></div>
-							<div class="backdrop-connect-button" style="display:none">
-								<span class="far fa-hourglass fa-spin"></span>
-							</div>
-						</div>
-					
+						<div id="apt-exchange-connect-button-as316"></div>
+						<div id="sol-exchange-connect-button-as864"></div>
+						<div id="sui-exchange-connect-button-as164"></div>
+						<div id="eth-exchange-connect-button-as628"></div>
+						<div id="bybit-exchange-connect-button-as854"></div>
+						<div id="okx-exchange-connect-button-as858"></div>
 						<div class="clearfix"></div>
 					</div>
-					
+
 					<div class="clearfix"></div>
 					<div id="wrap-balance">		
 						<div id="title_balance"><?=Yii::t('Api', 'Connect your wallet to see list of assets')?></div>
@@ -103,32 +77,8 @@ use yii\bootstrap5\Html;
 				<div class="app-navigation">
 					<i class="fa fa-times" id="chat-close" style="display:none"></i>
 				</div>	
-				
-				
-				<?php if (empty($wallet['sui']['address'])) { ?>
-					
-					<div class="row" style="margin:0 0 20px 0;">	
-						<div class="create_aiagent_wallet">
-							<div id="create-aiagent-wallet" class="currency_button mt-17 mr-10"><?=Yii::t('Api', 'Create AI agent wallet')?></div>
-						</div>
-					</div>
-					
-				<?php } else { ?>
-				
-					<div class="row" style="margin:0 0 20px 0;font-size:18px">	
-						<div class="create_aiagent_wallet">
-							<?=Yii::t('Api', 'AI agent SUI wallet')?>:&nbsp;<?=substr_replace($wallet['sui']['address'], '...', 8, -8)?>&nbsp;&nbsp;<span id="as-wallet-copy" data-address="<?=$wallet['sui']['address']?>"><img src="/images/icons/copy.svg" alt="" title=""></span>&nbsp;&nbsp;<a href="https://suivision.xyz/account/<?=$wallet['sui']['address']?>" target="_blank" id="as-rewiew-wallet"><img src="/images/icons/globe.svg" alt="" title=""></a><br>
-							<?=Yii::t('Api', 'Balance')?>:&nbsp;<?=$wallet['sui']['balance']?>&nbsp;SUI (<?=$wallet['sui']['price']?><?=$grafema?>)
-						</div>
-					</div>
-				
-				<?php } ?>
-			
-				<h1 class="text-center"><?=Yii::t('Api', 'Chat')?></h1>
 	
-				<a tabindex="0" role="button" id="question-addon-chat" class="fa fa-question-circle"></a>
-				
-				<div id="chat-form-as" class="chat_form_as" style="overflow-y:auto;height:calc(100vh - 100px);padding-bottom:90px;"></div>
+				<div id="as-chatai"></div>
 				
 			</div>
 			

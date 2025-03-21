@@ -1,10 +1,38 @@
 <?php
+//Base function
+require dirname(__FILE__).'/__script/__app.php';
+
+//Ton Deposit
+require dirname(__FILE__).'/__script/__ton_deposit.php';
+
+//Chat Ai JS scripts
+require dirname(__FILE__).'/__script/__chatai.php';
+
+//Bybit Wallet
+require dirname(__FILE__).'/__script/__bybit_wallet.php';
+
+//OKX Wallet
+require dirname(__FILE__).'/__script/__okx_wallet.php';
+
+//SOL Wallet
+require dirname(__FILE__).'/__script/__sol_wallet.php';
+
+//SUI Wallet
+require dirname(__FILE__).'/__script/__sui_wallet.php';
+
+//APT Wallet
+require dirname(__FILE__).'/__script/__apt_wallet.php';
+
+//ETH Wallet
+require dirname(__FILE__).'/__script/__eth_wallet.php';
+
 $this->registerJs('
 
 	var log_id = '.$id.';
 	var sc = "'.$sc.'";
 	var username = "'.$username.'";
 	var userpic = "'.$userpic.'";
+	var lang = "'.$lang.'";
 	var globe_num = 0;
 	var exchange = \''.json_encode($currency).'\';
 	var targets = \''.json_encode($targets).'\';
@@ -15,6 +43,8 @@ $this->registerJs('
 	var okxSummActive = 0;
 	var solSummActive = 0;
 	var suiSummActive = 0;
+	var aptSummActive = 0;
+	var ethSummActive = 0;
 	var coinsSummActive = 0;
 	var tonSummActiveCurrency = 0;
 	var tonConnectedStatus='.$status['ton'].';
@@ -22,73 +52,42 @@ $this->registerJs('
 	var okxConnectedStatus='.$status['okx'].';
 	var solConnectedStatus='.$status['sol'].';
 	var suiConnectedStatus='.$status['sui'].';
+	var aptConnectedStatus='.$status['apt'].';
+	var ethConnectedStatus='.$status['eth'].';
+
 	var userActives={
 		"grafema": "",
 		"data": {
-			"tonwallet": {
-				0: {
-					"asset": "",
-					"active": {},
-				}
-			},
-			"bybit":{
-				0: {
-					"asset": "",
-					"active": {},
-					"trading": {},
-				},
-			},
-			"okx":{
-				0: {
-					"asset": "",
-					"active": {},
-					"trading": {},
-				},
-			},
-			"sol":{
-				0: {
-					"asset": "",
-					"active": {},
-				},
-			},
-			"sui":{
-				0: {
-					"asset": "",
-					"active": {},
-				},
-			},
+			"ton": {},
+			"bybit":{},
+			"okx":{},
+			"sol":{},
+			"sui":{},
+			"apt":{},
+			"eth":{},
 		},
 	};
 	
 	var userActivesMin = {
-		"ton": {
-			0: {
-				"active": {},
-			}
-		},
-		"bybit":{
-			0: {
-				"active": {},
-				"trading": {},
-			},
-		},
-		"okx":{
-			0: {
-				"active": {},
-				"trading": {},
-			},
-		},
-		"sol":{
-			0: {
-				"active": {},
-			},
-		},
-		"sui":{
-			0: {
-				"active": {},
-			},
-		},
+		"ton": {},
+		"bybit":{},
+		"okx":{},
+		"sol":{},
+		"sui":{},
+		"apt":{},
+		"eth":{},
 	};
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	var storage_type = {
 		button: "abcpbuttonsearch",
@@ -96,7 +95,6 @@ $this->registerJs('
 		select: "abcpbuttonselect",
 		status: "abcpbuttonstatus",
 		settings1: "abcpbuttonsettings1",
-		chat: "abcpchat1",
 	}
 
 	function convertData(data) {
@@ -564,144 +562,99 @@ $this->registerJs('
 		} else if(type==10) {
 
 			return localStorage.getItem(storage_type.settings1);
-			
-		} else if(type==11) {
-
-			return localStorage.setItem(storage_type.chat, value);
-			
-		} else if(type==12) {
-
-			return localStorage.getItem(storage_type.chat);
-						
+				
 		}
 	}
-
-	function targetform() {
-
-		var symbol = $("#adModal #ad-symbol").val();
-		if (typeof symbol==="undefined" || symbol===undefined || !symbol) {
-			addNotify("'.Yii::t('Error', 'Missing Symbol Coins').'", "error");
-			return false;
-		}
-		
-		var target_price = $("#targetModal #inputPrice").val();
-		if (typeof target_price==="undefined" || target_price===undefined || !target_price) {
-			addNotify("'.Yii::t('Error', 'Not Value Price').'", "error");
-			return false;
-		}
-		
-		var price = $("#adModal #ad-price").val();
-		if (typeof price==="undefined" || price===undefined || !price) {
-			addNotify("'.Yii::t('Error', 'Not Value Price').'", "error");
-			return false;
-		}
-
-		var coins = $("#adModal #ad-coins").val();
-		if (typeof coins==="undefined" || coins===undefined || !coins) {
-			addNotify("'.Yii::t('Error', 'Not Value Coins').'", "error");
-			return false;
-		}
-		
-		var multiply = $("#targetModal #ad-user-price").val();
-		if (typeof multiply==="undefined" || multiply===undefined || !multiply) {
-			addNotify("'.Yii::t('Error', 'Not Value Multiply').'", "error");
-			return false;
-		}
-
-		var spinner = "<i class=\"fas fa-asterisk fa-spin\"></i>";
-		var text_button = jQuery("#targetModal #ct-target-send").text();
-		jQuery("#targetModal #ct-target-send").html(spinner + "&nbsp;" + text_button);
 	
-		jQuery.ajax({
-			"url": "/app/addtarget",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"coins": coins, "symbol": symbol, "price": target_price, "current_price": price, "multiply": multiply, "log_id": log_id, sc: sc}),
-			"success": function(response){
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//displayConnectMenu(type=0, flag=0)
+	function displayConnectMenu(type=0, flag=0, address, id) {
+		if (typeof type==="undefined" || type===undefined || !type) {
+			return false;
+		} 
 
-				jQuery("#targetModal #ct-target-send").html(text_button);
-
-				jQuery("#adModal").attr("data-id", symbol);
-				closeAllModal();
-				var modal = new bootstrap.Modal(document.getElementById("adModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-
-				if (response) {
-
-					if (!response.error) {
-						
-						if (
-							typeof response.targets!=="undefined" &&
-							response.targets!==undefined &&
-							response.targets
-						) {
-							targets = JSON.stringify(response.targets);
-						}
-
-						if (
-							typeof response.message.change_target!=="undefined" &&
-							response.message.change_target!==undefined
-						) {
-
-							if (response.message.change_target==1) {
-								addNotify("'.Yii::t('Api', 'Success Add Target').'", "success");
-								jQuery("#adModal #target_actions-button").html("'.Yii::t('Api', 'Change Target').'");
-								jQuery("#targetModal #ct-target-send").html("'.Yii::t('Api', 'Set Target').'");
-							} else {
-								addNotify("'.Yii::t('Api', 'Success Change Target').'", "success");
-								jQuery("#adModal #target_actions-button").html("'.Yii::t('Api', 'Change Target').'");
-								jQuery("#targetModal #ct-target-send").html("'.Yii::t('Api', 'Change Target').'");
-							}
-							
-						} else {
-							addNotify("'.Yii::t('Api', 'Success Add Target').'", "success");
-						}
-						
-						//if (!setTarget(symbol)) {
-							//console.log("Error added target");
-						//}
-
-						var bar = getTargetProgressBar(symbol, price);
-						jQuery("#asModal .option_item[data-id=\"" + symbol + "\"] .block_target_bar").html(bar);
-			
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-					
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});	
+		var elem;
+		var ident;
 		
+		if (type==1) {
+			elem = jQuery("#ton-wallet-click-button");
+			ident = "ton";
+		} else {
+			return false;
+		}
+
+		var popover = bootstrap.Popover.getInstance(elem);
+		popover.dispose();
+
+		if (flag) {
+
+			var parseAddress = string_replace(address, "...", 6, 6);
+	
+			var template = "<div class=\"popover disconnect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"view_address text_input\"><span>" + parseAddress + "</span> <img src=\"/images/icons/copy2.svg\" alt=\"copy\" title=\"copy\"><div class=\"copy_address\">" + address + "</div></div><div class=\"" + ident + "_disconnect_button\"><div class=\"dataid\" id=\"" + id + "\"></div><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Disconnect').'</div><div class=\"clearfix\"></div></div></div></div>";
+
+		} else {
+			
+			var template = "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div acc-id=\"" + id + "\" class=\"" + ident + "_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>";
+
+		}	
+		
+		elem.popover({
+			placement: "bottom",
+			content: " ",
+			trigger: "click",
+			template: template,
+		});
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
 	
 	function sendAddress(address) {	
 
 		displayBackdrop(1, 1);
 
 		jQuery.ajax({
-			"url": "/app/getaddress",
+			"url": "/app/gettonbalance",
 			"type": "post",
 			"dataType": "json",
 			"contentType": "application/json",
-			"data": JSON.stringify({"address": address, "log_id": log_id, sc: sc}),
+			"data": JSON.stringify({"type": 2, "address": address, "log_id": log_id, sc: sc}),
 			"success": function(response){
+
 				displayBackdrop(1, 0);
 				if (!response.error) {
 
 					displayConnectIcon(1, 1);
-					displayConnectMenu(1, 1, response.address);
+					displayConnectMenu(1, 1, response.address, response.id);
 					
 					tonSummActive = response.summ;
 					getAllActive();
@@ -712,43 +665,71 @@ $this->registerJs('
 					if (
 						typeof response.data==="object" && 
 						response.data!==undefined && 
-						response.data &&
-						response.data.length
+						response.data
 					) {
-					
-						response.data.forEach((val) => {
+			
+						for (var key in response.data) {
 							
-							userActivesMin.ton[0].active[val.symbolid] = {
-								"symbol": val.symbol,
-								"balance": val.balance,
-								"price": val.price,
+							if (typeof userActivesMin.ton[response.data[key].asset]==="undefined" || userActivesMin.ton[response.data[key].asset]===undefined || !userActivesMin.ton[response.data[key].asset] || userActivesMin.ton[response.data[key].asset]!=="object") {
+							
+								userActivesMin.ton[response.data[key].asset] = {};	
+
 							}
 							
-							userActives.data.tonwallet[0].asset = val.asset;
-							userActives.data.tonwallet[0].active[val.symbolid] = {
-								"img": val.img,
-								"symbol": val.symbol,
-								"name": val.name,
-								"currency_value": val.currency_value,
-								"symbolid": val.symbolid,
-								"balance": val.balance,
-								"apr": val.apr,
-								"price": val.price,
-								"class": val.class,
-								"asset": val.asset,
-								"type": "tonactive",
-							};
-						});
+							if (typeof userActivesMin.ton[response.data[key].asset].active==="undefined" || userActivesMin.ton[response.data[key].asset].active===undefined || !userActivesMin.ton[response.data[key].asset].active || userActivesMin.ton[response.data[key].asset].active!=="object") {
+						
+								userActivesMin.ton[response.data[key].asset]["active"] = {};
+						
+							}	
+				
+							if (typeof userActives.data.ton[response.data[key].asset]==="undefined" || userActives.data.ton[response.data[key].asset]===undefined || !userActives.data.ton[response.data[key].asset] || userActives.data.ton[response.data[key].asset]!=="object") {
+						
+								userActives.data.ton[response.data[key].asset] = {};	
 
+							}
+							
+							if (typeof userActives.data.ton[response.data[key].asset].active==="undefined" || userActives.data.ton[response.data[key].asset].active===undefined || !userActives.data.ton[response.data[key].asset].active || userActives.data.ton[response.data[key].asset].active!=="object") {
+										
+								userActives.data.ton[response.data[key].asset]["active"] = {};
+										
+							}
+									
+							userActives.data.ton[response.data[key].asset].asset = response.data[key].asset;	
+								
+							response.data[key].active.forEach((val) => {
+				
+								userActivesMin.ton[response.data[key].asset].active[val.symbolid] = {
+									"symbol": val.symbol,
+									"balance": val.balance,
+									"price": val.price,
+								}
+					
+								userActives.data.ton[response.data[key].asset].active[val.symbolid] = {
+									"img": val.img,
+									"symbol": val.symbol,
+									"name": val.name,
+									"currency_value": val.currency_value,
+									"symbolid": val.symbolid,
+									"coinid": val.coinid,
+									"balance": val.balance,
+									"apr": val.apr,
+									"price": val.price,
+									"asset": val.asset,
+									"type": "suiactive",
+									"connectname": response.data[key].connectname,
+									"network": val.network,
+									"network_icon": val.network_icon,
+								};
+							});	
+						};
+	
 						jQuery("#wrap-actives #title_balance").html("");
 						tonConnectedStatus=true;
 						addListCoin();
 						
 					} else {
 						
-						if (bybitConnectedStatus==false) {
-							jQuery("#wrap-actives #title_balance").html("'.Yii::t('Api', 'Your wallet is empty').'");
-						}
+						addNotify("'.Yii::t('Error', 'Wallet not connect').'", "error");
 					}
 					
 				} else {
@@ -761,15 +742,16 @@ $this->registerJs('
 				addNotify(thrownError, "error");
 			}
 		}).done(function (data) {
-			bybitconnect();
-			okxconnect();
+			//okxconnect();
 		}).fail(function (jqXHR, textStatus) {
-			bybitconnect();
-			okxconnect();
+			//okxconnect();
+			//okxconnect();
 		});
 	}
 	
-	function tondisconnect() {
+	function tondisconnect(id) {
+		
+		console.log(id);
 
 		displayBackdrop(1, 1);
 		
@@ -778,31 +760,26 @@ $this->registerJs('
 		tonRecalculation();
 		
 		addListCoin();
-		
-		console.log("bybit: " + bybitConnectedStatus);
-		console.log("okx: " + okxConnectedStatus);
-		console.log("sol: " + solConnectedStatus);
-		console.log("sui: " + suiConnectedStatus);
-		
-		if (!bybitConnectedStatus && !okxConnectedStatus && !solConnectedStatus && !suiConnectedStatus) {
+
+		if (!bybitConnectedStatus && !okxConnectedStatus && !solConnectedStatus && !suiConnectedStatus && !aptConnectedStatus) {
 			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
 		}
 
 		jQuery.ajax({
-			"url": "/app/tondisconnect",
+			"url": "/app/gettonbalance",
 			"type": "post",
 			"dataType": "json",
 			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id}),
+			"data": JSON.stringify({"type": 3, "id": id, "log_id": log_id, sc: sc}),
 			"success": function(response){
-				
+
 				displayBackdrop(1, 0);
 				
 				if (!response.error) {
 					displayConnectIcon(1, 0);
 					displayConnectMenu(1, 0);
 					jQuery("#user_balance").html("");
-					userActives.data.tonwallet[0].active = {};
+					userActives.data.ton = {};
 					addListCoin();
 				}
 			},
@@ -816,21 +793,21 @@ $this->registerJs('
 	function tonconnected() {	
 
 		displayBackdrop(1, 1);
-
+	
 		jQuery.ajax({
-			"url": "/app/tonconnected",
+			"url": "/app/gettonbalance",
 			"type": "post",
 			"dataType": "json",
 			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id, sc: sc}),
+			"data": JSON.stringify({"type": 1, "log_id": log_id, sc: sc}),
 			"success": function(response){
-				
+		
 				displayBackdrop(1, 0);
 
 				if (!response.error) {
 					
 					displayConnectIcon(1, 1);
-					displayConnectMenu(1, 1, response.address);
+					displayConnectMenu(1, 1, response.address, response.id);
 
 					tonSummActive = response.summ;
 					getAllActive();
@@ -841,42 +818,71 @@ $this->registerJs('
 					if (
 						typeof response.data==="object" && 
 						response.data!==undefined && 
-						response.data &&
-						response.data.length
+						response.data
 					) {
-					
-						response.data.forEach((val) => {
+			
+						for (var key in response.data) {
+							
+							if (typeof userActivesMin.ton[response.data[key].asset]==="undefined" || userActivesMin.ton[response.data[key].asset]===undefined || !userActivesMin.ton[response.data[key].asset] || userActivesMin.ton[response.data[key].asset]!=="object") {
+							
+								userActivesMin.ton[response.data[key].asset] = {};	
 
-							userActivesMin.ton[0].active[val.symbolid] = {
-								"symbol": val.symbol,
-								"balance": val.balance,
-								"price": val.price,
 							}
 							
-							userActives.data.tonwallet[0].asset = val.asset;
-							userActives.data.tonwallet[0].active[val.symbolid] = {
-								"img": val.img,
-								"symbol": val.symbol,
-								"name": val.name,
-								"currency_value": val.currency_value,
-								"symbolid": val.symbolid,
-								"balance": val.balance,
-								"apr": val.apr,
-								"price": val.price,
-								"asset": val.asset,
-								"type": "tonactive",
-							};
-						});
+							if (typeof userActivesMin.ton[response.data[key].asset].active==="undefined" || userActivesMin.ton[response.data[key].asset].active===undefined || !userActivesMin.ton[response.data[key].asset].active || userActivesMin.ton[response.data[key].asset].active!=="object") {
 						
+								userActivesMin.ton[response.data[key].asset]["active"] = {};
+						
+							}	
+				
+							if (typeof userActives.data.ton[response.data[key].asset]==="undefined" || userActives.data.ton[response.data[key].asset]===undefined || !userActives.data.ton[response.data[key].asset] || userActives.data.ton[response.data[key].asset]!=="object") {
+						
+								userActives.data.ton[response.data[key].asset] = {};	
+
+							}
+							
+							if (typeof userActives.data.ton[response.data[key].asset].active==="undefined" || userActives.data.ton[response.data[key].asset].active===undefined || !userActives.data.ton[response.data[key].asset].active || userActives.data.ton[response.data[key].asset].active!=="object") {
+										
+								userActives.data.ton[response.data[key].asset]["active"] = {};
+										
+							}
+									
+							userActives.data.ton[response.data[key].asset].asset = response.data[key].asset;	
+								
+							response.data[key].active.forEach((val) => {
+				
+								userActivesMin.ton[response.data[key].asset].active[val.symbolid] = {
+									"symbol": val.symbol,
+									"balance": val.balance,
+									"price": val.price,
+								}
+					
+								userActives.data.ton[response.data[key].asset].active[val.symbolid] = {
+									"img": val.img,
+									"symbol": val.symbol,
+									"name": val.name,
+									"currency_value": val.currency_value,
+									"symbolid": val.symbolid,
+									"coinid": val.coinid,
+									"balance": val.balance,
+									"apr": val.apr,
+									"price": val.price,
+									"asset": val.asset,
+									"type": "suiactive",
+									"connectname": response.data[key].connectname,
+									"network": val.network,
+									"network_icon": val.network_icon,
+								};
+							});	
+						};
+	
 						jQuery("#wrap-actives #title_balance").html("");
 						tonConnectedStatus=true;
 						addListCoin();
 						
 					} else {
 						
-						if (bybitConnectedStatus==false) {
-							jQuery("#wrap-actives #title_balance").html("'.Yii::t('Api', 'Your wallet is empty').'");
-						}
+						addNotify("'.Yii::t('Error', 'Wallet not connect').'", "error");
 					}
 					
 				} else {
@@ -890,1223 +896,321 @@ $this->registerJs('
 			}
 		});
 	}
+
+
+
+
+
 	
-	function bybitconnect() {
-
-		if (bybitConnectedStatus==false) {
-			return false;
-		}
-		
-		displayBackdrop(3, 1);
-
-		jQuery.ajax({
-			"url": "/app/getbybitbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 2, "log_id": log_id, sc: sc}),
-			"success": function(response){
-
-				displayBackdrop(3, 0);
-
-				if (response) {
-
-					if (!response.error) {
-						
-						displayConnectIcon(3, 1);
-						displayConnectMenu(3, 1, response.address);
-
-						bybitSummActive = response.summ;
-						getAllActive();
-
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
 	
-						if (response.data.active && response.data.active.length) {
-
-							response.data.active.forEach((val) => {
-								
-							userActivesMin.bybit[0].active[val.symbolid] = {
-								"symbol": val.symbol,
-								"balance": val.balance,
-								"price": val.price,
-							}
-								
-								userActives.data.bybit[0].asset = val.asset;
-								userActives.data.bybit[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "bybitactive",
-								};
-							});
-						}
-						
-						if (response.data.trade && response.data.trade.length) {
-
-							response.data.trade.forEach((val) => {
-								
-								userActivesMin.bybit[0].trading[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.bybit[0].asset = val.asset;
-								userActives.data.bybit[0].trading[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "bybittrading",
-								};
-							});
-						}
-						
-						jQuery("#asModal #title_balance").html("");
-						bybitConnectedStatus = true;
-						addListCoin();
-			
-					} else {	
-						addNotify("Bybit: " + response.message, "error");
-						displayConnectIcon(3, 1, 1);
-						bybitConnectedStatus = false;
-						return false;
-					}
-					
-				} else {
-					addNotify("Bybit: '.Yii::t('Error', 'Server not response').'", "error");
-					displayConnectIcon(3, 1, 1);
-					bybitConnectedStatus = false;
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(3, 0);
-				addNotify("Bybit: " + thrownError, "error");
-				displayConnectIcon(3, 1, 1);
-				bybitConnectedStatus = false;
-				return false;
-			}
-		});			
-	}
 	
-	function bybitdisconnect() {
-		
-		bybitConnectedStatus = false;
-		
-		bybitRecalculation();
-		
-		if (!tonConnectedStatus && !okxConnectedStatus && !solConnectedStatus && !suiConnectedStatus) {
-			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-		}
-		
-		displayBackdrop(3, 1);
-		
-		jQuery.ajax({
-			"url": "/app/bybitdisconnect",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id}),
-			"success": function(response){
-				
-				displayBackdrop(3, 0);
-
-				if (!response.error) {
-					displayConnectIcon(3, 0);
-					displayConnectMenu(3, 0);
-					jQuery("#user_balance").html("");
-					userActives.data.bybit[0].active = {};
-					userActives.data.bybit[0].trading = {};
-					addListCoin();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(3, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
 	
-	function bybitform() {
-
-		var uid = $("#ct-bybit-uid").val();
-		if (typeof uid==="undefined" || uid===undefined || !uid) {
-			addNotify("'.Yii::t('Error', 'Missing Bybit UID').'", "error");
-			return false;
-		}
-		
-		var apikey = $("#ct-bybit-apikey").val();
-		if (typeof apikey==="undefined" || apikey===undefined || !apikey) {
-			addNotify("'.Yii::t('Error', 'Missing Bybit API Key').'", "error");
-			return false;
-		}
-		
-		var apisecret = $("#ct-bybit-apisecret").val();
-		if (typeof apisecret==="undefined" || apisecret===undefined || !apisecret) {
-			addNotify("'.Yii::t('Error', 'Missing Bybit API Secret').'", "error");
-			return false;
-		}
-		
-		displayBackdrop(3, 1);
 	
-		jQuery.ajax({
-			"url": "/app/getbybitbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 1, "uid": uid, "apikey": apikey, "apisecret": apisecret, "log_id": log_id, sc: sc}),
-			"success": function(response){
-
-				displayBackdrop(3, 0);
-
-				closeAllModal();
-				var modal = new bootstrap.Modal(document.getElementById("asModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-
-				if (response) {
-
-					if (!response.error) {
-						
-						displayConnectIcon(3, 1);
-						displayConnectMenu(3, 1, response.address);
-					
-						var html = "";
-						
-						bybitSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-						
-						if (response.data.active && response.data.active.length) {
-
-							response.data.active.forEach((val) => {
-								
-								userActivesMin.bybit[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.bybit[0].asset = val.asset;
-								userActives.data.bybit[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "bybitactive",
-								};
-							});
-						}
-						
-						if (response.data.trade && response.data.trade.length) {
-
-							response.data.trade.forEach((val) => {
-								
-								userActivesMin.bybit[0].trading[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.bybit[0].asset = val.asset;
-								userActives.data.bybit[0].trading[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "bybittrading",
-								};
-							});
-						}
-
-						jQuery("#asModal #title_balance").html("");
-						bybitConnectedStatus = true;
-						addListCoin();
-			
-					} else {		
-						addNotify("Bybit: " + response.message, "error");
-						displayConnectIcon(3, 1, 1);
-						bybitConnectedStatus = false;
-						return false;
-					}
-					
-				} else {
-					addNotify("Bybit: '.Yii::t('Error', 'Server not response').'", "error");
-					displayConnectIcon(3, 1, 1);
-					bybitConnectedStatus = false;
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(3, 0);
-				addNotify("Bybit: " + thrownError, "error");
-				displayConnectIcon(3, 1, 1);
-				bybitConnectedStatus = false;
-				return false;
-			}
-		});	
-	}
-	
-	function okxconnect() {
-		if (okxConnectedStatus==false) {
-			return false;
-		}
-
-		displayBackdrop(4, 1);
-
-		jQuery.ajax({
-			"url": "/app/getokxbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 2, "log_id": log_id, sc: sc}),
-			"success": function(response){
-				
-				displayBackdrop(4, 0);
-
-				if (response) {
-
-					if (!response.error) {
-						
-						displayConnectIcon(4, 1);
-						displayConnectMenu(4, 1, response.address);
-
-						okxSummActive = response.summ;
-						getAllActive();
-
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-	
-						if (response.data.active && response.data.active.length) {
-
-							response.data.active.forEach((val) => {
-								
-								userActivesMin.okx[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.okx[0].asset = val.asset;
-								userActives.data.okx[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "okxactive",
-								};
-							});
-						}
-						
-						if (response.data.trade && response.data.trade.length) {
-
-							response.data.trade.forEach((val) => {
-								
-								userActivesMin.okx[0].trading[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.okx[0].asset = val.asset;
-								userActives.data.okx[0].trading[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "okxtrading",
-								};
-							});
-						}
-						
-						jQuery("#asModal #title_balance").html("");
-						okxConnectedStatus = true;
-						addListCoin();
-			
-					} else {	
-						addNotify(response.message, "error");
-						return false;
-					}
-					
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(4, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});	
-	}
-	
-	function okxdisconnect() {		
-		
-		okxConnectedStatus = false;
-		
-		okxRecalculation();
-		
-		if (!tonConnectedStatus && !bybitConnectedStatus && !solConnectedStatus && !suiConnectedStatus) {
-			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-		}
-		
-		displayBackdrop(4, 1);
-		
-		jQuery.ajax({
-			"url": "/app/okxdisconnect",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id}),
-			"success": function(response){
-				displayBackdrop(4, 0);
-				if (!response.error) {
-					displayConnectIcon(4, 0);
-					displayConnectMenu(4, 0);
-					jQuery("#user_balance").html("");
-					userActives.data.okx[0].active = {};
-					userActives.data.okx[0].trading = {};
-					addListCoin();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(4, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-	
-	//okxform()
-	function okxform() {
-		
-		var uid = $("#ct-okx-uid").val();
-		if (typeof uid==="undefined" || uid===undefined || !uid) {
-			addNotify("'.Yii::t('Error', 'Missing OKX UID').'", "error");
-			return false;
-		}
-		
-		var apikey = $("#ct-okx-apikey").val();
-		if (typeof apikey==="undefined" || apikey===undefined || !apikey) {
-			addNotify("'.Yii::t('Error', 'Missing OKX API Key').'", "error");
-			return false;
-		}
-		
-		var apisecret = $("#ct-okx-apisecret").val();
-		if (typeof apisecret==="undefined" || apisecret===undefined || !apisecret) {
-			addNotify("'.Yii::t('Error', 'Missing OKX API Secret').'", "error");
-			return false;
-		}
-		
-		var password = $("#ct-okx-password").val();
-		if (typeof password==="undefined" || password===undefined || !password) {
-			addNotify("'.Yii::t('Error', 'Missing OKX Password').'", "error");
-			return false;
-		}
-
-		displayBackdrop(4, 1);
-	
-		jQuery.ajax({
-			"url": "/app/getokxbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 1, "uid": uid, "apikey": apikey, "apisecret": apisecret, "password": password, "log_id": log_id, sc: sc}),
-			"success": function(response){
-				
-				displayBackdrop(4, 0);
-		
-				closeAllModal();
-				var modal = new bootstrap.Modal(document.getElementById("asModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						displayConnectIcon(4, 1);
-						displayConnectMenu(4, 1, response.address);
-					
-						var html = "";
-						
-						okxSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-						
-						if (response.data.active && response.data.active.length) {
-
-							response.data.active.forEach((val) => {
-								
-								userActivesMin.okx[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.okx[0].asset = val.asset;
-								userActives.data.okx[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "okxactive",
-								};
-							});
-						}
-						
-						if (response.data.trade && response.data.trade.length) {
-
-							response.data.trade.forEach((val) => {
-								
-								userActivesMin.okx[0].trading[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.okx[0].asset = val.asset;
-								userActives.data.okx[0].trading[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "okxtrading",
-								};
-							});
-						}
-						
-						jQuery("#asModal #title_balance").html("");
-						okxConnectedStatus = true;
-						addListCoin();
-
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(4, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});	
-	}
-
-	//solconnect()
-	function solconnect() {
-
-		if (solConnectedStatus==false) {
-			return false;
-		}
-		
-		displayBackdrop(2, 1);
-		
-		jQuery.ajax({
-			"url": "/app/getsolbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 2, "log_id": log_id, sc: sc}),
-			"success": function(response){
-
-				displayBackdrop(2, 0);
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						displayConnectIcon(2, 1);
-						displayConnectMenu(2, 1, response.address);
-					
-						var html = "";
-						
-						solSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-						
-						if (response.data && response.data.length) {
-		
-							response.data.forEach((val) => {
-								
-								userActivesMin.sol[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.sol[0].asset = val.asset;
-								userActives.data.sol[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "solactive",
-								};
-							});
-						}
-
-						jQuery("#asModal #title_balance").html("");
-						solConnectedStatus = true;
-						addListCoin();
-
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(2, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-
-	//soldisconnect()
-	function soldisconnect() {
-		solConnectedStatus = false;
-		
-		solRecalculation();
-		
-		if (!tonConnectedStatus && !bybitConnectedStatus && !okxConnectedStatus && !suiConnectedStatus) {
-			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-		}
-		
-		displayBackdrop(2, 1);
-		
-		jQuery.ajax({
-			"url": "/app/soldisconnect",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id}),
-			"success": function(response){
-				displayBackdrop(2, 0);
-				if (!response.error) {
-					displayConnectIcon(2, 0);
-					displayConnectMenu(2, 0);
-					jQuery("#user_balance").html("");
-					userActives.data.sol[0].active = {};
-					userActives.data.sol[0].trading = {};
-					addListCoin();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(2, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-	
-	//solform()
-	function solform(address) {
-		
-		if (address==="undefined" || address===undefined || !address) {
-		
-			var address = $("#ct-sol-address").val();
-			if (typeof address==="undefined" || address===undefined || !address) {
-				addNotify("'.Yii::t('Error', 'Missing SOL Address Wallet').'", "error");
-				return false;
-			}
-			
-		} else {
-
-			if (solConnectedStatus) {
-				return false;
-			}
-			
-			solConnectedStatus = true;
-		}
-
-		displayBackdrop(2, 1);
-	
-		jQuery.ajax({
-			"url": "/app/getsolbalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 1, "address": address, "log_id": log_id, sc: sc}),
-			"success": function(response){
-				
-				displayBackdrop(2, 0);
-		
-				closeAllModal();
-				var modal = new bootstrap.Modal(document.getElementById("asModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						displayConnectIcon(2, 1);
-						displayConnectMenu(2, 1, response.address);
-					
-						var html = "";
-						
-						solSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-						
-						if (response.data && response.data.length) {
-		
-							response.data.forEach((val) => {
-								
-								userActivesMin.sol[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.sol[0].asset = val.asset;
-								userActives.data.sol[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "solactive",
-								};
-							});
-						}
-
-						jQuery("#asModal #title_balance").html("");
-						solConnectedStatus = true;
-						addListCoin();
-
-					} else {		
-						solConnectedStatus = false;
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					solConnectedStatus = false;
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				solConnectedStatus = false;
-				displayBackdrop(2, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});	
-	}
-	
-	//suiconnect()
-	function suiconnect() {
-
-		if (suiConnectedStatus==false) {
-			return false;
-		}
-		
-		displayBackdrop(5, 1);
-		
-		jQuery.ajax({
-			"url": "/app/getsuibalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 2, "log_id": log_id, sc: sc}),
-			"success": function(response){
-	
-				displayBackdrop(5, 0);
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						displayConnectIcon(5, 1);
-						displayConnectMenu(5, 1, response.address);
-	
-						var html = "";
-						
-						suiSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-			
-						if (response.data && response.data.length) {
-		
-							response.data.forEach((val) => {
-
-								userActivesMin.sui[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.sui[0].asset = val.asset;
-								userActives.data.sui[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "suiactive",
-								};
-							});
-
-						} else {
-							
-							addNotify("'.Yii::t('Api', 'Not Sui Active').'", "warning");
-								
-						}
-
-						jQuery("#asModal #title_balance").html("");
-						suiConnectedStatus = true;
-						addListCoin();
-
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(5, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-
-	//suidisconnect()
-	function suidisconnect() {
-		suiConnectedStatus = false;
-		
-		suiRecalculation();
-		
-		if (!tonConnectedStatus && !bybitConnectedStatus && !okxConnectedStatus && !solConnectedStatus) {
-			jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-		}
-		
-		displayBackdrop(5, 1);
-		
-		jQuery.ajax({
-			"url": "/app/suidisconnect",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"log_id": log_id}),
-			"success": function(response){
-				displayBackdrop(5, 0);
-				if (!response.error) {
-					displayConnectIcon(5, 0);
-					displayConnectMenu(5, 0);
-					jQuery("#user_balance").html("");
-					userActives.data.sui[0].active = {};
-					addListCoin();
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(5, 0);
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-	
-	//suiform()
-	function suiform(address) {
-
-		if (address==="undefined" || address===undefined || !address) {
-		
-			var address = $("#ct-sui-address").val();
-			if (typeof address==="undefined" || address===undefined || !address) {
-				addNotify("'.Yii::t('Error', 'Missing SUI Address Wallet').'", "error");
-				return false;
-			}
-			
-		} else {
-
-			if (suiConnectedStatus) {
-				return false;
-			}
-			
-			suiConnectedStatus = true;
-		}
-
-		displayBackdrop(5, 1);
-	
-		jQuery.ajax({
-			"url": "/app/getsuibalance",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"type": 1, "address": address, "log_id": log_id, sc: sc}),
-			"success": function(response){
-
-				displayBackdrop(5, 0);
-		
-				closeAllModal();
-				var modal = new bootstrap.Modal(document.getElementById("asModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						displayConnectIcon(5, 1);
-						displayConnectMenu(5, 1, response.address);
-					
-						var html = "";
-						
-						suiSummActive = response.summ;
-						getAllActive();
-						
-						userActives.grafema = response.grafema;
-						userActives.address = response.address;
-						
-						if (response.data && response.data.length) {
-		
-							response.data.forEach((val) => {
-								
-								userActivesMin.sui[0].active[val.symbolid] = {
-									"symbol": val.symbol,
-									"balance": val.balance,
-									"price": val.price,
-								}
-								
-								userActives.data.sui[0].asset = val.asset;
-								userActives.data.sui[0].active[val.symbolid] = {
-									"img": val.img,
-									"symbol": val.symbol,
-									"name": val.name,
-									"currency_value": val.currency_value,
-									"symbolid": val.symbolid,
-									"balance": val.balance,
-									"apr": val.apr,
-									"price": val.price,
-									"asset": val.asset,
-									"type": "suiactive",
-								};
-							});
-	
-						} else {
-							
-							addNotify("'.Yii::t('Api', 'Not Sui Active').'", "warning");
-
-						}
-
-						jQuery("#asModal #title_balance").html("");
-						suiConnectedStatus = true;
-						addListCoin();
-
-					} else {		
-						addNotify(response.message, "error");
-						suiConnectedStatus = false;
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					suiConnectedStatus = false;
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				displayBackdrop(5, 0);
-				addNotify(thrownError, "error");
-				suiConnectedStatus = false;
-				return false;
-			}
-		});	
-	}
-
-	//sendDataAl()
-	function sendDataAl(type, message) {
-
-		var data;
-		if (type==1) {
-		
-			if (typeof userActivesMin==="undefined" || userActivesMin===undefined || !userActivesMin) {
-				return false;
-			} 
-			
-			data = userActivesMin;
-		
-		} else if (type==2) {
-			
-			var coin = $("#wrap-detailscoin .symbol_details_coin").html();
-			if (typeof coin==="undefined" || coin===undefined || !coin) {
-				return false;
-			} 
-
-			var data = selectCoin(coin);
-			
-		} else if (type==3) {
-			
-			if (typeof message==="undefined" || message===undefined || !message) {
-				return false;
-			} 
-
-			data = message;
-
-		} else {
-			return false;
-		}
-
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"data": data, "log_id": log_id, sc: sc, type: type}),
-			"success": function(response){
-				if (response) {
-				
-					if (!response.error) {
-						
-						return response.message;
-
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}		
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});		
-	}
 
 	//addListCoin()
 	function addListCoin() {
 
 		var html = "";
 		var allCoinsData = [];
-		
+	
 		if (
-			typeof userActives.data.tonwallet[0].active!=="undefined" && 
-			userActives.data.tonwallet[0].active!==undefined && 
-			userActives.data.tonwallet[0].active
+			typeof userActives.data.ton!=="undefined" && 
+			userActives.data.ton!==undefined && 
+			userActives.data.ton
 		) {
-			for (key in userActives.data.tonwallet[0].active) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
+			for (var key1 in userActives.data.ton) {
 				
-				allCoinsData[key].push(userActives.data.tonwallet[0].active[key]);	
+				if (
+					typeof userActives.data.ton[key1]!=="undefined" && 
+					userActives.data.ton[key1]!==undefined && 
+					userActives.data.ton[key1]
+				) {
+		
+					if (
+						typeof userActives.data.ton[key1].active!=="undefined" && 
+						userActives.data.ton[key1].active!==undefined && 
+						userActives.data.ton[key1].active &&
+						typeof userActives.data.ton[key1].active==="object"
+					) {
+					
+						for (var key2 in userActives.data.ton[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.ton[key1].active[key2]);
+						}
+					}					
+				}
 			}
 		}
 
 		if (
-			typeof userActives.data.bybit[0].active!=="undefined" && 
-			userActives.data.bybit[0].active!==undefined && 
-			userActives.data.bybit[0].active
+			typeof userActives.data.bybit!=="undefined" && 
+			userActives.data.bybit!==undefined && 
+			userActives.data.bybit
 		) {
-			for (key in userActives.data.bybit[0].active) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
+			for (key1 in userActives.data.bybit) {
 				
-				allCoinsData[key].push(userActives.data.bybit[0].active[key]);
-			}	
+				if (
+					typeof userActives.data.bybit[key1]!=="undefined" && 
+					userActives.data.bybit[key1]!==undefined && 
+					userActives.data.bybit[key1]
+				) {
+		
+					if (
+						typeof userActives.data.bybit[key1].active!=="undefined" && 
+						userActives.data.bybit[key1].active!==undefined && 
+						userActives.data.bybit[key1].active &&
+						typeof userActives.data.bybit[key1].active==="object"
+					) {
+					
+						for (key2 in userActives.data.bybit[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.bybit[key1].active[key2]);
+						}
+					}					
+
+					if (
+						typeof userActives.data.bybit[key1].trading!=="undefined" && 
+						userActives.data.bybit[key1].trading!==undefined && 
+						userActives.data.bybit[key1].trading
+					) {
+
+						for (key2 in userActives.data.bybit[key1].trading) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.bybit[key1].trading[key2]);
+						}	
+					}
+				}
+			}
+		}
+		
+		if (
+			typeof userActives.data.okx!=="undefined" && 
+			userActives.data.okx!==undefined && 
+			userActives.data.okx
+		) {
+			for (key1 in userActives.data.okx) {
+				
+				if (
+					typeof userActives.data.okx[key1]!=="undefined" && 
+					userActives.data.okx[key1]!==undefined && 
+					userActives.data.okx[key1]
+				) {
+		
+					if (
+						typeof userActives.data.okx[key1].active!=="undefined" && 
+						userActives.data.okx[key1].active!==undefined && 
+						userActives.data.okx[key1].active &&
+						typeof userActives.data.okx[key1].active==="object"
+					) {
+					
+						for (key2 in userActives.data.okx[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.okx[key1].active[key2]);
+						}
+					}					
+
+					if (
+						typeof userActives.data.okx[key1].trading!=="undefined" && 
+						userActives.data.okx[key1].trading!==undefined && 
+						userActives.data.okx[key1].trading
+					) {
+
+						for (key2 in userActives.data.okx[key1].trading) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.okx[key1].trading[key2]);
+						}	
+					}
+				}
+			}
 		}
 
 		if (
-			typeof userActives.data.bybit[0].trading!=="undefined" && 
-			userActives.data.bybit[0].trading!==undefined && 
-			userActives.data.bybit[0].trading
+			typeof userActives.data.sol!=="undefined" && 
+			userActives.data.sol!==undefined && 
+			userActives.data.sol
 		) {
-			for (key in userActives.data.bybit[0].trading) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
+			for (key1 in userActives.data.sol) {
 				
-				allCoinsData[key].push(userActives.data.bybit[0].trading[key]);
+				if (
+					typeof userActives.data.sol[key1]!=="undefined" && 
+					userActives.data.sol[key1]!==undefined && 
+					userActives.data.sol[key1]
+				) {
+		
+					if (
+						typeof userActives.data.sol[key1].active!=="undefined" && 
+						userActives.data.sol[key1].active!==undefined && 
+						userActives.data.sol[key1].active &&
+						typeof userActives.data.sol[key1].active==="object"
+					) {
+					
+						for (key2 in userActives.data.sol[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.sol[key1].active[key2]);
+						}
+					}					
+				}
 			}
 		}
 		
 		if (
-			typeof userActives.data.okx[0].active!=="undefined" && 
-			userActives.data.okx[0].active!==undefined && 
-			userActives.data.okx[0].active
+			typeof userActives.data.sui!=="undefined" && 
+			userActives.data.sui!==undefined && 
+			userActives.data.sui
 		) {
-			for (key in userActives.data.okx[0].active) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
+			for (key1 in userActives.data.sui) {
 				
-				allCoinsData[key].push(userActives.data.okx[0].active[key]);
-			}	
+				if (
+					typeof userActives.data.sui[key1]!=="undefined" && 
+					userActives.data.sui[key1]!==undefined && 
+					userActives.data.sui[key1]
+				) {
+		
+					if (
+						typeof userActives.data.sui[key1].active!=="undefined" && 
+						userActives.data.sui[key1].active!==undefined && 
+						userActives.data.sui[key1].active &&
+						typeof userActives.data.sui[key1].active==="object"
+					) {
+					
+						for (key2 in userActives.data.sui[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.sui[key1].active[key2]);
+						}
+					}					
+				}
+			}
+		}
+	
+		if (
+			typeof userActives.data.apt!=="undefined" && 
+			userActives.data.apt!==undefined && 
+			userActives.data.apt
+		) {
+
+			for (key1 in userActives.data.apt) {
+				
+				if (
+					typeof userActives.data.apt[key1]!=="undefined" && 
+					userActives.data.apt[key1]!==undefined && 
+					userActives.data.apt[key1]
+				) {
+		
+					if (
+						typeof userActives.data.apt[key1].active!=="undefined" && 
+						userActives.data.apt[key1].active!==undefined && 
+						userActives.data.apt[key1].active &&
+						typeof userActives.data.apt[key1].active==="object"
+					) {
+					
+						for (key2 in userActives.data.apt[key1].active) {
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.apt[key1].active[key2]);
+						}
+					}					
+				}
+			}
 		}
 
 		if (
-			typeof userActives.data.okx[0].trading!=="undefined" && 
-			userActives.data.okx[0].trading!==undefined && 
-			userActives.data.okx[0].trading
+			typeof userActives.data.eth!=="undefined" && 
+			userActives.data.eth!==undefined && 
+			userActives.data.eth
 		) {
-			for (key in userActives.data.okx[0].trading) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
+			for (key1 in userActives.data.eth) {
 				
-				allCoinsData[key].push(userActives.data.okx[0].trading[key]);
-			}
-		}
+				if (
+					typeof userActives.data.eth[key1]!=="undefined" && 
+					userActives.data.eth[key1]!==undefined && 
+					userActives.data.eth[key1]
+				) {
 		
-		if (
-			typeof userActives.data.sol[0].active!=="undefined" && 
-			userActives.data.sol[0].active!==undefined && 
-			userActives.data.sol[0].active
-		) {
-			for (key in userActives.data.sol[0].active) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
+					if (
+						typeof userActives.data.eth[key1].active!=="undefined" && 
+						userActives.data.eth[key1].active!==undefined && 
+						userActives.data.eth[key1].active &&
+						typeof userActives.data.eth[key1].active==="object"
+					) {
+
+						for (key2 in userActives.data.eth[key1].active) {
+	
+							if (
+								typeof allCoinsData[key2]==="undefined" || 
+								allCoinsData[key2]===undefined ||
+								allCoinsData[key2].length==0 ||
+								typeof allCoinsData[key2]==="function"
+							) {
+								allCoinsData[key2]=[];
+							}
+							
+							allCoinsData[key2].push(userActives.data.eth[key1].active[key2]);
+						}
+					}					
 				}
-				
-				allCoinsData[key].push(userActives.data.sol[0].active[key]);	
-			}
-		}
-		
-		if (
-			typeof userActives.data.sui[0].active!=="undefined" && 
-			userActives.data.sui[0].active!==undefined && 
-			userActives.data.sui[0].active
-		) {
-			for (key in userActives.data.sui[0].active) {
-				if (
-					typeof allCoinsData[key]==="undefined" || 
-					allCoinsData[key]===undefined ||
-					allCoinsData[key].length==0 ||
-					typeof allCoinsData[key]==="function"
-				) {
-					allCoinsData[key]=[];
-				}
-				
-				allCoinsData[key].push(userActives.data.sui[0].active[key]);	
 			}
 		}
 
@@ -2115,6 +1219,7 @@ $this->registerJs('
 			allCoinsData!==undefined && 
 			allCoinsData
 		) {
+
 			for (var key in allCoinsData) {
 
 				var img = "";
@@ -2126,7 +1231,9 @@ $this->registerJs('
 				var apr = "";
 				var class_blc = "middle_value";
 				var service_icon = ""
-				
+				var name = "";
+				var network = "";
+		
 				for (var index in allCoinsData[key]) {
 
 					if (!img) {
@@ -2137,71 +1244,137 @@ $this->registerJs('
 						symbol = allCoinsData[key][index].symbol;
 					}
 					
-					if (allCoinsData[key][index].type=="tonactive") {
-						if (!apr && key=="ton") {
-							apr += "Earn ";
-							if (allCoinsData[key][index].apr) {
-								apr += parseInt(allCoinsData[key][index].apr, 10) + "% APR";
-							}
-						} else if (!apr && key=="usdt") {
-							apr += "Earn ";
-							if (allCoinsData[key][index].apr) {
-								apr += parseInt(allCoinsData[key][index].apr, 10) + "% APR";
-							}
-						}
+					if (!name) {
+						name = allCoinsData[key][index].name;
 					}
-					
-					balance += parseFloat(allCoinsData[key][index].balance);
-					currency_value += parseFloat(allCoinsData[key][index].currency_value);
-					price = parseFloat(allCoinsData[key][index].price);
-				
-					if (currency_value<1) {
-						class_blc = "small_value";
-					}
-					
-					if (!service_icon) {
-					
-						if (allCoinsData[key][index].type=="tonactive") {
-							service_icon += "<img class=\"service_icon_first ton_icon\" src=\"/images/logos/tonkeeper2.png\">";
-						} else if(allCoinsData[key][index].type=="bybitactive") {
-							service_icon += "<img class=\"service_icon_first bybit_icon\" src=\"/images/logos/bybit2.png\">";
-						} else if(allCoinsData[key][index].type=="bybittrading") {
-							service_icon += "<img class=\"service_icon_first bybit_icon\" src=\"/images/logos/bybit2.png\">";
-						} else if(allCoinsData[key][index].type=="okxactive") {
-							service_icon += "<img class=\"service_icon_first okx_icon\" src=\"/images/logos/okx2.png\">";
-						} else if(allCoinsData[key][index].type=="okxtrading") {
-							service_icon += "<img class=\"service_icon_first okx_icon\" src=\"/images/logos/okx2.png\">";
-						} else if(allCoinsData[key][index].type=="solactive") {
-							service_icon += "<img class=\"service_icon_first sol_icon\" src=\"/images/logos/sol2.png\">";
-						} else if(allCoinsData[key][index].type=="suiactive") {
-							service_icon += "<img class=\"service_icon_first sui_icon\" src=\"/images/logos/sui2.png\">";
-						}
-					} else {
-						if (allCoinsData[key][index].type=="tonactive") {
-							service_icon += "<img class=\"service_icon_second ton_icon\" src=\"/images/logos/tonkeeper2.png\">";
-						} else if(allCoinsData[key][index].type=="bybitactive") {
-							service_icon += "<img class=\"service_icon_second bybit_icon\" src=\"/images/logos/bybit2.png\">";
-						} else if(allCoinsData[key][index].type=="bybittrading") {
-							service_icon += "<img class=\"service_icon_second bybit_icon\" src=\"/images/logos/bybit2.png\">";
-						} else if(allCoinsData[key][index].type=="okxactive") {
-							service_icon += "<img class=\"service_icon_second okx_icon\" src=\"/images/logos/okx2.png\">";
-						} else if(allCoinsData[key][index].type=="okxtrading") {
-							service_icon += "<img class=\"service_icon_second okx_icon\" src=\"/images/logos/okx2.png\">";
-						} else if(allCoinsData[key][index].type=="solactive") {
-							service_icon += "<img class=\"service_icon_second sol_icon\" src=\"/images/logos/sol2.png\">";
-						} else if(allCoinsData[key][index].type=="suiactive") {
-							service_icon += "<img class=\"service_icon_second sui_icon\" src=\"/images/logos/sui2.png\">";
-						}
-					}
-				}
 
+					if (
+						typeof allCoinsData[key][index].listCoin!=="undefined" && 
+						allCoinsData[key][index].listCoin!==undefined && 
+						allCoinsData[key][index].listCoin
+					) {
+					
+						allCoinsData[key][index].listCoin.forEach((val, token) => {
+
+							if (
+								typeof val.network!=="undefined" &&
+								val.network!==undefined &&
+								val.network
+							) {
+								network = val.network;
+							}
+							
+							if (
+								typeof val.protocol!=="undefined" &&
+								val.protocol!==undefined &&
+								val.protocol
+							) {
+								network += " <br>" + val.protocol;
+							}
+							
+							if (
+								typeof val.apr!=="undefined" &&
+								val.apr!==undefined &&
+								val.apr
+							) {
+								network += " <br>" + val.apr;
+							}
+		
+							if (!service_icon) {
+							
+								if (
+									typeof val.network_icon!=="undefined" &&
+									val.network_icon!==undefined &&
+									val.network_icon
+								) {
+
+									service_icon += "<img class=\"service_icon_first ton_icon\" title=\"" + network + "\" src=\"" + val.network_icon + "\" data-bs-toggle=\"tooltip\" rel=\"tooltip\" data-bs-html=\"true\">&nbsp";
+								}
+
+							} else {	
+
+								if (
+									typeof val.network_icon!=="undefined" &&
+									val.network_icon!==undefined &&
+									val.network_icon
+								) {
+	
+									service_icon += "<img class=\"service_icon_second ton_icon\" title=\"" + network + "\" src=\"" + val.network_icon + "\"  data-bs-toggle=\"tooltip\" rel=\"tooltip\" data-bs-html=\"true\">&nbsp";
+								}						
+							}
+							
+							balance += parseFloat(val.balance);
+							currency_value += parseFloat(val.currency_value);
+							price = parseFloat(val.price);
+
+						});
+					
+						if (currency_value<1) {
+							class_blc = "small_value";
+						}
+
+					} else {
+
+						if (
+							typeof allCoinsData[key][index].network!=="undefined" &&
+							allCoinsData[key][index].network!==undefined &&
+							allCoinsData[key][index].network
+						) {
+							network = allCoinsData[key][index].network;
+						}
+	
+						if (allCoinsData[key][index].type=="tonactive") {
+							if (!apr && key=="ton") {
+								apr += "Earn ";
+								if (allCoinsData[key][index].apr) {
+									apr += parseInt(allCoinsData[key][index].apr, 10) + "% APR";
+								}
+							} else if (!apr && key=="usdt") {
+								apr += "Earn ";
+								if (allCoinsData[key][index].apr) {
+									apr += parseInt(allCoinsData[key][index].apr, 10) + "% APR";
+								}
+							}
+						}
+					
+						balance += parseFloat(allCoinsData[key][index].balance);
+						currency_value += parseFloat(allCoinsData[key][index].currency_value);
+						price = parseFloat(allCoinsData[key][index].price);
+					
+						if (currency_value<1) {
+							class_blc = "small_value";
+						}
+		
+						if (!service_icon) {
+							
+							if (
+								typeof allCoinsData[key][index].network_icon!=="undefined" &&
+								allCoinsData[key][index].network_icon!==undefined &&
+								allCoinsData[key][index].network_icon
+							) {
+								service_icon += "<img class=\"service_icon_first ton_icon\" data-bs-toggle=\"tooltip\" rel=\"tooltip\" data-bs-html=\"true\" title=\"" + network + "\" src=\"" + allCoinsData[key][index].network_icon + "\">&nbsp";
+							}
+
+						} else {	
+
+							if (
+								typeof allCoinsData[key][index].network_icon!=="undefined" &&
+								allCoinsData[key][index].network_icon!==undefined &&
+								allCoinsData[key][index].network_icon
+							) {
+								service_icon += "<img class=\"service_icon_second ton_icon\" data-bs-toggle=\"tooltip\" rel=\"tooltip\" data-bs-html=\"true\" title=\"" + network + "\" src=\"" + allCoinsData[key][index].network_icon + "\">&nbsp";
+							}						
+						}
+					}
+				}				
+	
 				html += "<div class=\"option_item " + class_blc + "\" data-id=\"" + key + "\" data-sort=\"" + currency_value + "\">";
 				
 					html += "<img src=\"" + img + "\" alt=\"coin images\">";
 								
 					html += "<div class=\"currency_name_block ml-10\">";
 							
-						html += "<div class=\"currency_name\">" + symbol + "</div>";
+						html += "<div class=\"currency_name\">" + symbol + "&nbsp<span>" + name + "</span></div>";
 						html += "<div class=\"currency_symbol\">" + service_icon + "</div>";
 				
 					html += "</div>";
@@ -2229,6 +1402,8 @@ $this->registerJs('
 
 		jQuery("#wrap-actives #user_balance").html(html);
 		
+		$("[rel=\"tooltip\"]").tooltip();
+		
 		var sort_coin = jQuery.makeArray(jQuery("#wrap-actives #user_balance .option_item"));
 		
 		sort_coin.sort(function (a, b) {
@@ -2239,12 +1414,37 @@ $this->registerJs('
 
 		jQuery(sort_coin).appendTo("#wrap-actives #user_balance")
 		getSettings();
-		addDetailsCoin();	
+		//addDetailsCoin();	
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//addDetailsCoin(symbol)
 	function addDetailsCoin(symbol) {
-		
+
 		jQuery("#adModal #wrap_actives_coin").html("");
 
 		if (typeof symbol==="undefined" || symbol===undefined || !symbol) { 
@@ -2259,12 +1459,15 @@ $this->registerJs('
 		var html_okx = "";
 		var html_sol = "";
 		var html_sui = "";
+		var html_apt = "";
+		var html_eth = "";
 		coinsSummActive = 0;
 		tonSummActiveCurrency = 0;
 		var price = 0;
 		var currency = 0;
 		var coins = 0;
-
+		var connectname = "";
+		
 		jQuery("#adModal .symbol_details_coin, #targetModal .symbol_details_coin").html(symbol);
 		jQuery("#adModal #ad-symbol").val(symbol);
 		
@@ -2277,48 +1480,56 @@ $this->registerJs('
 		var data_sort = 0;
 
 		if (
-			typeof userActives.data.tonwallet!=="undefined" && 
-			userActives.data.tonwallet!==undefined && 
-			userActives.data.tonwallet && 
-			typeof userActives.data.tonwallet==="object"
+			typeof userActives.data.ton!=="undefined" && 
+			userActives.data.ton!==undefined && 
+			userActives.data.ton && 
+			typeof userActives.data.ton==="object"
 		) {
 
-			for (key in userActives.data.tonwallet) {
+			for (key in userActives.data.ton) {
 				if (
-					typeof userActives.data.tonwallet[key].active[symbol]!=="undefined" && 
-					userActives.data.tonwallet[key].active[symbol]!==undefined && 
-					userActives.data.tonwallet[key].active[symbol] && 
-					typeof userActives.data.tonwallet[key].active[symbol]==="object"
+					typeof userActives.data.ton[key].active[symbol]!=="undefined" && 
+					userActives.data.ton[key].active[symbol]!==undefined && 
+					userActives.data.ton[key].active[symbol] && 
+					typeof userActives.data.ton[key].active[symbol]==="object"
 				) {	
-					if (userActives.data.tonwallet[key].active[symbol].symbolid==symbol) {
+					if (userActives.data.ton[key].active[symbol].symbolid==symbol) {
 						
 						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.tonwallet[key].active[symbol].currency_value)<1) {
+						if (parseFloat(userActives.data.ton[key].active[symbol].currency_value)<1) {
 							summ_coin = "small_value";
 						}
 	
-						coinsSummActive += parseFloat(userActives.data.tonwallet[key].active[symbol].balance);
-						tonSummActiveCurrency += parseFloat(userActives.data.tonwallet[key].active[symbol].currency_value);
+						coinsSummActive += parseFloat(userActives.data.ton[key].active[symbol].balance);
+						tonSummActiveCurrency += parseFloat(userActives.data.ton[key].active[symbol].currency_value);
 						getCoinsActive();
 						
-						coins += parseFloat(userActives.data.tonwallet[key].active[symbol].balance);
-						price = parseFloat(userActives.data.tonwallet[key].active[symbol].price);
-						currency += parseFloat(userActives.data.tonwallet[key].active[symbol].currency_value);
+						coins += parseFloat(userActives.data.ton[key].active[symbol].balance);
+						price = parseFloat(userActives.data.ton[key].active[symbol].price);
+						currency += parseFloat(userActives.data.ton[key].active[symbol].currency_value);
 	
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.tonwallet[key].active[symbol].price) + userActives.grafema);	
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.tonwallet[key].active[symbol].img);
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.ton[key].active[symbol].price) + userActives.grafema);	
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.ton[key].active[symbol].img);
 						
-						html_ton += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.tonwallet[key].active[symbol].currency_value + "\">";
+						html_ton += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.ton[key].active[symbol].currency_value + "\">";
 		
-						html_ton += "<img src=\"/images/logos/tonkeeper2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'Ton wallet 1').'</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Basic').'</div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.tonwallet[key].active[symbol].currency_value, 1) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.tonwallet[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div>";
+						html_ton += "<img src=\"/images/logos/tonkeeper2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">Account 1</div><div class=\"currency_symbol\">'.Yii::t('Api', 'TON Wallet').'</div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.ton[key].active[symbol].currency_value, 1) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.ton[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div>";
 						
 						if (symbol=="ton") {
-							
-							html_ton +=addTonDeposit(userActives.data.tonwallet[key]);
+							if (log_id==8) {
+							var deposit = new TonDeposit();
+							html_ton += deposit.getDeposit({
+								id: '.$id.',
+								sc: "'.$sc.'",
+								coin: symbol,
+								apr: userActives.data.ton[key].active[symbol].apr,
+								price: userActives.data.ton[key].active[symbol].price,
+							});
+							} 
 
 						} else if(symbol=="usdt") {
 							
-							html_ton +=addUSDTDeposit(userActives.data.tonwallet[key]);
+							//html_ton +=addUSDTDeposit(userActives.data.ton[key]);
 						}
 
 						html_ton += "</div>";
@@ -2348,7 +1559,7 @@ $this->registerJs('
 				template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(Yii::t('Api', 'For using this pool')).' </div><div class=\"clearfix\"></div></div></div></div>",
 			}).show();
 		}
-
+		
 		if (
 			typeof userActives.data.bybit!=="undefined" && 
 			userActives.data.bybit!==undefined && 
@@ -2364,23 +1575,44 @@ $this->registerJs('
 				) {	
 					if (userActives.data.bybit[key].active[symbol].symbolid==symbol) {
 						
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.bybit[key].active[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						var connectname = "";
+						if (
+							typeof userActives.data.bybit[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.bybit[key].active[symbol].connectname!==undefined && 
+							userActives.data.bybit[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.bybit[key].active[symbol].connectname;
 						}
 						
-						coinsSummActive += userActives.data.bybit[key].active[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.bybit[key].active[symbol].currency_value*1;
-						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.bybit[key].active[symbol].balance);
-						price = parseFloat(userActives.data.bybit[key].active[symbol].price);
-						currency += parseFloat(userActives.data.bybit[key].active[symbol].currency_value);
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.bybit[key].active[symbol].img);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.bybit[key].active[symbol].price) + userActives.grafema);	
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.bybit[key].active[symbol].img);	
+						if (
+							typeof userActives.data.bybit[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.bybit[key].active[symbol].listCoin!==undefined && 
+							userActives.data.bybit[key].active[symbol].listCoin
+						) {	
 						
-						html_bybit += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.bybit[key].active[symbol].currency_value + "\"><img src=\"/images/logos/bybit2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'Bybit').'</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Basic').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.bybit[key].active[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.bybit[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+							userActives.data.bybit[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_bybit += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						}
+						
+						getCoinsActive();
+
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}
 				}
 				
@@ -2392,24 +1624,44 @@ $this->registerJs('
 				) {	
 					if (userActives.data.bybit[key].trading[symbol].symbolid==symbol) {
 						
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.bybit[key].trading[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						var connectname = "";
+						if (
+							typeof userActives.data.bybit[key].trading[symbol].connectname!=="undefined" && 
+							userActives.data.bybit[key].trading[symbol].connectname!==undefined && 
+							userActives.data.bybit[key].trading[symbol].connectname
+						) {	
+							connectname = userActives.data.bybit[key].trading[symbol].connectname;
 						}
 						
-						coinsSummActive += userActives.data.bybit[key].trading[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.bybit[key].trading[symbol].currency_value*1;
-						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.bybit[key].trading[symbol].balance);
-						price = parseFloat(userActives.data.bybit[key].trading[symbol].price);
-						currency += parseFloat(userActives.data.bybit[key].trading[symbol].currency_value);
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.bybit[key].trading[symbol].img);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.bybit[key].trading[symbol].price) + userActives.grafema);	
+						if (
+							typeof userActives.data.bybit[key].trading[symbol].listCoin!=="undefined" && 
+							userActives.data.bybit[key].trading[symbol].listCoin!==undefined && 
+							userActives.data.bybit[key].trading[symbol].listCoin
+						) {	
 						
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.bybit[key].trading[symbol].img);	
+							userActives.data.bybit[key].trading[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_bybit += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						}
 						
-						html_bybit += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.bybit[key].trading[symbol].currency_value + "\"><img src=\"/images/logos/bybit2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'Bybit').'</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Trading').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.bybit[key].trading[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.bybit[key].trading[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+						getCoinsActive();
+
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}		
 				}
 			};
@@ -2432,23 +1684,44 @@ $this->registerJs('
 				) {	
 					if (userActives.data.okx[key].active[symbol].symbolid==symbol) {
 						
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.okx[key].active[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						var connectname = "";
+						if (
+							typeof userActives.data.okx[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.okx[key].active[symbol].connectname!==undefined && 
+							userActives.data.okx[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.okx[key].active[symbol].connectname;
 						}
 						
-						coinsSummActive += userActives.data.okx[key].active[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.okx[key].active[symbol].currency_value*1;
-						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.okx[key].active[symbol].balance);
-						price = parseFloat(userActives.data.okx[key].active[symbol].price);
-						currency += parseFloat(userActives.data.okx[key].active[symbol].currency_value);
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.okx[key].active[symbol].img);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.okx[key].active[symbol].price) + userActives.grafema);	
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.okx[key].active[symbol].img);	
+						if (
+							typeof userActives.data.okx[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.okx[key].active[symbol].listCoin!==undefined && 
+							userActives.data.okx[key].active[symbol].listCoin
+						) {	
 						
-						html_okx += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.okx[key].active[symbol].currency_value + "\"><img src=\"/images/logos/okx2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'OKX').'</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Basic').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.okx[key].active[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.okx[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+							userActives.data.okx[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_okx += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						}
+						
+						getCoinsActive();
+
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}
 				}
 				
@@ -2460,24 +1733,45 @@ $this->registerJs('
 				) {	
 					if (userActives.data.okx[key].trading[symbol].symbolid==symbol) {
 						
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.okx[key].trading[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						var connectname = "";
+						if (
+							typeof userActives.data.okx[key].trading[symbol].connectname!=="undefined" && 
+							userActives.data.okx[key].trading[symbol].connectname!==undefined && 
+							userActives.data.okx[key].trading[symbol].connectname
+						) {	
+							connectname = userActives.data.okx[key].trading[symbol].connectname;
 						}
+						
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.okx[key].trading[symbol].img);
 
-						coinsSummActive += userActives.data.okx[key].trading[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.okx[key].trading[symbol].currency_value*1;
+						if (
+							typeof userActives.data.okx[key].trading[symbol].listCoin!=="undefined" && 
+							userActives.data.okx[key].trading[symbol].listCoin!==undefined && 
+							userActives.data.okx[key].trading[symbol].listCoin
+						) {	
+						
+							userActives.data.okx[key].trading[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_okx += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						
+						}
+						
 						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.okx[key].trading[symbol].balance);
-						price = parseFloat(userActives.data.okx[key].trading[symbol].price);
-						currency += parseFloat(userActives.data.okx[key].trading[symbol].currency_value);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.okx[key].trading[symbol].price) + userActives.grafema);	
-						
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.okx[key].trading[symbol].img);	
-						
-						html_okx += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.okx[key].trading[symbol].currency_value + "\"><img src=\"/images/logos/okx2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'OKX').'</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Trading').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.okx[key].trading[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.okx[key].trading[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}		
 				}
 			};
@@ -2500,23 +1794,45 @@ $this->registerJs('
 				) {	
 					if (userActives.data.sol[key].active[symbol].symbolid==symbol) {
 						
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.sol[key].active[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						var connectname = "";
+						if (
+							typeof userActives.data.sol[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.sol[key].active[symbol].connectname!==undefined && 
+							userActives.data.sol[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.sol[key].active[symbol].connectname;
 						}
+						
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.sol[key].active[symbol].img);
 
-						coinsSummActive += userActives.data.sol[key].active[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.sol[key].active[symbol].currency_value*1;
+						if (
+							typeof userActives.data.sol[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.sol[key].active[symbol].listCoin!==undefined && 
+							userActives.data.sol[key].active[symbol].listCoin
+						) {	
+						
+							userActives.data.sol[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_sol += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						
+						}
+						
 						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.sol[key].active[symbol].balance);
-						price = parseFloat(userActives.data.sol[key].active[symbol].price);
-						currency += parseFloat(userActives.data.sol[key].active[symbol].currency_value);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.sol[key].active[symbol].price) + userActives.grafema);	
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.sol[key].active[symbol].img);	
-						
-						html_sol += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.sol[key].active[symbol].currency_value + "\"><img src=\"/images/logos/sol2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'SOL Wallet').' 1</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Basic').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.sol[key].active[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.sol[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}
 				}
 			};
@@ -2538,29 +1854,214 @@ $this->registerJs('
 					typeof userActives.data.sui[key].active[symbol]==="object"
 				) {	
 					if (userActives.data.sui[key].active[symbol].symbolid==symbol) {
-
-						var summ_coin = "middle_value";
-						if (parseFloat(userActives.data.sui[key].active[symbol].currency_value)<1) {
-							summ_coin = "small_value";
+						
+						var connectname = "";
+						if (
+							typeof userActives.data.sui[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.sui[key].active[symbol].connectname!==undefined && 
+							userActives.data.sui[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.sui[key].active[symbol].connectname;
 						}
+						
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.sui[key].active[symbol].img);
 
-						coinsSummActive += userActives.data.sui[key].active[symbol].balance*1;
-						tonSummActiveCurrency += userActives.data.sui[key].active[symbol].currency_value*1;
+						if (
+							typeof userActives.data.sui[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.sui[key].active[symbol].listCoin!==undefined && 
+							userActives.data.sui[key].active[symbol].listCoin
+						) {	
+						
+							userActives.data.sui[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+
+								html_sui += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + val.network + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						
+						}
+						
 						getCoinsActive();
-						
-						coins += parseFloat(userActives.data.sui[key].active[symbol].balance);
-						price = parseFloat(userActives.data.sui[key].active[symbol].price);
-						currency += parseFloat(userActives.data.sui[key].active[symbol].currency_value);
 
-						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(userActives.data.sui[key].active[symbol].price) + userActives.grafema);	
-						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.sui[key].active[symbol].img);	
-						
-						html_sui += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + userActives.data.sui[key].active[symbol].currency_value + "\"><img src=\"/images/logos/sui2.png\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">'.Yii::t('Api', 'SUI Wallet').' 1</div><div class=\"currency_symbol\">'.Yii::t('Api', 'Basic').'</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(userActives.data.sui[key].active[symbol].currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(userActives.data.sui[key].active[symbol].balance) + "</div></div><div class=\"clearfix\"></div></div>";
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);
 					}
 				}
 			};
 			
 			jQuery("#adModal #wrap_actives_coin").append(html_sui);
+		}
+		
+		if (
+			typeof userActives.data.apt!=="undefined" && 
+			userActives.data.apt!==undefined && 
+			userActives.data.apt && 
+			typeof userActives.data.apt==="object"
+		) {
+			for (key in userActives.data.apt) {
+				
+				console.log(userActives.data.apt[key].active[symbol]);
+				
+				
+				if (
+					typeof userActives.data.apt[key].active[symbol]!=="undefined" && 
+					userActives.data.apt[key].active[symbol]!==undefined && 
+					userActives.data.apt[key].active[symbol] && 
+					typeof userActives.data.apt[key].active[symbol]==="object"
+				) {	
+					if (userActives.data.apt[key].active[symbol].symbolid==symbol) {
+						
+						var connectname = "";
+						if (
+							typeof userActives.data.apt[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.apt[key].active[symbol].connectname!==undefined && 
+							userActives.data.apt[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.apt[key].active[symbol].connectname;
+						}
+						
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.apt[key].active[symbol].img);
+
+						if (
+							typeof userActives.data.apt[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.apt[key].active[symbol].listCoin!==undefined && 
+							userActives.data.apt[key].active[symbol].listCoin
+						) {	
+						
+							userActives.data.apt[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+								
+								var titleCoin = val.network;
+								if (typeof val.protocol!=="undefined" && val.protocol!==undefined && val.protocol && val.protocol.length>0) {
+									
+									if (typeof val.network_link!=="undefined" && val.network_link!==undefined && val.network_link && val.network_link.length>0) {
+										
+										titleCoin += " | <a href=\"" + val.network_link + "\" class=\"protocol-link\" target=\"_blank\">" + val.protocol + "</a>";
+										
+									} else {
+		
+										titleCoin += " | " + val.protocol;
+									}
+								}
+								
+								if (typeof val.apr!=="undefined" && val.apr!==undefined && val.apr && val.apr.length>0) {
+									titleCoin += " | " + val.apr;
+								}
+
+								html_apt += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + titleCoin + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						
+						}
+						
+						getCoinsActive();
+
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);							
+					}
+				}
+			};
+			
+			jQuery("#adModal #wrap_actives_coin").append(html_apt);
+		}
+		
+		if (
+			typeof userActives.data.eth!=="undefined" && 
+			userActives.data.eth!==undefined && 
+			userActives.data.eth && 
+			typeof userActives.data.eth==="object"
+		) {
+
+			for (key in userActives.data.eth) {
+				if (
+					typeof userActives.data.eth[key].active[symbol]!=="undefined" && 
+					userActives.data.eth[key].active[symbol]!==undefined && 
+					userActives.data.eth[key].active[symbol] && 
+					typeof userActives.data.eth[key].active[symbol]==="object"
+				) {	
+					if (userActives.data.eth[key].active[symbol].symbolid==symbol) {
+						
+						var connectname = "";
+						if (
+							typeof userActives.data.eth[key].active[symbol].connectname!=="undefined" && 
+							userActives.data.eth[key].active[symbol].connectname!==undefined && 
+							userActives.data.eth[key].active[symbol].connectname
+						) {	
+							connectname = userActives.data.eth[key].active[symbol].connectname;
+						}
+						
+						jQuery("#adModal .img_details_coin>img, #targetModal .img_details_coin>img").attr("src", userActives.data.eth[key].active[symbol].img);
+
+						if (
+							typeof userActives.data.eth[key].active[symbol].listCoin!=="undefined" && 
+							userActives.data.eth[key].active[symbol].listCoin!==undefined && 
+							userActives.data.eth[key].active[symbol].listCoin
+						) {	
+							
+							userActives.data.eth[key].active[symbol].listCoin.forEach((val, index) => {
+								
+								var summ_coin = "middle_value";
+								if (parseFloat(val.currency_value)<1) {
+									summ_coin = "small_value";
+								}
+								
+								coinsSummActive += val.balance*1;
+								tonSummActiveCurrency += val.currency_value*1;
+								coins += parseFloat(val.balance);
+								price = parseFloat(val.price);
+								currency += parseFloat(val.currency_value);
+				
+								var titleCoin = val.network;
+								if (typeof val.protocol!=="undefined" && val.protocol!==undefined && val.protocol && val.protocol.length>0) {
+									
+									if (typeof val.network_link!=="undefined" && val.network_link!==undefined && val.network_link && val.network_link.length>0) {
+										
+										titleCoin += " | <a href=\"" + val.network_link + "\" class=\"protocol-link\">" + val.protocol + "</a>";
+										
+									} else {
+			
+										titleCoin += " | " + val.protocol;
+									}
+								}
+								
+								if (typeof val.apr!=="undefined" && val.apr!==undefined && val.apr && val.apr.length>0) {
+					
+									titleCoin += " | " + val.apr;
+								}
+
+								html_eth += "<div class=\"option_item " + summ_coin + "\" data-sort=\"" + val.sort + "\"><img src=\"" + val.network_icon + "\" title=\"" + val.network + "\" alt=\"coin images\"><div class=\"currency_name_block ml-10\"><div class=\"currency_name\">" + connectname + "</div><div class=\"currency_symbol\">" + titleCoin + "</div><div class=\"earn\"></div></div><div class=\"currency_graf ml-10\"></div><div class=\"currency_price_block ml-10\"><div class=\"currency_price\">" + formatValue(val.currency_value) + " " + userActives.grafema + "</div><div class=\"currency_volat\">" + formatValue(val.balance) + "</div></div><div class=\"clearfix\"></div></div>";
+	
+							});
+						
+						}
+
+						getCoinsActive();
+
+						jQuery("#adModal .name_details_coin, #targetModal .name_details_coin").html(formatValue(price) + userActives.grafema);	
+	
+					}
+				}
+			};
+			
+			jQuery("#adModal #wrap_actives_coin").append(html_eth);
 		}
 
 		var sort_coin = jQuery.makeArray(jQuery("#adModal #wrap_actives_coin .option_item"));
@@ -2588,229 +2089,18 @@ $this->registerJs('
 		addTargetPage(symbol);
 	}
 	
-	//addTargetPage(symbol)
-	function addTargetPage(symbol) {
-		
-		var value = 2;
-		var summ_coins = parseFloat(jQuery("#adModal #ad-coins").val());
-		var price_coins = parseFloat(jQuery("#adModal #ad-price").val());
-
-		if (isTarget(symbol)) {	
-		
-			var dataTarget = getTarget(symbol);
-			value = parseFloat(dataTarget.multiply);
-			var price = parseFloat(dataTarget.price);
-			jQuery("#adModal #target-info").html("'.Yii::t('Api', 'Current Target').': " + price);
-
-		} else {
-
-			var price = price_coins*value;
-		}	
-		
-		var summ_price = summ_coins*price;
-		
-		jQuery("#targetModal #inputPrice").val(formatValue(price));			
-		jQuery("#targetModal #inputAmount").val(formatValue(summ_price));
-		jQuery("#customRange1").val(value);
-		jQuery("#ad-user-price").val(value);
-	}
 	
-	//addTonDeposit(userDataWallet)
-	function addTonDeposit(userDataWallet) {
-		if (
-			typeof userDataWallet==="undefined" || 
-			userDataWallet===undefined || 
-			!userDataWallet || 
-			typeof userDataWallet.active==="undefined" || 
-			userDataWallet.active===undefined || 
-			!userDataWallet.active
-		) {
-			return false;
-		}
-
-		var usdt_balance = 0;
-		if (
-			typeof userDataWallet.active["usdt"]!== "undefined" &&
-			userDataWallet.active["usdt"]!==undefined &&
-			userDataWallet.active["usdt"] &&
-			typeof userDataWallet.active["usdt"].balance!== "undefined" &&
-			userDataWallet.active["usdt"].balance!==undefined &&
-			userDataWallet.active["usdt"].balance
-		) {
-			usdt_balance = userDataWallet.active["usdt"].balance;
-		}
-		
-		var ton_apr = "";
-		var ton_balance = 0;
-		if (
-			typeof userDataWallet.active["ton"].balance!== "undefined" &&
-			userDataWallet.active["ton"].balance!==undefined &&
-			userDataWallet.active["ton"].balance &&
-			userDataWallet.active["ton"].balance>1
-		) {
-			ton_balance = toFloatDecimals(userDataWallet.active["ton"].balance - 1, 2);			
-		}
-
-		if (
-			typeof userDataWallet.active["ton"].apr!== "undefined" &&
-			userDataWallet.active["ton"].apr!==undefined &&
-			userDataWallet.active["ton"].apr
-		) {
-			ton_apr += "APR=" + userDataWallet.active["ton"].apr;
-		}
-		
-		var ton_exchange_balance = 0;
-		var ton_send_balance = 0;
-		var usdt_send_balance = 0;
-		var ton_wallet_balance = 0;
-		var swap_button = "";
-		var depo_button = "";
-		var usdt_class = "is-valid";
-		var ton_class = "is-valid";
-		var usdt_price_balance = 0;
-		var swapBlock = "block";
-		var poolBlock = "block"
-		
-		if (ton_balance) {		
-			usdt_price_balance = ton_balance*userDataWallet.active["ton"].price;
-		}
-
-		if (ton_balance && usdt_balance) {
-			
-			usdt_send_balance = ton_balance*userDataWallet.active["ton"].price;
-			ton_send_balance = ton_balance;
-			
-			if (usdt_send_balance<usdt_balance) {
-
-				usdt_class = "is-valid";
-				swapBlock = "none";
-			
-			} else {
-			
-				usdt_class = "is-invalid";
-				swapBlock = "block";
-			
-			}
 	
-		} else if(ton_balance && !usdt_balance) {
-			
-			var usdt_class = "is-invalid";
-			
-			ton_send_balance = ton_balance/2;
-			ton_exchange_balance = ton_balance/2;
-			swapBlock = "block";
-
-			
-		} else if(!ton_balance && usdt_balance) {	
-			
-			var ton_class = "is-invalid";
-			var usdt_class = "is-valid";
-			swapBlock = "none";
-			poolBlock = "none";
-			
-		} else {
-			
-			var usdt_class = "is-invalid";
-			var ton_class = "is-invalid";
-			var swap_button = "disabled";
-			var depo_button = "disabled";			
-		}
-
-		if (ton_exchange_balance>0) {
-			ton_exchange_balance = customRound(ton_exchange_balance, 4);
-		}
-		
-		if (ton_send_balance>0) {
-			ton_send_balance = toFloatDecimals(ton_send_balance, 4);
-		}	
-		if (!ton_send_balance) {
-			ton_send_balance = "";
-		}
-		
-		if (usdt_send_balance>0) {
-			usdt_send_balance = toFloatDecimals(usdt_send_balance, 4);
-		}
-		
-		if (!usdt_send_balance) {
-			usdt_send_balance = "";
-		}
-		
-		ton_exchange_balance = toFloatAmont(ton_exchange_balance);
-		if (!ton_exchange_balance) {
-			ton_exchange_balance = "";
-		}
-
-		ton_wallet_balance = toFloatAmont(ton_balance);
-		if (!ton_wallet_balance) {
-			ton_wallet_balance = "";
-		}
-		
-		if (ton_class=="is-valid" && usdt_class=="is-valid") {
-			swapBlock = "none";
-		} else {
-			swapBlock = "block";
-		}
-
-		var html_deposit = "<div class=\"earn\">";
-
-			html_deposit += "<div style=\"font-size:18px;margin-bottom:4px;\">'.Yii::t('Api', 'I want to Deposit').'&nbsp;<div id=\"question-addon4\" class=\"is-external-info\"></div></div>";
-
-			html_deposit += "<div style=\"border:1px solid #fff;border-radius:8px;padding:15px;margin-bottom:8px;\">";
-							
-				html_deposit += "<div style=\"margin-bottom:8px\"></div>";
-
-				html_deposit += "<div style=\"width:calc(50% - 5px);height:60px\" class=\"form-floating float-start\"><input style=\"width:100%;height:60px;font-size:20px\" type=\"text\" class=\"form-control float-start\" id=\"inputToDeposit\" placeholder=\"'.Yii::t('Api', 'TON to Deposit').'\" autocomplete=\"off\" inputmode=\"numeric\" value=\"" + toFloatDecimals(ton_wallet_balance, 4) + "\"><label for=\"inputToDeposit\">'.Yii::t('Api', 'TON to Deposit').'</label></div>";
-				
-				html_deposit += "<div style=\"width:10px;height:60px;padding:20px 5px 0 5px\" class=\"float-start\"></div>";
-				
-				html_deposit += "<div style=\"width:calc(50% - 5px);height:60px\" class=\"form-floating float-start\"><input style=\"width:100%;height:60px;font-size:20px\" type=\"text\" class=\"form-control float-start\" id=\"inputToDepositLeft\" placeholder=\"'.Yii::t('Api', 'USDT').'\" autocomplete=\"off\" inputmode=\"numeric\" value=\"" + toFloatDecimals(usdt_price_balance, 4) + "\"><label for=\"inputToDepositLeft\">'.Yii::t('Api', 'USDT').'</label></div>";
 	
-				html_deposit += "<div class=\"clearfix\"></div>";
-				
-			html_deposit += "</div>";
-			
-			html_deposit += "<div id=\"poolBlock\" style=\"display:" + poolBlock + "\">";
-
-				html_deposit += "<div id=\"deposit_apr\" style=\"font-size:18px;margin-bottom:4px;position:relative;\">'.Yii::t('Api', 'Your pool with').' " + ton_apr + "&nbsp;<div id=\"question-addon5\" class=\"is-external-info\"></div></div>";
-							
-				html_deposit += "<div style=\"border:1px solid #fff;border-radius:8px;padding:15px;margin-bottom:8px;\"><div style=\"margin-bottom:8px\">'.Yii::t('Api', 'Build LP using').'</div>";
-
-					html_deposit += "<div style=\"width:calc(50% - 60px);height:60px\" class=\"form-floating float-start\"><input style=\"width:100%;height:60px;font-size:20px\" type=\"text\" class=\"form-control float-start " + usdt_class + "\" id=\"inputTonDeposit\" placeholder=\"'.Yii::t('Api', 'TON').'\" autocomplete=\"off\" inputmode=\"numeric\" value=\"" + ton_send_balance + "\"><label for=\"inputTonDeposit\">'.Yii::t('Api', 'TON').'</label></div>";
-									
-					html_deposit += "<div style=\"width:10px;height:60px;padding:20px 5px 0 5px\" class=\"float-start\"></div>";
-								
-					html_deposit += "<div style=\"width:calc(50% - 60px);height:60px\" class=\"form-floating float-start\"><input style=\"width:100%;height:60px;font-size:20px\" type=\"text\" class=\"form-control float-start " + ton_class + "\" id=\"inputUSDTDeposit\" placeholder=\"'.Yii::t('Api', 'USDT').'\" autocomplete=\"off\" inputmode=\"numeric\" value=\"" + usdt_send_balance + "\"><label for=\"inputUSDTDeposit\">'.Yii::t('Api', 'USDT').'</label></div>";
-
-					html_deposit += "<button id=\"tonusdt-add-liquidity-button\" class=\"btn btn-outline-light float-end\" style=\"width:100px;height:60px;font-size:20px\" " + depo_button + ">'.Yii::t('Api', 'Deposit').'</button>";
-
-					html_deposit += "<div class=\"clearfix\"></div>";
-
-				html_deposit += "</div>";
-				
-			html_deposit += "</div>";
-			
-			html_deposit += "<div id=\"swapBlock\" style=\"display:" + swapBlock + "\">";
-			
-				html_deposit += "<div style=\"font-size:18px;margin-bottom:4px;\">'.Yii::t('Api', 'Swap').'</div>";
-							
-				html_deposit += "<div style=\"border:1px solid #fff;border-radius:8px;padding:15px;margin-bottom:8px;position:relative;\">";
-								
-					html_deposit += "<div style=\"margin-bottom:8px\">'.Yii::t('Api', 'Exchange your TON to balance assets for this pool').'<br>'.Yii::t('Api', 'USDT Balance').': " + usdt_balance + "</div>";
-								
-					html_deposit += "<div style=\"width:calc(100% - 110px);height:60px\" class=\"form-floating float-start\"><input style=\"width:100%;height:60px;font-size:20px\" type=\"text\" class=\"form-control\" id=\"inputSwap\" placeholder=\"'.Yii::t('Api', 'TON to USDT').'\" autocomplete=\"off\" inputmode=\"numeric\" value=\"" + ton_exchange_balance + "\"><label for=\"inputSwap\">'.Yii::t('Api', 'TON to USDT').'</label></div>";
-
-					html_deposit += "<div style=\"width:10px;\" class=\"float-start\"></div>";
-								
-					html_deposit += "<button id=\"swap-tonusdt-button\" class=\"btn btn-outline-light float-end\" style=\"width:100px;height:60px;font-size:20px\" " + swap_button + ">'.Yii::t('Api', 'Swap').'</button><div class=\"clearfix\"></div>";
-								
-				html_deposit += "</div>";
-				
-			html_deposit += "</div>";
-
-		html_deposit += "</div>";
-		
-		return html_deposit;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//addUSDTDeposit(userDataWallet)
 	function addUSDTDeposit(userDataWallet) {
@@ -2996,14 +2286,12 @@ $this->registerJs('
 				
 				if (status==1) {
 					jQuery("#inputSwap").val("");
-					addNotify("'.Yii::t('Api', 'Successfully swap ton').'", "success");
 				}
 				
 			} else if(type="addusdtaqua") {
 				
 				if (status==1) {
 					jQuery("#inputSwap2").val("");
-					addNotify("'.Yii::t('Api', 'Successfully swap ton').'", "success");
 				}
 				
 				
@@ -3012,6 +2300,150 @@ $this->registerJs('
 				jQuery("#inputSwap").val("");
 			}
 		} 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//addTargetPage(symbol)
+	function addTargetPage(symbol) {
+		
+		var value = 2;
+		var summ_coins = parseFloat(jQuery("#adModal #ad-coins").val());
+		var price_coins = parseFloat(jQuery("#adModal #ad-price").val());
+
+		if (isTarget(symbol)) {	
+
+			var dataTarget = getTarget(symbol);
+			value = parseFloat(dataTarget.multiply);
+			var price = parseFloat(dataTarget.price);
+			jQuery("#adModal #target-info").html("'.Yii::t('Api', 'Current Target').': " + price).show();
+
+		} else {
+
+			jQuery("#adModal #target-info").hide();
+			var price = 0;
+		}	
+		
+		var summ_price = summ_coins*price;
+		
+		jQuery("#targetModal #inputPrice").val(formatValue(price));			
+		jQuery("#targetModal #inputAmount").val(formatValue(summ_price));
+		jQuery("#customRange1").val(value);
+		jQuery("#ad-user-price").val(value);
+	}
+	
+	function targetform() {
+
+		var symbol = $("#adModal #ad-symbol").val();
+		if (typeof symbol==="undefined" || symbol===undefined || !symbol) {
+			addNotify("'.Yii::t('Error', 'Missing Symbol Coins').'", "error");
+			return false;
+		}
+		
+		var target_price = $("#targetModal #inputPrice").val();
+		if (typeof target_price==="undefined" || target_price===undefined || !target_price) {
+			addNotify("'.Yii::t('Error', 'Not Value Price').'", "error");
+			return false;
+		}
+		
+		var price = $("#adModal #ad-price").val();
+		if (typeof price==="undefined" || price===undefined || !price) {
+			addNotify("'.Yii::t('Error', 'Not Value Price').'", "error");
+			return false;
+		}
+
+		var coins = $("#adModal #ad-coins").val();
+		if (typeof coins==="undefined" || coins===undefined || !coins) {
+			addNotify("'.Yii::t('Error', 'Not Value Coins').'", "error");
+			return false;
+		}
+		
+		var multiply = $("#targetModal #ad-user-price").val();
+		if (typeof multiply==="undefined" || multiply===undefined || !multiply) {
+			addNotify("'.Yii::t('Error', 'Not Value Multiply').'", "error");
+			return false;
+		}
+
+		var spinner = "<i class=\"fas fa-asterisk fa-spin\"></i>";
+		var text_button = jQuery("#targetModal #ct-target-send").text();
+		jQuery("#targetModal #ct-target-send").html(spinner + "&nbsp;" + text_button);
+	
+		jQuery.ajax({
+			"url": "/app/addtarget",
+			"type": "post",
+			"dataType": "json",
+			"contentType": "application/json",
+			"data": JSON.stringify({"coins": coins, "symbol": symbol, "price": target_price, "current_price": price, "multiply": multiply, "log_id": log_id, sc: sc}),
+			"success": function(response){
+
+				jQuery("#targetModal #ct-target-send").html(text_button);
+
+				jQuery("#adModal").attr("data-id", symbol);
+				closeAllModal();
+				var modal = new bootstrap.Modal(document.getElementById("adModal"), {
+					backdrop: false,
+					keyboard: false			
+				});
+				modal.show();
+
+				if (response) {
+
+					if (!response.error) {
+						
+						if (
+							typeof response.targets!=="undefined" &&
+							response.targets!==undefined &&
+							response.targets
+						) {
+							targets = JSON.stringify(response.targets);
+						}
+
+						if (
+							typeof response.message.change_target!=="undefined" &&
+							response.message.change_target!==undefined
+						) {
+
+							if (response.message.change_target==1) {
+								addNotify("'.Yii::t('Api', 'Success Add Target').'", "success");
+								jQuery("#adModal #target_actions-button").html("'.Yii::t('Api', 'Change Target').'");
+								jQuery("#targetModal #ct-target-send").html("'.Yii::t('Api', 'Set Target').'");
+							} else {
+								addNotify("'.Yii::t('Api', 'Success Change Target').'", "success");
+								jQuery("#adModal #target_actions-button").html("'.Yii::t('Api', 'Change Target').'");
+								jQuery("#targetModal #ct-target-send").html("'.Yii::t('Api', 'Change Target').'");
+							}
+							
+						} else {
+							addNotify("'.Yii::t('Api', 'Success Add Target').'", "success");
+						}
+			
+						var bar = getTargetProgressBar(symbol, price);
+						jQuery("#asModal .option_item[data-id=\"" + symbol + "\"] .block_target_bar").html(bar);
+			
+					} else {		
+						addNotify(response.message, "error");
+						return false;
+					}
+					
+				} else {
+					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
+					return false;
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				addNotify(thrownError, "error");
+				return false;
+			}
+		});	
+		
 	}
 	
 	//getTargetProgressBar(symbol, price)
@@ -3110,666 +2542,92 @@ $this->registerJs('
 		return bar;
 	}
 	
-	//displayConnectMenu(type=0, flag=0)
-	function displayConnectMenu(type=0, flag=0, address) {
-		if (typeof type==="undefined" || type===undefined || !type) {
-			return false;
-		} 
-
-		var elem;
-		var ident;
-		
-		if (type==1) {
-			elem = jQuery("#ton-wallet-click-button");
-			ident = "ton";
-		} else if(type==2) {
-			elem = jQuery("#sol-wallet-click-button");
-			ident = "sol";
-		} else if(type==3) {
-			elem = jQuery("#bybit-exchange-click-button");
-			ident = "bybit";
-		} else if(type==4) {
-			elem = jQuery("#okx-exchange-click-button");
-			ident = "okx";
-		} else if(type==5) {
-			elem = jQuery("#sui-wallet-click-button");
-			ident = "sui";
-		} else {
-			return false;
-		}
-
-		var popover = bootstrap.Popover.getInstance(elem);
-		popover.dispose();
-
-		if (flag) {
-
-			if (type==3) {
-				var parseAddress = string_replace(address, "...", 6, 1);
-			} else {
-				var parseAddress = string_replace(address, "...", 6, 6);
-			}
-
-			var template = "<div class=\"popover disconnect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"view_address text_input\"><span>" + parseAddress + "</span> <img src=\"/images/icons/copy2.svg\" alt=\"copy\" title=\"copy\"><div class=\"copy_address\">" + address + "</div></div><div class=\"" + ident + "_disconnect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Disconnect').'</div><div class=\"clearfix\"></div></div></div></div>";
-
-		} else {
-			
-			var template = "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"" + ident + "_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>";
-
-		}	
-		
-		elem.popover({
-			placement: "bottom",
-			content: " ",
-			trigger: "click",
-			template: template,
-		});
-	}
 	
-	function sendMessageAl(str, from, username, userpic) {
-
-		changeButtonChat(1);
-		var chat = abcpLocalStorage(12);
-
-		if (typeof str==="undefined" || str===undefined || !str) {
-
-			if (typeof chat==="undefined" || chat===undefined || !chat) {
-				changeButtonChat(0);
-				return false
-
-			} else {
-				
-				var arr = JSON.parse(chat);
-				
-			}
 	
-		} else {
-			
-			if (typeof from==="undefined" || from===undefined || !from) {
-				addNotify("'.Yii::t('Error', 'Storage not from identify').'", "error");
-				return false;
-			}
-			
-			var mess = from + str;
-
-			if (typeof chat==="undefined" || chat===undefined || !chat) {
 	
-				var arr = [];
-				arr.push(mess);
-				var value = JSON.stringify(arr);
-
-			} else {
-				
-				var arr = JSON.parse(chat);
-				var len = arr.length;
-				if (len>=10) {
-					arr.shift();
-				}
-
-				arr.push(mess);
-				var value = JSON.stringify(arr);
-			}
-
-			abcpLocalStorage(11, value);
-		}
-
-		if (typeof username==="undefined" || username===undefined || !username) {
-			var username = "You";
-		}
-		
-		if (typeof userpic==="undefined" || userpic===undefined || !userpic) {
-			
-			var firstLitera = string_replace(username, "", 1, 0);
-			var userpic = "<div style=\"background:#47e7ce\" class=\"text-center avatar\"><span>" + firstLitera.toUpperCase() + "</span></div>";
-
-		} else {
-			
-			var userpic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"" + userpic + "\"></div>";
-			
-		}
-		
-		var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
-		
-		var appname = "FinKeeper";
-		
-		var arrIdentify = [fromIdentify, toIdentify];
-		
-		$("#chat-form-as").html("");
-		arr.reverse();
-		arr.forEach(function(item, i, arr) {
-			
-			if (typeof item==="undefined" || item===undefined || !item) {
-				return false;
-			}
-			
-			var pic = userpic;
-			var name = username;
-
-			arrIdentify.forEach(function(identify, i, arr) {
-				var search = identify.length;
-				var result = string_replace(item, "", search, 0);
-				if (result==identify) {
-					var str = item.slice(search);
-					if (identify==toIdentify){
-						pic = appic;
-						name = appname;
-						item = str;
-						return "";
-					} else {
-						pic = userpic;
-						name = username;
-						item = str;
-						return "";
-					}
-				}
-			});
-
-			var html = "<div class=\"sl-item p-b-md\">" + pic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + name + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
-			
-			$("#chat-form-as").append(html);
-
-		});
-		
-		if (typeof str==="undefined" || str===undefined || !str) {
-
-			changeButtonChat(0);
-			return false;
-		}
-		
-		var portfolio = userActivesMin;
-
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({"data": str, "portfolio": portfolio, "log_id": log_id, sc: sc, type: 3}),
-			"success": function(response){
 	
-				if (response) {
-				
-					if (!response.error) {
-						
-						var balance = 100; //parseFloat('.$wallet['sui']['balance'].');
-
-						if (
-							typeof response.message.function!=="undefined" &&
-							response.message.function!==undefined &&
-							response.message.function.function==1 &&
-							response.message.function.name=="transfer"
-						) {
-
-							var amount = parseFloat(response.message.function.amount);
-				
-							var short_address1 = response.message.function.address;
-							var address1 = response.message.function.address;
-							short_address1 = string_replace(short_address1, "...", 8, 8);
-							var short_address2 = "'.$wallet['sui']['address'].'";
-							short_address2 = string_replace(short_address2, "...", 8, 8);
-							
-							if (amount==0) {
-								
-								response.message = "'.Yii::t('Api', 'Amount is empty').'";
-								
-							} else if(amount>balance) {
-								
-								response.message = "'.Yii::t('Api', 'Not enough assets').'";
-
-							} else {
-								
-								response.message = "'.Yii::t('Api', 'Transfer  Coins').'<p></p><button onClick=\"transferWalletProcess(\'" + amount + "\', \'" + address1 + "\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
-							}
-
-							response.message = response.message.replaceAll("{coin}", amount);
-							response.message = response.message.replaceAll("{wallet}", short_address1);
-							response.message = response.message.replaceAll("{createwallet}", short_address2);
-							
-						}
-					
-						if (
-							typeof response.message!=="undefined" &&
-							response.message!==undefined &&
-							response.message &&
-							typeof response.message.function!=="undefined" &&
-							response.message.function!==undefined &&		
-							response.message.function &&
-							typeof response.message.function.function!=="undefined" &&
-							response.message.function.function!==undefined &&
-							response.message.function.function.function==2 &&
-							response.message.function.function.name=="deposit"
-						) {
-		
-							var amount = parseFloat(response.message.function.function.amount);
-		
-							var short_address2 = "'.$wallet['sui']['address'].'";
-							short_address2 = string_replace(short_address2, "...", 8, 8);
-				
-							if (amount==0) {
-								
-								response.message = "'.Yii::t('Api', 'Amount is empty').'";
-								
-							} else if(amount>balance) {
-								
-								response.message = "'.Yii::t('Api', 'Not enough assets Deposit').'";
-
-							} else {
-								
-								response.message = "'.Yii::t('Api', 'Deposit  Coins').'<p></p><button onClick=\"depositWalletProcess(\'" + amount + "\', \'sui\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
-							}
-							
-							response.message = response.message.replaceAll("{coin}", amount);
-							response.message = response.message.replaceAll("{wallet}", short_address2);
-						}
-						
-						/*
-						if (
-							typeof response.message.function.function!=="undefined" &&
-							response.message.function.function!==undefined &&
-							response.message.function.function.function==3 &&
-							response.message.function.function.name=="withdraw"
-						) {
-		
-							var amount = parseFloat(response.message.function.function.amount);
-		
-							var short_address2 = "'.$wallet['sui']['address'].'";
-							short_address2 = string_replace(short_address2, "...", 8, 8);
-							
-							if (amount==0) {
-								
-								response.message = "'.Yii::t('Api', 'Amount is empty').'";
-
-							} else {
-								
-								response.message = "'.Yii::t('Api', 'Withdraw  Coins').'<p></p><button onClick=\"withdrawWalletProcess(\'" + amount + "\', \'sui\')\"class=\"btn btn-light\" id=\"transfer-ok\">'.Yii::t('Api', 'OK').'</button>&nbsp;<button class=\"btn btn-light\" id=\"transfer-cancel\">'.Yii::t('Api', 'Cancel').'</button>";
-							}
-							
-							response.message = response.message.replaceAll("{coin}", amount);
-							response.message = response.message.replaceAll("{wallet}", short_address2);
-						}
-						*/
 	
-						var mess = toIdentify + response.message;
-						var chat = abcpLocalStorage(12);
-
-						if (typeof chat==="undefined" || chat===undefined || !chat) {
-				
-							var arr = [];
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-
-						} else {
-							
-							var arr = JSON.parse(chat);
-							var len = arr.length;
-							if (len>=10) {
-								arr.shift();
-							}
-
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-						}
-
-						abcpLocalStorage(11, value);
-						var arrIdentify = [fromIdentify, toIdentify];
-						
-						$("#chat-form-as").html("");
-						arr.reverse();
-						arr.forEach(function(item, i, arr) {
-							
-							if (typeof item==="undefined" || item===undefined || !item) {
-								return false;
-							}
-							
-							var pic = userpic;
-							var name = username;
-							
-							arrIdentify.forEach(function(identify, i, arr) {
-								var search = identify.length;
-								var result = string_replace(item, "", search, 0);
-								if (result==identify) {
-									var str = item.slice(search);
-									
-									if (identify==toIdentify){
-										pic = appic;
-										name = appname;
-										item = str;
-									} else {
-										pic = userpic;
-										name = username;
-										item = str;
-										return "";
-									}
-								}
-							});
-
-							var html = "<div class=\"sl-item p-b-md\">" + pic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + name + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
-							
-							$("#chat-form-as").append(html);
-
-						});
-						
-						changeButtonChat(0);	
-
-					} else {		
-						addNotify(response.message, "error");
-						changeButtonChat(0);
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					changeButtonChat(0);
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				changeButtonChat(0);
-				return false;
-			}
-		});			
-	}
 	
-	function createWalletProcess() {
-		
-		var buttonName = jQuery("#create-aiagent-wallet").html();
-		jQuery("#create-aiagent-wallet").html(buttonName + "&nbsp;&nbsp;<i class=\"fas fa-asterisk fa-spin\"></i>");
-
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({data: "create", "log_id": log_id, sc: sc, type: 4}),
-			"success": function(response){
-
-				jQuery("#create-aiagent-wallet").html(buttonName);
-
-				if (response) {
-				
-					if (!response.error) {
-					
-						var html = "'.Yii::t('Api', 'AI agent SUI wallet').':&nbsp;" + string_replace(response.message, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as-wallet-copy\" data-address=\"" + response.message + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + response.message + "\" target=\"_blank\" id=\"as-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a><br>'.Yii::t('Api', 'Balance').':&nbsp;0&nbsp;SUI";
-						
-						jQuery("#chat-active-page .create_aiagent_wallet").html(html);
-		
-		
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});		
-	}
 	
-	function transferWalletProcess(amount, address) {
-		
-		if (
-			typeof amount==="undefined" ||
-			typeof address==="undefined" ||
-			amount===undefined ||
-			address===undefined ||
-			!amount ||
-			!address
-		) {
-			addNotify("'.Yii::t('Error', 'Missing amount or address').'", "error");
-			return false;
-		}
-		
-		var data = {
-			"amount": amount,
-			"address": address,
-		};
-		
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 5}),
-			"success": function(response){
-
-				if (response) {
-				
-					if (!response.error) {
-						
-						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
-		
-						var appname = "FinKeeper";
-						
-						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
-						
-						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
-						
-						var mess = toIdentify + item;
-	
-						var chat = abcpLocalStorage(12);
-						
-						if (typeof chat==="undefined" || chat===undefined || !chat) {
-	
-							var arr = [];
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-
-						} else {
-							
-							var arr = JSON.parse(chat);
-							var len = arr.length;
-							if (len>=10) {
-								arr.shift();
-							}
-
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-						}
-						
-						abcpLocalStorage(11, value);
-	
-						$(html).prependTo("#chat-form-as"); 
-
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}
-
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});		
-	}
-	
-	function depositWalletProcess(amount, token) {
-		
-		if (
-			typeof amount==="undefined" ||
-			typeof token==="undefined" ||
-			amount===undefined ||
-			token===undefined ||
-			!amount ||
-			!token
-		) {
-			addNotify("'.Yii::t('Error', 'Missing amount or token').'", "error");
-			return false;
-		}
-		
-		var data = {
-			"amount": amount,
-			"token": "sui",
-		};
-		
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 6}),
-			"success": function(response){
-			
-				if (response) {
-				
-					if (!response.error) {
-						
-						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
-		
-						var appname = "FinKeeper";
-						
-						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
-						
-						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
-						
-						var mess = toIdentify + item;
-	
-						var chat = abcpLocalStorage(12);
-						
-						if (typeof chat==="undefined" || chat===undefined || !chat) {
-	
-							var arr = [];
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-
-						} else {
-							
-							var arr = JSON.parse(chat);
-							var len = arr.length;
-							if (len>=10) {
-								arr.shift();
-							}
-
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-						}
-						
-						abcpLocalStorage(11, value);
-	
-						$(html).prependTo("#chat-form-as"); 
-						
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}			
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				//addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
-	
-	function withdrawWalletProcess(amount, token) {
-		
-		if (
-			typeof amount==="undefined" ||
-			typeof token==="undefined" ||
-			amount===undefined ||
-			token===undefined ||
-			!amount ||
-			!token
-		) {
-			addNotify("'.Yii::t('Error', 'Missing amount or token').'", "error");
-			return false;
-		}
-		
-		var data = {
-			"amount": amount,
-			"token": "sui",
-		};
-		
-		jQuery.ajax({
-			"url": "/app/alassistant",
-			"type": "post",
-			"dataType": "json",
-			"contentType": "application/json",
-			"data": JSON.stringify({data: data, "log_id": log_id, sc: sc, type: 7}),
-			"success": function(response){
-				
-				console.log(response);
-				return false;
-			
-				if (response) {
-				
-					if (!response.error) {
-						
-						var appic = "<div class=\"avatar\"><img style=\"width:30px\" src=\"/images/favicons/web-app-manifest-512x512.png\"></div>";
-		
-						var appname = "FinKeeper";
-						
-						var item = "The transaction has been sent to the SUI blockchain. You can check it here: <a href=\"https://suivision.xyz/txblock/" + response.message + "\" target=\"_blanck\">https://suivision.xyz/txblock/" + response.message + "</a>";
-						
-						var html = "<div class=\"sl-item p-b-md\">" + appic + "<div class=\"sl-content m-l-sm\"><h5 class=\"m-t-0\"><div class=\"m-r-xs pull-left\"><b>" + appname + "</b></div><div class=\"clearfix\"></div></h5><div class=\"speech-bubble\">" + item + "</div></div></div>";
-						
-						var mess = toIdentify + item;
-	
-						var chat = abcpLocalStorage(12);
-						
-						if (typeof chat==="undefined" || chat===undefined || !chat) {
-	
-							var arr = [];
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-
-						} else {
-							
-							var arr = JSON.parse(chat);
-							var len = arr.length;
-							if (len>=10) {
-								arr.shift();
-							}
-
-							arr.push(mess);
-							var value = JSON.stringify(arr);
-						}
-						
-						abcpLocalStorage(11, value);
-	
-						$(html).prependTo("#chat-form-as");
-						
-					} else {		
-						addNotify(response.message, "error");
-						return false;
-					}
-				
-				} else {
-					addNotify("'.Yii::t('Error', 'Server not response').'", "error");
-					return false;
-				}			
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				addNotify(thrownError, "error");
-				return false;
-			}
-		});
-	}
 
 	//document ready
 	jQuery(document).ready(function($) {	
 
-		sendMessageAl("", "", username, userpic);
+		var chat = new Chatai();
+		chat.getChat({
+			username: username,
+			userpic: userpic,
+			appname: "FinKeeper",
+			apppic: "/images/favicons/web-app-manifest-512x512.png",
+			elementChat: "as-chatai",
+			elementForm: "bottom-chat-form",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			portfolio: userActivesMin,
+			wallet: {
+				type: "sui",
+				address: "'.$wallet['sui']['address'].'",
+				balance: '.$wallet['sui']['balance'].',
+				price: '.$wallet['sui']['price'].',
+				navi: '.$wallet['sui']['navi'].',
+				rewards: '.$wallet['sui']['rewards'].',
+				currency: "'.$grafema.'",	
+			},
+			
+		});
+
+		var bybit = new Bybit();
+		bybit.getBybit({
+			elementButton: "bybit-exchange-connect-button-as854",
+			elementForm: "bybit-exchange-connect-manage-as854",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['bybit'].',
+		});
 		
-		$("#chat-active-send").on("click", function(e) {
-			e.preventDefault();
-			var text = $("#chat-active-input").val();
-			$("#chat-active-input").val("");
-			sendMessageAl(text, fromIdentify, username, userpic);		
+		var okx = new OKX();
+		okx.getOKX({
+			elementButton: "okx-exchange-connect-button-as858",
+			elementForm: "okx-exchange-connect-manage-as858",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['okx'].',
+		});	
+
+		var sol = new SOL();
+		sol.getSOL({
+			elementButton: "sol-exchange-connect-button-as864",
+			elementForm: "sol-exchange-connect-manage-as864",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['sol'].',
+		});	
+		
+		var sui = new SUI();
+		sui.getSUI({
+			elementButton: "sui-exchange-connect-button-as164",
+			elementForm: "sui-exchange-connect-manage-as164",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['sui'].',
+		});	
+		
+		var apt = new APT();
+		apt.getAPT({
+			elementButton: "apt-exchange-connect-button-as316",
+			elementForm: "apt-exchange-connect-manage-as316",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['apt'].',
+		});
+		
+		var eth = new ETH();
+		eth.getETH({
+			elementButton: "eth-exchange-connect-button-as628",
+			elementForm: "eth-exchange-connect-manage-as628",
+			id: '.$id.',
+			sc: "'.$sc.'",
+			connect: '.$status['eth'].',
 		});
 
 		$("#smart-toy").on("click", function() {
@@ -3797,92 +2655,12 @@ $this->registerJs('
 		if (tonConnectedStatus==1) {
 			tonconnected();
 		}
-		
-		if (bybitConnectedStatus==1) {
-			bybitconnect();
-		}
-		
-		if(okxConnectedStatus==1) {
-			okxconnect();
-		}
-		
-		if(solConnectedStatus==1) {
-			solconnect();
-		}
-		
-		if(suiConnectedStatus==1) {
-			suiconnect();
-		}
 
-		// Popover help
-		$("#question-addon1").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit UID'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon2").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit APIKey'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon3").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question Bybit APISecret'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon6").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX UID'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon7").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX APIKey'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon8").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX APISecret'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon9").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question OKX Password'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon10").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question SOL Address'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon11").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question SUI Address'), "\r\n", '<br>')).' <a href=\"https://finkeeper.gitbook.io/finkeeper/integration/exchange\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
 		$("#smart-toy, #smart-toy-active").popover({
 			placement: "right",
 			content: "This is the body of Popover",
 			trigger: "hover",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'AI assistant'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'AI assistant'))).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 
 		// Popover menu
@@ -3891,46 +2669,7 @@ $this->registerJs('
 			content: " ",
 			container: "body",
 			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"ton_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		jQuery("#sol-wallet-click-button").popover({
-			placement: "bottom",
-			content: " ",
-			container: "body",
-			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sol_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
-		});
-
-		jQuery("#bybit-exchange-click-button").popover({
-			placement: "bottom",
-			content: " ",
-			container: "body",
-			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"bybit_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		jQuery("#okx-exchange-click-button").popover({
-			placement: "bottom",
-			content: " ",
-			container: "body",
-			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"okx_connect_button\"><div class=\"mdi mdi-login\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		jQuery("#sui-wallet-click-button").popover({
-			placement: "bottom",
-			content: " ",
-			container: "body",
-			trigger: "click",
-			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sui_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Connect'), "\r\n", '<br>')).'</div><div class=\"clearfix\"></div></div></div></div>",
-		});
-		
-		$("#question-addon-chat").popover({
-			placement: "left",
-			content: "This is the body of Popover",
-			trigger: "focus",
-			template: "<div class=\"popover question_popover\" role=\"tooltip\"><div class=\"popover-arrow\" style=\"position: absolute; top: 0px; transform: translate(0px, 12px);\"></div><div class=\"popover-content\"><div class=\"question_addon_popover\"><div class=\"popover_text\">'.addslashes(str_replace(Yii::t('Api', 'Question FinKeeper Help'), "\r\n", "<br>")).'<br><a href=\"https://finkeeper.gitbook.io/finkeeper/en\" target=\"_blank\">'.Yii::t('Api', 'Detailed instructions').' <i class=\"fa fa-external-link-alt\"></i></a></div><div class=\"clearfix\"></div></div></div></div>",
+			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"ton_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Connect'))).'</div><div class=\"clearfix\"></div></div></div></div>",
 		});
 	});
 ', yii\web\View::POS_END);

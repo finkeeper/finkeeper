@@ -4,7 +4,7 @@ namespace frontend\modules\app\components;
 
 use Yii;
 use common\models\Exchange;
-//use common\models\Chatgpt;
+use common\models\Sendstatus;
 //use api\modules\v3\models\ApiChatbot;
 
 class AiagentApi {
@@ -37,7 +37,7 @@ class AiagentApi {
 	/**
 	 * getQuestion($message='') 
 	 */
-    public function getQuestion($message='', $portfolio='') 
+    public function getQuestion($message='', $coin='', $portfolio='') 
 	{
 		if (empty($message)) {
 			return [
@@ -51,7 +51,7 @@ class AiagentApi {
 			'Authorization: Basic '.$this->api_key,
 		];
 
-		$message =urlencode(addslashes($message));
+		$message = urlencode(addslashes($message));
 		$api_url = $this->api_url.'chat?input_text='.$message;
 
 		$curl = curl_init();
@@ -66,9 +66,7 @@ class AiagentApi {
 		curl_setopt($curl, CURLOPT_PORT, 8443);
 		$response = curl_exec($curl);
 		curl_close($curl);
-		
-		//error_log($response."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-
+	
 		if (empty($response) || !is_string($response)) {
 			return [
 				'error' => 1,
@@ -91,14 +89,81 @@ class AiagentApi {
 				'message' => Yii::t('Error', 'Not response'),
 			];
 			
+		}
+		
+		$response_data = [];
+		if (!empty($result['response']['function'])) {
+			if (!empty($result['response']['function']['name'])) {
+				
+				$response_data = $result['response']['function'];
+				$response_data['coin'] = $coin;
+				$response_data['trnid'] = Sendstatus::createSendStatus($response_data);
+	
+				if (empty($response_data['trnid'])) {
+					return [
+						'error' => 1,
+						'message' => Yii::t('Error', 'Not save transaction id'),
+					];
+				}
+				
+			} else if ($result['response']['function']['function']['name']) {
+			
+				$response_data = $result['response']['function']['function'];
+				$response_data['coin'] = $coin;
+				$response_data['trnid'] = Sendstatus::createSendStatus($response_data);
+				
+				if (empty($response_data['trnid'])) {
+					return [
+						'error' => 1,
+						'message' => Yii::t('Error', 'Not save transaction id'),
+					];
+				}
+			}
+			
 		} else {
+			
+			if (is_string($result['response'])) {
+				$result['response'] = self::replaceStr($result['response']);
+			}
+			
+			$response_data = $result['response'];
+		}
 
-			return [
-				'error' => 0,
-				'message' => $result['response'],
-			];
-		}	
+		return [
+			'error' => 0,
+			'message' => $response_data,
+		];	
     }
+	
+	/**
+	 * replaceStr($str='')
+	 */
+	public static function replaceStr($str='')
+	{
+		if (empty($str)) {
+			return $str;
+		}
+		
+		$str = str_replace(["\n"], "<br>", $str);
+
+		preg_match_all('/\*\*(.*?)\*\*/i', $str, $matches);
+		
+		if (empty($matches) || empty($matches[0]) || empty($matches[1])) {
+			return $str;
+		}
+
+		$search = $matches[0];
+
+		foreach ($matches[1] as $key=>$value) {
+			$matches[1][$key] = '<b>'.$value.'</b>';
+		}
+
+		$replace = $matches[1];
+
+		$str = str_replace($search, $replace, $str);
+		
+		return $str;
+	}
 
 	/**
 	 * pstatic($className=__CLASS__)
