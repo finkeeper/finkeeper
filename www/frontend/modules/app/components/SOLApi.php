@@ -117,6 +117,7 @@ class SOLApi {
 		
 		$data[] = [
 			'balance' => $balance,
+			'negative' => 0,
 			'name' => 'Sol',
 			'currency' => $currency,
 			'sort' => $value,

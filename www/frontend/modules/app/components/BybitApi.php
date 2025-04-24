@@ -132,6 +132,7 @@ class BybitApi {
 					
 					$data['active'][] = [
 						'balance' => $balance,
+						'negative' => 0,
 						'name' => $val['coin'],
 						'currency' => $currency,
 						'sort' => $value,

@@ -65,7 +65,7 @@ class Tokens extends ActiveRecord
         return [
 			[['id_token', 'service_type', 'id_client', 'deleted', 'user_connect'], 'integer'],
 			[['creation_date', 'deleted_date'], 'string', 'max' => 60],
-			[['identify1', 'identify2', 'identify3', 'identify4', 'identify5'], 'string'],
+			[['identify1', 'identify2', 'identify3', 'identify4', 'identify5', 'exname', 'parent'], 'string'],
 			
 			['deleted', 'default', 'value' => self::STATUS_NOT_DELETED],
             ['deleted', 'in', 'range' => [self::STATUS_NOT_DELETED, self::STATUS_DELETED]],

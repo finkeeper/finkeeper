@@ -90,16 +90,19 @@ class LoginForm extends Model
         if(empty($token)) {
 			return false;
 		}
-		
+
 		$client = Clients::findByTelegramToken($token);
         if(empty($client)) {
-			return false;
+			Yii::$app->session->setFlash('warning', Yii::t('Error', 'Not user service'));
+			return true;
 		}
 		
-		$client->tg_auth_token = '';
-		if (!$client->save(false)) {
-			return false;
-		}
+		$life = $client->tg_auth_token_create + 600;
+		$current = time();
+		if ($current>$life) {
+			Yii::$app->session->setFlash('warning', Yii::t('Error', 'Incorrect token'));
+			return true;	
+		} 
 
 		return Yii::$app->user->login($client, 3600 * 24 * 30);
     }

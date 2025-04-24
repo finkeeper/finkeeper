@@ -14,6 +14,7 @@ use api\modules\v2\components\OKXApi;
 use api\modules\v2\components\SOLApi;
 use api\modules\v2\components\GPTApi2;
 use api\modules\v2\components\SUIApi;
+use api\modules\v2\components\SUIApi2;
 
 /**
  * Controller API
@@ -76,6 +77,8 @@ class DataController extends ActiveController
 			
 			return true;
 		}
+		
+		$data['subscribed'] = 1;
 
 		$api_id = (int) TelegramApi::saveData($data);
 		if (empty($api_id)) {
@@ -109,8 +112,6 @@ class DataController extends ActiveController
 			$result = TelegramApi::sendPhoto($send, $data['bot_token']);
 			if (empty($result)) {
 				error_log('Missing send photo result'."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-				
-				error_log(print_r($send, true)."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}
 
 			$send = [];
@@ -202,8 +203,6 @@ class DataController extends ActiveController
 			$result = TelegramApi::sendData($send, $data['bot_token']);
 			if (empty($result)) {
 				error_log('Missing result'."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-				
-				error_log(print_r($send, true)."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 			}		
 		}	
 		
@@ -233,8 +232,6 @@ class DataController extends ActiveController
 
 				if (empty($result)) {
 					error_log('Missing result'."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
-					
-					error_log(print_r($send, true)."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
 				}
 			}
 		}	
@@ -244,7 +241,7 @@ class DataController extends ActiveController
 
 	/**
      * @webhook
-	 * https://api.bank.ctfn.pro/v2/datas/webhook?id_bot=2&action=create&token=06637c0e190c7ba5a5086fbdecbe0e78
+	 * https://api.bank.ctfn.pro/v3/datas/webhook?id_bot=2&action=create&token=06637c0e190c7ba5a5086fbdecbe0e78
      */
 	public function actionWebhook($id_bot=0, $action='', $token='')
     {
@@ -309,7 +306,7 @@ class DataController extends ActiveController
 	}
 	
 	/** 
-	 * https://api.bank.ctfn.pro/v2/datas/converter?id=0
+	 * https://api.bank.ctfn.pro/v3/datas/converter?id=0
 	 */
 	public function actionConverter($id=0, $sc='')
 	{
@@ -325,7 +322,7 @@ class DataController extends ActiveController
 		$friends = ApiChatbot::getReferralsData();
 
 		Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
-	
+
 		return $this->render('converter', [
 		   'exchange' => $exchange,
 		   'friends' => $friends,
@@ -363,6 +360,8 @@ class DataController extends ActiveController
 			]));
 		}
 
+		$data = [];
+		
 		if (!TelegramApi::isSafe($array['initData'])) {
 			exit(json_encode([
 				'error' => 1,
@@ -370,14 +369,67 @@ class DataController extends ActiveController
 			]));
 		}
 
-		if (!empty($array['initDataUnsafe']['user']) && !empty($array['initDataUnsafe']['user']['photo_url'])) {
-			ApiChatbot::saveUserpic($array['initDataUnsafe']['user']['id'], $array['initDataUnsafe']['user']['photo_url']);
-		}
-
-		$data = [];
-		
 		if (!empty($array['initDataUnsafe']['start_param']) && $array['initDataUnsafe']['start_param']=='auth') {
+
+			$id = (int) $array['initDataUnsafe']['user']['id'];
+			$modelClients = ApiChatbot::getClient($id);
+			if (empty($modelClients)) {
+
+				$savedata = [];
+				$savedata['chat']['subscribed'] = 0;
+				$savedata['type'] = 2;
+				$savedata['request'] = $input;
+				if (!empty($array['initDataUnsafe']['auth_date'])) {
+					$savedata['api_date'] = date('Y-m-d H:i:s', $array['initDataUnsafe']['auth_date']);
+				}
 			
+				if (!empty($array['initDataUnsafe']['chat_type'])) {
+					$savedata['chat']['type'] = $array['initDataUnsafe']['chat_type'];
+				}
+		
+				if (!empty($array['initDataUnsafe']['user'])) {
+					
+					if (!empty($array['initDataUnsafe']['user']['id'])) {
+						$savedata['from']['id'] = $array['initDataUnsafe']['user']['id'];
+						$savedata['chat']['id'] = $array['initDataUnsafe']['user']['id'];
+					}
+
+					if (!empty($array['initDataUnsafe']['user']['first_name'])) {
+						$savedata['from']['first_name'] = $array['initDataUnsafe']['user']['first_name'];
+						$savedata['chat']['first_name'] = $array['initDataUnsafe']['user']['first_name'];
+					}
+
+					if (!empty($array['initDataUnsafe']['user']['last_name'])) {
+						$savedata['from']['last_name'] = $array['initDataUnsafe']['user']['last_name'];
+						$savedata['chat']['last_name'] = $array['initDataUnsafe']['user']['last_name'];
+					}
+
+					if (!empty($array['initDataUnsafe']['user']['username'])) {
+						$savedata['from']['username'] = $array['initDataUnsafe']['user']['username'];
+						$savedata['chat']['username'] = $array['initDataUnsafe']['user']['username'];
+					}
+
+					if (!empty($array['initDataUnsafe']['user']['language_code'])) {
+						$savedata['from']['language_code'] = $array['initDataUnsafe']['user']['language_code'];
+						$savedata['chat']['language_code'] = $array['initDataUnsafe']['user']['language_code'];
+					}	
+				}
+
+				$api_id = (int) TelegramApi::saveData($savedata);
+
+				if (empty($api_id)) {
+					exit(json_encode([
+						'error' => 1,
+						'message' => Yii::t('Error', 'Not save user data'),
+					]));
+				}
+				
+			}
+			
+			if (!empty($array['initDataUnsafe']['user']) && !empty($array['initDataUnsafe']['user']['photo_url'])) {
+				ApiChatbot::saveUserpic($array['initDataUnsafe']['user']['id'], $array['initDataUnsafe']['user']['photo_url']);
+			}
+
 			$data['tg_token'] = $array['initDataUnsafe']['hash'];
 			if (!ApiChatbot::saveTGToken($array['initDataUnsafe']['user']['id'], $array['initDataUnsafe']['hash'])) {
 				exit(json_encode([
@@ -433,7 +485,7 @@ class DataController extends ActiveController
 
 			$data['targets'] = ApiChatbot::getTargets($log->id);
 			$data['status'] = ApiChatbot::getStatusConnect($log->id);
-			$data['page_url'] = '/v2/datas/converter?id='.$log->id.'&sc='.$data['sc'];
+			$data['page_url'] = '/v3/datas/converter?id='.$log->id.'&sc='.$data['sc'];
 			$data['currency'] = $currency;
 			$data['friends'] = ApiChatbot::getReferralsData($log->id);
 			
@@ -453,7 +505,7 @@ class DataController extends ActiveController
 	}
 	
 	/** 
-	 * https://api.bank.ctfn.pro/v2/datas/stakingcalc
+	 * https://api.bank.ctfn.pro/v3/datas/stakingcalc
 	 */
 	public function actionStakingcalc($id=0)
 	{
@@ -1433,6 +1485,9 @@ class DataController extends ActiveController
 			$sui = new SUIApi;
 			$sui->address = $array['address'];
 			
+			$sui2 = new SUIApi2;
+			$sui2->address = $array['address'];
+			
 			$save_tokens = ApiChatbot::saveTokens(5, $array['log_id'], $array['address']);
 
 			if (
@@ -1461,6 +1516,9 @@ class DataController extends ActiveController
 
 			$sui = new SUIApi;
 			$sui->address = $modelTokens->identify1;
+			
+			$sui2 = new SUIApi2;
+			$sui2->address = $modelTokens->identify1;
 
 		} else {
 			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect type balance')]));	
@@ -1475,7 +1533,11 @@ class DataController extends ActiveController
 		
 		$data =[];
 		
-		$response = $sui->getWalletBalance();
+		$response = $sui2->getWalletBalance();
+		if (!empty($response['error'])) {
+			$response = $sui->getWalletBalance();
+		}
+		
 		if (empty($response['error'])) {
 			
 			if (!empty($response['data']) && !empty($response['data'][0])) {
@@ -1502,14 +1564,13 @@ class DataController extends ActiveController
 						$img = '/images/cryptologo/default_coin.webp';
 						$img_name = strtolower($val['symbolid']);
 						$path = getcwd().'/images/cryptologo/'.$img_name.'.webp';
+						if (file_exists($path)) {
+							$img = '/images/cryptologo/'.$img_name.'.webp';
+						}
 					} else {
 						$img = $val['image'];
 					}
-
-					if (file_exists($path)) {
-						$img = '/images/cryptologo/'.$img_name.'.webp';
-					}
-					
+	
 					if (!empty($value)) {
 						if (is_float($value)) {
 							$value = number_format($value, 12, '.', '');
@@ -1600,7 +1661,7 @@ class DataController extends ActiveController
 	}
 
 	/** 
-	 * https://api.bank.ctfn.pro/v2/datas/getaddress
+	 * https://api.bank.ctfn.pro/v3/datas/getaddress
 	 */
 	public function actionGetaddress()
 	{

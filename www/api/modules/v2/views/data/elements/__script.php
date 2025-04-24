@@ -127,9 +127,7 @@ $this->registerJs('
 				awards += 150;
 			} 
 		}
-		
-		
-		
+
 		jQuery("#frModal #fr-link-1").val(friends.link);
 		jQuery("#frModal .awards_friends").html(awards);
 		
@@ -3173,7 +3171,7 @@ $this->registerJs('
 		});
 	}
 
-	function getUserData() {
+	function getUserData(type) {
 
 		var data = Telegram.WebApp;
 	
@@ -3193,6 +3191,10 @@ $this->registerJs('
 			getErrorPage(404);
 			return false;
 		}
+		
+		if (typeof type!=="undefined" && type!==undefined && type) {		
+			Telegram.WebApp.initDataUnsafe.start_param = type;
+		}
 
 		jQuery.ajax({
 			"url": "/v2/datas/userdata",
@@ -3208,8 +3210,8 @@ $this->registerJs('
 					
 					if (!response.error) {
 						
-						if (response.type=="auth") {
-						
+						if (response.type=="auth" || type=="auth" ) {
+			
 							sc = response.data.tg_token;
 							$("#auth-page").show();	
 							return false;
@@ -3446,6 +3448,12 @@ $this->registerJs('
 			container: "body",
 			trigger: "click",
 			template: "<div class=\"popover connect_popover\" role=\"tooltip\"><div class=\"popover-content\"><div class=\"sui_connect_button\"><div class=\"mdi mdi-logout\"></div><div class=\"popover_text\">'.Yii::t('Api', 'Connect').'</div><div class=\"clearfix\"></div></div></div></div>",
+		});
+		
+		$("#lg-verify-web").on("click", function() {	
+			$("#auth-loader").show();
+			$("#content").hide();
+			getUserData("auth");			
 		});
 	}
 	

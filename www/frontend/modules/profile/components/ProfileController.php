@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\profile\components;
+namespace frontend\modules\profile\components;
 
 use Yii;
 use yii\web\Controller;
@@ -11,7 +11,7 @@ use yii\web\Controller;
 class ProfileController extends Controller
 {
 	/**
-     * @var \app\modules\service\Module
+     * @var \frontend\modules\service\Module
      */
     private $_module;
 

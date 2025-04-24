@@ -16,20 +16,12 @@ use yii\bootstrap5\Html;
 					</div>
 
 					<div class="row" style="margin:0 0 20px 0;">
-						
-						<div id="ton-wallet-connect-button" class="wallet-connect-button">
-							<div id="ton-connect" style="display:none"></div>
-							<span class="mdi mdi-wifi-off"></span>
-							<div tabindex="0" role="button" id="ton-wallet-click-button" class="areal-click-button"></div>
-							<div class="backdrop-connect-button" style="display:none">
-								<span class="far fa-hourglass fa-spin"></span>
-							</div>
-						</div>
-						
+						<div id="ton-exchange-connect-button-as218"></div>
 						<div id="apt-exchange-connect-button-as316"></div>
 						<div id="sol-exchange-connect-button-as864"></div>
 						<div id="sui-exchange-connect-button-as164"></div>
 						<div id="eth-exchange-connect-button-as628"></div>
+						<div id="btc-wallet-connect-button-as1958"></div>
 						<div id="bybit-exchange-connect-button-as854"></div>
 						<div id="okx-exchange-connect-button-as858"></div>
 						<div class="clearfix"></div>

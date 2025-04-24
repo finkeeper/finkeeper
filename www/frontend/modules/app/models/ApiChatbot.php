@@ -243,6 +243,15 @@ class ApiChatbot extends Model
 					'message' => Yii::t('Error', 'Missing ETH Address Wallet'),
 				];
 			}
+			
+		} else if ($type==9) {
+			
+			if (empty($identify1)) {
+				return [
+					'error' => 1,
+					'message' => Yii::t('Error', 'Missing BTC Address Wallet'),
+				];
+			}
 
 		} else {
 			
@@ -406,6 +415,7 @@ class ApiChatbot extends Model
 			'sui' => 0,
 			'apt' => 0,
 			'eth' => 0,
+			'btc' => 0,
 			'all' => 0,
 		];
 		
@@ -417,16 +427,21 @@ class ApiChatbot extends Model
 		if (empty($modelChatbotLog)) {
 			return $status;		
 		}
-
-		$modelTokens1 = Tokens::findOne([
+		
+		$arrayTokens1 = Tokens::find()->where([
 			'service_type' => 1, 
 			'id_client' => $modelChatbotLog->id_client, 
 			'deleted'=>Tokens::STATUS_NOT_DELETED,
-		]);
+		])->All();
 
-		if (!empty($modelTokens1) && !empty($modelTokens1->user_connect)) {
-			$status['ton'] = 1;
-			$status['all'] = 1;
+		if (!empty($arrayTokens1) && is_array($arrayTokens1)) {
+			
+			foreach ($arrayTokens1 as $modelTokens1) {
+				if (!empty($modelTokens1) && !empty($modelTokens1->user_connect)) {
+					$status['ton'] = 1;
+					$status['all'] = 1;
+				}
+			}
 		}
 		
 		$arrayTokens2 = Tokens::find()->where([
@@ -520,6 +535,22 @@ class ApiChatbot extends Model
 			foreach ($arrayTokens8 as $modelTokens8) {
 				if (!empty($modelTokens8) && !empty($modelTokens8->user_connect)) {
 					$status['eth'] = 1;
+					$status['all'] = 1;
+				}
+			}
+		}
+		
+		$arrayTokens9 = Tokens::find()->where([
+			'service_type' => 9, 
+			'id_client' => $modelChatbotLog->id_client, 
+			'deleted'=>Tokens::STATUS_NOT_DELETED,
+		])->All();
+
+		if (!empty($arrayTokens9) && is_array($arrayTokens9)) {
+			
+			foreach ($arrayTokens9 as $modelTokens9) {
+				if (!empty($modelTokens9) && !empty($modelTokens9->user_connect)) {
+					$status['btc'] = 1;
 					$status['all'] = 1;
 				}
 			}
@@ -628,6 +659,19 @@ class ApiChatbot extends Model
 	public static function getClient($chat_id=0)
 	{
 		$modelClient = Clients::findOne(['tg_chat_id' => $chat_id, 'deleted' => Clients::STATUS_NOT_DELETED]);
+		if (!empty($modelClient)) {
+			return $modelClient;
+		}
+
+		return false;		
+	}
+	
+	/**
+	 * getClient($chat_id=0)
+	 */
+	public static function getEmailClient($email='')
+	{
+		$modelClient = Clients::findOne(['email' => $email, 'deleted' => Clients::STATUS_NOT_DELETED]);
 		if (!empty($modelClient)) {
 			return $modelClient;
 		}
@@ -881,6 +925,49 @@ class ApiChatbot extends Model
 	}
 	
 	/**
+	 * addClient($chat=[])
+	 */
+	public static function addEmailClient($data=[])
+	{
+		if (empty($data) || !is_array($data) || empty($data['email'])) {
+			return false;
+		}
+		
+		$modelClient = new Clients;
+		
+		$modelClient->email = $data['email'];
+
+		if (!empty($data['family_name'])) {
+			$modelClient->name = $data['family_name'];
+		}
+		
+		if (!empty($data['given_name'])) {
+			$modelClient->surname = $data['given_name'];
+		}
+
+		if (!empty($data['picture'])) {
+			$modelClient->userpic = $data['picture'];
+		}
+		
+		$modelClient->generateAuthKey();
+		$modelClient->generateEmailVerificationToken();
+		$modelClient->getClientIP();
+		$modelClient->getHttpToken($modelClient->email);
+		$modelClient->setPassword($modelClient->email);
+		$modelClient->getIdentify();
+		$modelClient->login = $modelClient->generateLogin($modelClient->email);
+		
+		if ($modelClient->save()) {
+			$modelClient->referral_token = self::getHash($modelClient->id, $modelClient->email);
+			if ($modelClient->save()) {
+				return $modelClient;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * getRef()
 	 */
 	public static function getRef($bot_id=0, $chat_id=0)
@@ -1067,6 +1154,18 @@ class ApiChatbot extends Model
 	{	
 		return Tokens::find()->where([
 			'service_type' => 8, 
+			'id_client' => $id, 
+			'deleted'=>Tokens::STATUS_NOT_DELETED,
+		])->All();
+	}
+	
+	/**
+	 * getEthTokens($id=0)
+	 */
+	public static function getBtcTokens($id=0)
+	{	
+		return Tokens::find()->where([
+			'service_type' => 9, 
 			'id_client' => $id, 
 			'deleted'=>Tokens::STATUS_NOT_DELETED,
 		])->All();
@@ -1478,8 +1577,61 @@ class ApiChatbot extends Model
 					
 				if (TelegramApi::sendData($send, $data['bot_token'])) {
 					return true;
-				}		
+				}
+
+
+
+
+
+
+
+
+
+			} else if ($type==15) {
 				
+				$modelTokens = self::getBtcTokens($data['id_client']);
+				if (empty($modelTokens)) {
+					return false;
+				}
+
+				$send = [];
+				$send['chat_id'] = $data['chat_id'];
+				$send['parse_mode'] = 'HTML';
+				$send['disable_web_page_preview'] = true;
+				$bs64address = substr_replace($modelTokens->identify1, '...', 8, -8);
+				$send['text'] = Yii::t('Api', 'BTC Wallet').' '.$bs64address.' '.Yii::t('Api', 'successfully connected to FinKeeper').'.  <a href="https://t.me/finkeeper_ru/26">FinKeeper(RU)</a>';
+				
+				if (!empty($btn)) {
+					$send['reply_markup'] = $btn;
+				}
+
+				if (TelegramApi::sendData($send, $data['bot_token'])) {
+					return true;
+				}
+				
+			} else if ($type==16) {
+				
+				$modelTokens = self::getBtcTokens($data['id_client']);
+				if (empty($modelTokens)) {
+					return false;
+				}
+
+				$send = [];
+				$send['chat_id'] = $data['chat_id'];
+				$send['parse_mode'] = 'HTML';
+				$send['disable_web_page_preview'] = true;
+				$bs64address = substr_replace($modelTokens->identify1, '...', 8, -8);
+
+				$send['text'] = Yii::t('Api', 'BTC Wallet').' '.$bs64address.' '.Yii::t('Api', 'disconnected from FinKeeper').'.  <a href="https://t.me/finkeeper_ru/26">FinKeeper(RU)</a>';
+				
+				if (!empty($btn)) {
+					$send['reply_markup'] = $btn;
+				}
+					
+				if (TelegramApi::sendData($send, $data['bot_token'])) {
+					return true;
+				}
+
 			} else {
 				return false;
 			}
@@ -2015,6 +2167,21 @@ class ApiChatbot extends Model
 	}	
 	
 	/**
+	 * saveUserpic($id=0, $image='')
+	 */
+	public static function saveEmailToken($id=0, $token='')
+	{
+		$modelClient = Clients::findOne(['id' => $id, 'deleted' => Clients::STATUS_NOT_DELETED]);
+		if (empty($modelClient)) {
+			return false;
+		}
+		
+		$modelClient->tg_auth_token = $token;
+		$modelClient->tg_auth_token_create = time();
+		return $modelClient->save();
+	}	
+	
+	/**
 	 * getWallet($id=0) 
 	 */
 	public static function getWallet($id=0, $currency='usd') 
@@ -2113,5 +2280,5 @@ class ApiChatbot extends Model
 				'rewards' => $rewards,
 			]
 		];
-	}
+	}	
 }

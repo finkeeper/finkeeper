@@ -31,10 +31,8 @@ if (!empty($exchange)) {
 	}
 }
 
-$this->registerJsFile('https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js', ['position' => \yii\web\View::POS_HEAD]);
-
 //Connect JS scripts
-Yii::$app->view->render('elements/__script',[
+Yii::$app->view->render('elements/__config',[
 	'id' => $id,
 	'sc' => $sc,
 	'currency' => $currency,
@@ -47,6 +45,9 @@ Yii::$app->view->render('elements/__script',[
 	'lang' => $lang,
 	'grafema' => $grafema,
 ]);
+
+//Connect JS scripts
+echo Yii::$app->view->render('elements/__script');
 
 
 // Modal window for choosing currencies
@@ -75,12 +76,6 @@ echo Yii::$app->view->render('elements/__as_modal',[
 // Modal staking calc
 echo Yii::$app->view->render('elements/__st_modal');
 
-// Modal Bybit form
-echo Yii::$app->view->render('elements/__bybit_modal');
-
-// Modal OKX form
-echo Yii::$app->view->render('elements/__okx_modal');
-
 // Modal Active Details
 echo Yii::$app->view->render('elements/__ad_modal',[
 	'grafema' => $grafema,
@@ -91,18 +86,6 @@ echo Yii::$app->view->render('elements/__ad_modal',[
 echo Yii::$app->view->render('elements/__target_modal',[
 	'grafema' => $grafema,
 ]);
-
-// Modal Solana form
-echo Yii::$app->view->render('elements/__sol_modal');
-
-// Modal Sui form
-echo Yii::$app->view->render('elements/__sui_modal');
-
-// Modal Apt form
-echo Yii::$app->view->render('elements/__apt_modal', ['id' => $id,]);
-
-// Modal ETH form
-echo Yii::$app->view->render('elements/__eth_modal');
 
 /*
 // console for ios

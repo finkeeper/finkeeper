@@ -5,7 +5,9 @@ namespace frontend\modules\app\controllers;
 use Yii;
 use yii\helpers\Url;
 use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use common\models\Exchange;
+use common\models\Networks;
 use yii\rest\ActiveController;
 use frontend\modules\app\models\ApiChatbot;
 use frontend\modules\app\components\TelegramApi;
@@ -19,10 +21,12 @@ use frontend\modules\app\components\SUIApi;
 use frontend\modules\app\components\SUIApi2;
 use frontend\modules\app\components\APTApi;
 use frontend\modules\app\components\ETHApi;
+use frontend\modules\app\components\BTCApi;
 use frontend\modules\app\components\WalletApi;
 use frontend\modules\app\components\AppController;
 use frontend\modules\app\components\LaunchpoolsApi;
 use frontend\modules\app\components\AptospoolsApi;
+use frontend\modules\app\components\GoogleApi;
 
 /**
  * Default controller for the `service` module
@@ -37,8 +41,6 @@ class DefaultController extends AppController
      */
 	public function init()
     {
-		
-		
 		$this->getView()->theme = Yii::createObject([
 			'class' => '\yii\base\Theme',
 			'basePath' => '@app/themes/th1',
@@ -69,8 +71,10 @@ class DefaultController extends AppController
 			}
 		}
 		
-		ApiChatbot::getUserLang($id, $lang);
 		
+		
+		ApiChatbot::getUserLang($id, $lang);
+	
 		parent::init();
     }
 	
@@ -82,6 +86,8 @@ class DefaultController extends AppController
 
 	public function actionIndex($sc='') 
 	{
+		session_write_close();
+		
 		if (!Yii::$app->user->isGuest) {           
 			$this->accessUser = true;			
         }
@@ -125,6 +131,8 @@ class DefaultController extends AppController
 			
 			$lang = ApiChatbot::getSettingsLang($id);
 			Yii::$app->language=strtolower($lang).'-'.strtoupper($lang);
+			
+			session_start();
 		
 			return $this->render('converter', [
 				'id' => $id,
@@ -144,6 +152,8 @@ class DefaultController extends AppController
 			]);
 			
 		} else {
+			
+			session_start();
 	
 			return $this->render('auth', [
 				'id' => 0,
@@ -159,6 +169,120 @@ class DefaultController extends AppController
 				'used_gpt2' => [],
 			]);
 		}
+	}
+	
+	/** 
+	 * actionServiceAuth()
+	 */
+	public function actionServiceauth()
+	{
+		if (Yii::$app->request->isPost) {
+		
+			session_write_close();
+			
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			
+			if (!Yii::$app->user->isGuest) {           
+				return Yii::$app->response->redirect(['/app']);		
+			}
+			
+			$input = file_get_contents('php://input');
+			$array = @json_decode($input, true);
+			
+			if (empty($array['token'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));			
+			}
+
+			$data = (array) GoogleApi::pstatic()->parseJWT($array['token']);
+			if (!empty($data['error'])) {
+				exit(json_encode($data));
+			}
+			
+			$client_id = GoogleApi::pstatic()->saveData($data);
+			if (!empty($client_id)) {
+				
+				$hash = Yii::$app->security->generateRandomString();
+				
+				if (!ApiChatbot::saveEmailToken($client_id, $hash)) {
+					exit(json_encode([
+						'error' => 1,
+						'message' => Yii::t('Error', 'Not save user data'),
+					]));
+				}
+	
+				exit(json_encode(['error' => 0, 'message' => 'Success', 'token' => $hash]));
+			}
+
+			exit(json_encode([
+				'error' => 1, 
+				'message' => Yii::t('Error', 'Not save user data'),
+			]));
+		
+		} else {
+			
+			throw new NotFoundHttpException();
+		}
+	}
+	
+	/** 
+	 * actionConnect($id=0)
+	 */
+	public function actionConnect($id=0)
+	{
+		session_write_close();
+	
+		if (Yii::$app->user->isGuest) {           
+			return Yii::$app->response->redirect(['/login']);			
+        }
+		
+		if (empty($id)) {
+			exit(json_encode([ 
+				'error' => 1,
+				'status' => '404',
+				'message' => 'Page not found',
+			]));
+		}
+		
+		$network = Networks::findNetwork($id);
+		if (empty($network)) {
+			exit(json_encode([ 
+				'error' => 1,
+				'status' => '404',
+				'message' => 'Page not found',
+			]));
+		}
+		
+		$id_client = Yii::$app->user->getId();
+
+		$log = ApiChatbot::getUserLog($id_client);
+
+		$status = ApiChatbot::getStatusConnect($log->id);
+		
+		$wallet = [
+			'sui' => [
+				'address' => '',
+				'balance' => 0,
+				'price' => 0,
+				'navi' => 0,
+				'rewards' => 0,
+			],
+		];
+			
+		$sc = TelegramApi::tg()->generateUserToken($log->id);
+			
+		$lang = ApiChatbot::getSettingsLang($log->id);
+		Yii::$app->language=strtolower($lang).'-'.strtoupper($lang);
+		
+		session_start();
+
+		return $this->render('connect', [
+			'log_id' => $log->id,
+			'sc' => $sc,
+			'status' => $status,
+			'network' => $network,
+			'lang' => $lang,
+			'wallet' => $wallet,
+        ]);
 	}
 	
 	/** 
@@ -179,6 +303,7 @@ class DefaultController extends AppController
 	public function actionGetbybitbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -332,6 +457,8 @@ class DefaultController extends AppController
 				}
 			}
 		}
+		
+		session_start();
 
 		exit(json_encode([
 			'error'=>0, 
@@ -350,6 +477,7 @@ class DefaultController extends AppController
 	public function actionGetokxbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -511,6 +639,8 @@ class DefaultController extends AppController
 			}
 		}	
 		
+		session_start();
+		
 		exit(json_encode([
 			'error'=>0,
 			'connect' => $status_connect,			
@@ -528,6 +658,7 @@ class DefaultController extends AppController
 	public function actionGetsolbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -657,6 +788,8 @@ class DefaultController extends AppController
 				}
 			}	
 		}
+		
+		session_start();
 
 		exit(json_encode([
 			'error'=>0,
@@ -675,6 +808,7 @@ class DefaultController extends AppController
 	public function actionGetsuibalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -802,6 +936,8 @@ class DefaultController extends AppController
 				}
 			}	
 		}
+		
+		session_start();
 
 		exit(json_encode([
 			'error'=>0,
@@ -820,6 +956,7 @@ class DefaultController extends AppController
 	public function actionGetaptbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -949,6 +1086,8 @@ class DefaultController extends AppController
 			}
 		}
 		
+		session_start();
+		
 		exit(json_encode([
 			'error'=>0,
 			'connect' => $status_connect,			
@@ -966,6 +1105,7 @@ class DefaultController extends AppController
 	public function actionGetethbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -994,7 +1134,7 @@ class DefaultController extends AppController
 		
 		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
 		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
-		
+
 		if ($array['type']==2) {
 			
 			$exname = !empty($array['exname']) ? $array['exname'] : "";
@@ -1095,6 +1235,157 @@ class DefaultController extends AppController
 			}
 		}
 		
+		session_start();
+		
+		exit(json_encode([
+			'error'=>0,
+			'connect' => $status_connect,			
+			'data'=>$data,
+			'summ' => Exchange::formatValue($summ),
+			'sum_active' => Exchange::formatValue($sum_active),
+			'sum_trade' => Exchange::formatValue($sum_trade),
+			'grafema' => $grafema,
+		]));
+	}
+	
+	/** 
+	 * actionGetbtcbalance
+	 */
+	public function actionGetbtcbalance()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
+		
+		$input = file_get_contents('php://input');
+		$array = @json_decode($input, true);
+		$error = [];
+
+		if (empty($array['type'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing type balance')]));			
+		}
+		
+		if (empty($array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		} 
+		
+		if (empty($array['log_id'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not User Chat ID')]));			
+		}
+
+		if (!TelegramApi::validateUser($array['log_id'], $array['sc'])) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Incorrect token')]));	
+		}
+		
+		$modelChatbotLog = ApiChatbot::getChatbotLog($array['log_id']);
+		if (empty($modelChatbotLog)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing user data')]));		
+		}
+
+		$lang = ApiChatbot::getSettingsLang($modelChatbotLog->id);
+		Yii::$app->language = strtolower($lang).'-'.strtoupper($lang);
+
+		if ($array['type']==2) {
+			
+			$exname = !empty($array['exname']) ? $array['exname'] : "";
+			
+			if (empty($array['address'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing BTC Address Wallet')]));			
+			}
+
+			$btc = new BTCApi;
+			$btc->address = $array['address'];
+			
+			$save_tokens = ApiChatbot::saveTokens(9, $array['log_id'], $array['address'], '', '', '', '', $exname);
+
+			if (
+				empty($save_tokens) || 
+				!is_array($save_tokens) || 
+				!empty($save_tokens['error'])
+			) {
+				error_log($save_tokens['message']."\r\n".PHP_EOL, 3, dirname(__FILE__).'/log.log');
+			}
+			
+		} else if ($array['type']==3) {	
+
+			if (empty($array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing BTC Account ID')]));
+			}
+			
+			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
+				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
+			}
+		}
+		
+		$arrayTokens = ApiChatbot::getBtcTokens($modelChatbotLog->id_client);
+		if (empty($arrayTokens)) {
+			exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing token')]));	
+		}
+
+		$currency = Exchange::getDefaultCurrency();
+		$grafema = Exchange::getGrafemCurrency($currency);
+		$data = [];
+		$summ = 0;
+		$sum_active = 0;
+		$sum_trade = 0;
+		$status_connect = 0;
+
+		foreach ($arrayTokens as $modelTokens) {
+		
+			if (empty($modelTokens->user_connect)) {
+				continue;
+			}
+
+			$exname = $modelTokens->exname; 
+
+			$btc = new BTCApi;
+			$btc->address = $modelTokens->identify1;
+		
+			$data[$modelTokens->identify1] =[
+				'active' => [],
+				'asset' => $modelTokens->identify1,
+				'connectname' => $exname,
+				'status_connect' => 0,
+			];
+		
+			$response = $btc->getWalletBalance();
+			if (empty($response['error'])) {		
+				if (!empty($response['data'])) {
+		
+					foreach ($response['data'] as $val) {
+		
+						$summ += $val['currency_value'];
+						$sum_active += $val['currency_value'];
+						$data[$modelTokens->identify1]['active'][] = $val;					
+					}
+
+					usort($data[$modelTokens->identify1]['active'], [$this, 'cmp']);
+					$data[$modelTokens->identify1]['status_connect'] = 1;
+					$status_connect = 1;
+					
+				}
+				
+			} else {
+				$error[] = $response['message'];
+			}
+
+			$data[$modelTokens->identify1]['error'] = $error;
+
+			if ($array['type']==9 && empty($data[$modelTokens->identify1]['status_connect'])) {
+
+				if (ApiChatbot::saveStatusConnect(3, $array['log_id'], 1, $modelTokens->id_token)) {
+						
+				}
+
+				if (!empty($save_tokens['change_token'])) {
+					if (!ApiChatbot::sendMessageConnectedTon($array['log_id'], 15, $modelTokens->id_token)) {
+					
+					}
+				}
+			}
+		}
+		
+		session_start();
+		
 		exit(json_encode([
 			'error'=>0,
 			'connect' => $status_connect,			
@@ -1112,6 +1403,7 @@ class DefaultController extends AppController
 	public function actionGettonbalance()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -1150,9 +1442,14 @@ class DefaultController extends AppController
 			}
 
 			$ton = new TonApi;
-			$ton->address = $array['address'];
+			$raw_address = $ton->getAddressParse($array['address'], 1);
+			if (!empty($raw_address['error'])) {
+				exit(json_encode(['error'=>1, 'message'=>$raw_address['message']]));	
+			}
+			
+			$ton->address = $raw_address;
 
-			$save_tokens = ApiChatbot::saveTokens(1, $array['log_id'], $array['address'], '', '', '', '', $exname);
+			$save_tokens = ApiChatbot::saveTokens(1, $array['log_id'], $raw_address, '', '', '', '', $exname);
 
 			if (
 				empty($save_tokens) || 
@@ -1167,6 +1464,8 @@ class DefaultController extends AppController
 			if (empty($array['id'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Missing ETH Account ID')]));
 			}
+			
+			$array['id'] = str_replace('finkeeper_', '0:', $array['id']);
 			
 			if (!ApiChatbot::saveStatusConnect(3, $array['log_id'], 0, $array['id'])) {
 				exit(json_encode(['error'=>1, 'message'=>Yii::t('Error', 'Not save status connect')]));
@@ -1199,6 +1498,7 @@ class DefaultController extends AppController
 			$data[$modelTokens->identify1] =[
 				'active' => [],
 				'asset' => $modelTokens->identify1,
+				'assetP2PKH' => $ton->getAddressParse($modelTokens->identify1),
 				'connectname' => $exname,
 				'status_connect' => 0,
 			];
@@ -1246,6 +1546,8 @@ class DefaultController extends AppController
 			$address = TonApi::pstatic()->getAddressParse($ton->address);
 			$id = $ton->address;
 		}
+		
+		session_start();
 
 		exit(json_encode([
 			'error'=>0,
@@ -1266,6 +1568,7 @@ class DefaultController extends AppController
 	public function actionAddtarget()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 		
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -1329,6 +1632,8 @@ class DefaultController extends AppController
 		$save_targets['price'] = $array['price'];
 
 		$targets = ApiChatbot::getTargets($array['log_id']);
+		
+		session_start();
 
 		exit(json_encode(['error'=>0, 'message'=>$save_targets, 'targets'=>$targets]));	
 	}
@@ -1339,6 +1644,7 @@ class DefaultController extends AppController
 	public function actionAlassistant()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -1464,6 +1770,7 @@ class DefaultController extends AppController
 	public function actionLaunchpools()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);
@@ -1494,6 +1801,7 @@ class DefaultController extends AppController
 	public function actionAptospools()
 	{
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		session_write_close();
 
 		$input = file_get_contents('php://input');
 		$array = @json_decode($input, true);

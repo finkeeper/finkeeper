@@ -12,6 +12,11 @@ wui-card {
 	position:absolute;
 	top:10px;
 }
+a .fas, 
+a .fa,
+a .far {
+	color:#fff;
+}
 .wkit-dialog__overlay {
 	z-index:9999 !important;
 }
@@ -235,6 +240,38 @@ input {
 	margin:0;
 	cursor:pointer;
 }
+.connect-page {
+    box-sizing: content-box !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 !important;
+    background-color: #0f0638 !important;
+	position: fixed;
+    top: 0;
+    left: 0;
+	width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    transition: opacity 0.15s linear;
+}
+@media (min-width: 576px) {
+    .connect-page {
+        margin: 1.75rem;
+    }
+}
+.wrap-page {
+    position: relative;
+	max-width:700px;
+    display: block;
+    z-index: 1070;
+    pointer-events: auto !important;
+    height: 100%;
+	margin-right: auto;
+    margin-left: auto;
+}
+
 /* END: Common Style */
 /* Home Page Style */
 .page__content {
@@ -1320,362 +1357,6 @@ tc-root {
 	height:0;
 	width:0;
 	overflow:hidden;
-}
-/* END: Actives Page */
-/* Bybit Form Page */
-#wrap-bybit-form {
-	padding:32px 16px 160px 16px;
-	background-color:#0f0638;
-	/*
-	background-image:url();
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-position:center;
-	*/
-}
-
-
-
-/* OKX Form Page */
-#wrap-okx-form {
-	padding:32px 16px 160px 16px;
-	background-color:#0f0638;
-	/*
-	background-image:url();
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-position:center;
-	*/
-}
-#wrap-okx-form .form-currency-search {
-	font-size:24px;
-}
-#wrap-okx-form .fa-asterisk {
-	color:#000000;
-	font-size:18px;
-}
-#wrap-okx-form .input-group {
-	border:2px solid #fff;
-	border-radius:12px;
-	background-color:#3e3567;
-}
-#wrap-okx-form .input-group-text {
-	background:#ffffff;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567 !important;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:10px;
-	padding:10px 5px 10px 10px !important;
-}
-#wrap-okx-form .form-currency-search {
-	outline:none !important;
-	box-shadow:none !important;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:12px;
-	padding:10px 0 !important;
-	height:48px !important!
-}
-#wrap-okx-form .form-currency-search:focus {
-	border:0 !important;
-	font-weight:normal !important;
-}
-#wrap-okx-form .form-currency-search::placeholder {
-  color:#8b86a4;
-  opacity: 1; 
-  font-weight:normal !important;
-}
-#wrap-okx-form .form-currency-search::-ms-input-placeholder {
-  color:#8b86a4;
-}
-#wrap-okx-form .input-group-text img {
-	width:24px;
-}
-#wrap-okx-form .btn-turquoise {
-	bottom:70px;
-	width:100;
-}
-#wrap-okx-form .fa-question-circle {
-	color:#8b86a4;
-	font-size:22px;
-	cursor:pointer;
-	background:transparent;
-	outline:none;
-	border:none;
-	padding:0;
-	margin:0;
-}
-#wrap-okx-form .quest-addon {
-	padding-right:10px !important;
-}
-@media (min-width: 700px) {
-	#wrap-okx-form .btn-turquoise {   
-		width:calc(700px - 30px);
-	}
-}
-.question_popover {
-	border-radius:8px;
-	padding:10px;
-}
-.question_popover .popover-content {
-	background:transparent;
-	font-size:16px !important;
-	color:#000000;
-	height:fit-content;
-	width:fit-content;
-	cursor:pointer;
-}
-.question_popover .popover-content:hover {
-	background:#F1F3F5;
-}
-.question_popover .popover_text a {
-	text-decoration:underline !important;
-	color:#000000;
-}
-.question_popover .fa-external-link-alt {
-	color:#666666;
-	text-decoration:underline !important;
-	font-size:14px;
-}
-
-/*
-.question_popover .popover-content img {
-	margin:8px 8px 0 10px;
-	float:left;
-}
-.question_popover .popover_text {
-	margin:7px 0 0 0;
-	font-size:16px !important;
-	color:#000000;
-	font-weight:600;
-	float:left;
-}
-*/
-
-/* END: OKX Form Page */
-/* Sol Form Page */
-#wrap-sol-form {
-	padding:32px 16px 160px 16px;
-	background-color:#0f0638;
-	/*
-	background-image:url();
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-position:center;
-	*/
-}
-#wrap-sol-form .form-currency-search {
-	font-size:24px;
-}
-#wrap-sol-form .fa-asterisk {
-	color:#000000;
-	font-size:18px;
-}
-#wrap-sol-form .input-group {
-	border:2px solid #fff;
-	border-radius:12px;
-	background-color:#3e3567;
-}
-#wrap-sol-form .input-group-text {
-	background:#ffffff;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567 !important;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:10px;
-	padding:10px 5px 10px 10px !important;
-}
-#wrap-sol-form .form-currency-search {
-	outline:none !important;
-	box-shadow:none !important;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:12px;
-	padding:10px 0 !important;
-	height:48px !important!
-}
-#wrap-sol-form .form-currency-search:focus {
-	border:0 !important;
-	font-weight:normal !important;
-}
-#wrap-sol-form .form-currency-search::placeholder {
-  color:#8b86a4;
-  opacity: 1; 
-  font-weight:normal !important;
-}
-#wrap-sol-form .form-currency-search::-ms-input-placeholder {
-  color:#8b86a4;
-}
-#wrap-sol-form .input-group-text img {
-	width:24px;
-}
-#wrap-sol-form .btn-turquoise {
-	bottom:70px;
-	width:100;
-}
-#wrap-sui-form .btn-wc,
-#wrap-sol-form .btn-wc {
-	background:hsla(230, 100%, 67%, 1) !important;
-	border-color:#0f0638;
-	color:#fff;
-}
-#wrap-sol-form .fa-question-circle {
-	color:#8b86a4;
-	font-size:22px;
-	cursor:pointer;
-	background:transparent;
-	outline:none;
-	border:none;
-	padding:0;
-	margin:0;
-}
-#wrap-sol-form .quest-addon {
-	padding-right:10px !important;
-}
-@media (min-width: 700px) {
-	#wrap-sol-form .btn-turquoise {   
-		width:calc(700px - 30px);
-	}
-}
-.question_popover {
-	border-radius:8px;
-	padding:10px;
-}
-.question_popover .popover-content {
-	background:transparent;
-	font-size:16px !important;
-	color:#000000;
-	height:fit-content;
-	width:fit-content;
-	cursor:pointer;
-}
-.question_popover .popover-content:hover {
-	background:#F1F3F5;
-}
-.question_popover .popover_text a {
-	text-decoration:underline !important;
-	color:#000000;
-}
-.question_popover .fa-external-link-alt {
-	color:#666666;
-	text-decoration:underline !important;
-	font-size:14px;
-}
-/* END: Sol Form Page */
-/* Sui Form Page */
-#wrap-sui-form {
-	padding:32px 16px 160px 16px;
-	background-color:#0f0638;
-	/*
-	background-image:url();
-	background-repeat:no-repeat;
-	background-size:cover;
-	background-position:center;
-	*/
-}
-#wrap-sui-form .form-currency-search {
-	font-size:24px;
-}
-#wrap-sui-form .fa-asterisk {
-	color:#000000;
-	font-size:18px;
-}
-#wrap-sui-form .input-group {
-	border:2px solid #fff;
-	border-radius:12px;
-	background-color:#3e3567;
-}
-#wrap-sui-form .input-group-text {
-	background:#ffffff;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567 !important;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:10px;
-	padding:10px 5px 10px 10px !important;
-}
-#wrap-sui-form .form-currency-search {
-	outline:none !important;
-	box-shadow:none !important;
-	border:0 !important;
-	color:#ffffff;
-	background:#3e3567;
-	font-size:16px;
-	font-weight:normal !important;
-	border-radius:12px;
-	padding:10px 0 !important;
-	height:48px !important!
-}
-#wrap-sui-form .form-currency-search:focus {
-	border:0 !important;
-	font-weight:normal !important;
-}
-#wrap-sui-form .form-currency-search::placeholder {
-  color:#8b86a4;
-  opacity: 1; 
-  font-weight:normal !important;
-}
-#wrap-sui-form .form-currency-search::-ms-input-placeholder {
-  color:#8b86a4;
-}
-#wrap-sui-form .input-group-text img {
-	width:24px;
-}
-#wrap-sui-form .btn-turquoise {
-	bottom:70px;
-	width:100;
-}
-#wrap-sui-form .fa-question-circle {
-	color:#8b86a4;
-	font-size:22px;
-	cursor:pointer;
-	background:transparent;
-	outline:none;
-	border:none;
-	padding:0;
-	margin:0;
-}
-#wrap-sui-form .quest-addon {
-	padding-right:10px !important;
-}
-@media (min-width: 700px) {
-	#wrap-sui-form .btn-turquoise {   
-		width:calc(700px - 30px);
-	}
-}
-.question_popover {
-	border-radius:8px;
-	padding:10px;
-}
-.question_popover .popover-content {
-	background:transparent;
-	font-size:16px !important;
-	color:#000000;
-	height:fit-content;
-	width:fit-content;
-	cursor:pointer;
-}
-.question_popover .popover-content:hover {
-	background:#F1F3F5;
-}
-.question_popover .popover_text a {
-	text-decoration:underline !important;
-	color:#000000;
-}
-.question_popover .fa-external-link-alt {
-	color:#666666;
-	text-decoration:underline !important;
-	font-size:14px;
 }
 /* END: Sui Form Page */
 /* Target Form Page */

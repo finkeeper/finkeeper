@@ -5,9 +5,51 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap5\ActiveForm;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use frontend\assets\FinkeeperAuthAsset;
+
+FinkeeperAuthAsset::register($this);
 
 $this->title = Yii::t('Title', 'FinKeeper');
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerCss("
+	.modal {
+		--bs-modal-color:#fff;
+	}
+	#googleModal .modal-content {
+		min-height:150px;
+		
+	}
+	#googleModal .spinner-border {
+		width:50px !important;
+		height:50px !important;
+		position:absolute;
+		top:10px;
+		left:50%;
+		margin:0 0 0 -30px !important;
+	}
+	#googleModal .alert {
+		position:absolute;
+		top:10px;
+		left:10px;
+		right:10px;
+		bottom:10px;
+	}
+	#wrap-actives #bybit-exchange-connect-button {
+		background-image: url(/images/logos/bybit_connect.png);
+	}
+	.g_id_signin {
+		width: 100%;
+		max-width: 400px;
+		min-width: 200px;
+	}
+	@media (max-width: 768px) {
+		.g_id_signin {
+			max-width: 100%;
+		}
+	}
+}
+", ['id'=>'as2-auth']);
 
 //Connect JS scripts
 Yii::$app->view->render('elements/__script_auth');

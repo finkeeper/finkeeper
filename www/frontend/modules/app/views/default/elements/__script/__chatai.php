@@ -465,7 +465,7 @@ $this->registerJs('
 			
 			if (this.wallet.address) {
 
-				chat += "<div class=\"row\" style=\"margin:0 0 20px 0;font-size:18px\"><div class=\"as2_create_aiagent_wallet\">'.Yii::t('Api', 'AI agent wallet').' " + this.wallet.type.toUpperCase() + " :&nbsp;" + this.app.stringReplace(this.wallet.address, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as2-wallet-copy\" data-address=\"" + this.wallet.address + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + this.wallet.address + "\" target=\"_blank\" id=\"as2-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a>";
+				//chat += "<div class=\"row\" style=\"margin:0 0 20px 0;font-size:18px\"><div class=\"as2_create_aiagent_wallet\">'.Yii::t('Api', 'AI agent wallet').' " + this.wallet.type.toUpperCase() + " :&nbsp;" + this.app.stringReplace(this.wallet.address, "...", 8, 8) + "&nbsp;&nbsp;<span id=\"as2-wallet-copy\" data-address=\"" + this.wallet.address + "\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"></span>&nbsp;&nbsp;<a href=\"https://suivision.xyz/account/" + this.wallet.address + "\" target=\"_blank\" id=\"as2-rewiew-wallet\"><img src=\"/images/icons/globe.svg\" alt=\"\" title=\"\"></a>";
 				
 				
 				if (this.showBalance) {
@@ -495,7 +495,11 @@ $this->registerJs('
 			
 			chat +="<div class=\"text-center as2-title-chat\">'.Yii::t('Api', 'Chat').'</div>";
 	
-			chat +="<button class=\"btn btn-as2button\" id=\"as2-btn-chat-portfolio\">'.Yii::t('Api', 'Analise Portfolio').'</button>&nbsp;";
+			if (log_id==8 || log_id==15) {
+			
+				chat +="<button class=\"btn btn-as2button\" id=\"as2-btn-chat-portfolio\">'.Yii::t('Api', 'Analise Portfolio').'</button>&nbsp;";
+				
+			}
 			
 			chat +="<button class=\"btn btn-as2button\" id=\"as2-btn-chat-launchpools\">'.Yii::t('Api', 'Exchange LaunchPools').'</button>&nbsp;";
 			
@@ -526,7 +530,10 @@ $this->registerJs('
 			});
 			
 			jQuery("#" + this.chat).delegate("#as2-btn-chat-portfolio", "click", function() {
-				$this.sendPortfolioAiagentAS2();
+				
+				$this.createPortfolioCSVAS2();
+				
+				//$this.sendPortfolioAiagentAS2();
 			});
 			
 			jQuery("#" + this.chat).delegate("#as2-btn-chat-launchpools", "click", function() {
@@ -1477,6 +1484,185 @@ $this->registerJs('
 			elem.html(buttonName + " <i class=\"fas fa-asterisk fa-spin\"></i>");
 			this.sendMessageAl(query, 1);
 		}
+		
+		/**
+		 * createPortfolioCSVAS2()
+		 */
+		createPortfolioCSVAS2() {
+			
+			var objectTo = [];
+
+			if (
+				typeof userActives!=="undefined" && 
+				userActives!==undefined && 
+				userActives &&
+				typeof userActives.data!=="undefined" && 
+				userActives.data!==undefined && 
+				userActives.data
+			) {
+				var key1;
+				for (var key1 in userActives.data) {
+					
+					if (
+						typeof userActives.data[key1]!=="undefined" && 
+						userActives.data[key1]!==undefined && 
+						userActives.data[key1]
+					) {
+						var key2;
+						for (var key2 in userActives.data[key1]) {
+					
+							if (
+								typeof userActives.data[key1][key2].active!=="undefined" && 
+								userActives.data[key1][key2].active!==undefined && 
+								userActives.data[key1][key2].active &&
+								Object.keys(userActives.data[key1][key2].active).length!==0
+							) {
+								var key3;
+								for (var key3 in userActives.data[key1][key2].active) {
+	
+									if (
+										typeof userActives.data[key1][key2].active[key3].listCoin!=="undefined" && 
+										userActives.data[key1][key2].active[key3].listCoin!==undefined && 
+										userActives.data[key1][key2].active[key3].listCoin &&
+										Object.keys(userActives.data[key1][key2].active[key3].listCoin).length!==0
+									) {
+										var key4;
+										for (var key4 in userActives.data[key1][key2].active[key3].listCoin) {
+											
+											objectTo.push({
+				"coin_name": userActives.data[key1][key2].active[key3].name,
+				"symbol": userActives.data[key1][key2].active[key3].symbol,
+				"type": userActives.data[key1][key2].active[key3].source,
+				"connect_name":  userActives.data[key1][key2].active[key3].connectname,
+				"coin_icon": userActives.data[key1][key2].active[key3].img,
+				"balance": userActives.data[key1][key2].active[key3].listCoin[key4].balance,
+				"usd_balance": userActives.data[key1][key2].active[key3].listCoin[key4].currency_value,
+				"network": userActives.data[key1][key2].active[key3].listCoin[key4].network,
+				"network_icon": userActives.data[key1][key2].active[key3].listCoin[key4].network_icon,
+				"price": parseFloat(userActives.data[key1][key2].active[key3].listCoin[key4].price),	
+											});
+										}
+									}
+								}
+							}
+							
+							if (
+								userActives.data[key1][key2].trading!=="undefined" && 
+								userActives.data[key1][key2].trading!==undefined && 
+								userActives.data[key1][key2].trading &&
+								Object.keys(userActives.data[key1][key2].trading).length!==0
+							) {
+								var key3;
+								for (var key3 in userActives.data[key1][key2].trading) {
+								
+									if (
+										typeof userActives.data[key1][key2].trading[key3].listCoin!=="undefined" && 
+										userActives.data[key1][key2].trading[key3].listCoin!==undefined && 
+										userActives.data[key1][key2].trading[key3].listCoin &&
+										Object.keys(userActives.data[key1][key2].trading[key3].listCoin).length!==0
+									) {
+										var key4;
+										for (var key4 in userActives.data[key1][key2].trading[key3].listCoin) {
+									
+											objectTo.push({
+				"coin_name": userActives.data[key1][key2].trading[key3].name,
+				"symbol": userActives.data[key1][key2].trading[key3].symbol,
+				"type": userActives.data[key1][key2].trading[key3].source,
+				"connect_name":  userActives.data[key1][key2].trading[key3].connectname,
+				"coin_icon": userActives.data[key1][key2].trading[key3].img,
+				"balance": userActives.data[key1][key2].trading[key3].listCoin[key4].balance,
+				"usd_balance": userActives.data[key1][key2].trading[key3].listCoin[key4].currency_value,
+				"network": userActives.data[key1][key2].trading[key3].listCoin[key4].network,
+				"network_icon": userActives.data[key1][key2].trading[key3].listCoin[key4].network_icon,
+				"price": parseFloat(userActives.data[key1][key2].trading[key3].listCoin[key4].price),	
+											});
+										}
+									}
+								}	
+							}
+						}
+					}
+				}
+			}
+
+			const date = new Date();
+			const day = String(date.getDate()).padStart(2, "0");
+			const month = String(date.getMonth() + 1).padStart(2, "0"); 
+			const year = date.getFullYear();
+
+			const formattedDate = `${day}_${month}_${year}`;
+    
+			var name_file = "portfolio_" + formattedDate;
+			//this.downloadCSV(objectTo, name_file);
+			this.downloadJSON(objectTo, name_file);
+			
+
+		}
+		
+		/**
+		 * convertToCSV(arr)
+		 */
+		convertToCSV(objArray) {
+			var arr = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
+			
+			var str =
+			  `${Object.keys(arr[0])
+				.map((value) => `"${value}"`)
+				.join(",")}` + "\r\n";
+			
+			var csvContent = arr.reduce((st, next) => {
+			  st +=
+				`${Object.values(next)
+				  .map((value) => `"${value}"`)
+				  .join(",")}` + "\r\n";
+			  return st;
+			}, str);
+			
+			return csvContent;
+		}
+		
+		/**
+		 * downloadCSV(data, filename = "data")
+		 */
+		downloadCSV(data, filename = "data") {
+			
+			var data =  this.convertToCSV(data);
+
+			const blob = new Blob([data], { type: "text/csv;charset=utf-8;" });
+			const url = URL.createObjectURL(blob);
+  
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = filename + ".csv";
+			link.click();
+  
+			// Освобождаем память
+			setTimeout(() => URL.revokeObjectURL(url), 100);
+		}
+		
+		/**
+		 * downloadJSON(data, filename = "data")
+		 */
+		downloadJSON(data, filename = "data") {
+
+			var data = JSON.stringify(data);
+
+			const blob = new Blob([data], { type: "application/json;charset=utf-8;" });
+			const url = URL.createObjectURL(blob);
+  
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = filename + ".json";
+			link.click();
+  
+			// Освобождаем память
+			setTimeout(() => URL.revokeObjectURL(url), 100);
+		}
+		
+		
+		
+		
+		
 
 		// Aptos launchpools button
 		

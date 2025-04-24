@@ -126,13 +126,18 @@ class AptospoolsApi {
 				
 				if ($pool['protocol']=='Joule') {
 					
-					$protocol_icon = 'https://app.joule.finance/favicon.ico';
+					$protocol_icon = '/images/logos/joule2.png';
 					$protocol_link = 'https://app.joule.finance/rewards?tabId=referral&referralAddress=0x56ff2fc971deecd286314fe99b8ffd6a5e72e62eacdc46ae9b234c5282985f97';
 					
 				} else if ($pool['protocol']=='Echelon') {
 					
-					$protocol_icon = 'https://echelon.market/favicon.ico';
+					$protocol_icon = '/images/logos/echelon2.png';
 					$protocol_link = 'https://app.echelon.market/dashboard?network=aptos_mainnet';
+					
+				} else if ($pool['protocol']=='Aries') {
+					
+					$protocol_icon = '/images/logos/aries3.png';
+					$protocol_link = 'https://app.ariesmarkets.xyz/lending';
 				}
 
 				$data[] = [

@@ -117,6 +117,7 @@ class OKXApi {
 					
 					$data['active'][] = [
 						'balance' => $balance,
+						'negative' => 0,
 						'name' => $val['ccy'],
 						'currency' => $currency,
 						'sort' => $value,

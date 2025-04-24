@@ -37,7 +37,7 @@ class FinkeeperAppAssetv3 extends AssetBundle
 		'/finkeeper/js/appkit/dist/vendors-node_modules_reown_appkit-scaffold-ui_dist_esm_exports_w3m-modal_js.bundle.js',
 		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_metamask-sdk_lib_esm_index_js.bundle.js',
 		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_sdk_lib_esm_index_js.bundle.js',
-		'finkeeper/js/site-v3.js?61000',
+		'finkeeper/js/site-v3.js?64000',
 		//YII_ENV_DEV ? 'finkeeper/js/site.js?222' : 'finkeeper/js/site.min.js?222'
     ];
 	

@@ -1,13 +1,19 @@
-var tonConnectUI, userAmount, userQueryID, userTonSend, userUSDTSend, userUSDT, swapCommission = 0.1, userAmount2, userAQUASend2, userUSDTSend2, userUSDT2, swapCommission2 = 1, lang = 'en', fromIdentify = 'finkeeperuser156974', toIdentify = 'finkeeperai15697426';
+var tonConnectUI, userAmount, userQueryID, userTonSend, userUSDTSend, userUSDT, swapCommission = 0.1, userAmount2, userAQUASend2, userUSDTSend2, userUSDT2, swapCommission2 = 1, userTonDeposit, userUSDTDeposit, lang = 'en';
 
 document.addEventListener("DOMContentLoaded", function () {
-	var lang = document.querySelector('script[data-id="bundle"][data-id]').getAttribute('data-lang');
 	
+	var lang = 'en';
+	var langElem = document.querySelector('script[data-id="bundle"][data-id]');
+	if (typeof langElem!=="undefined" && langElem!==undefined && langElem) {
+		lang = langElem.getAttribute('data-lang');
+	}
+	
+	/*
 	if (typeof TON_CONNECT_UI!=="undefined" && TON_CONNECT_UI!==undefined && TON_CONNECT_UI) {
 	
 		tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
 			manifestUrl: "https://app.finkeeper.pro/tonconnect-manifest.json",
-			buttonRootId: "ton-connect",
+			buttonRootId: "ton-connect-button-as152",
 			language: lang
 		});
 
@@ -18,16 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		tonConnectUI.onStatusChange((walletAndwalletInfo) => {
 
-			if (tonConnectUI.wallet===null) {
-
-				if (bybitConnectedStatus==false) {
-					jQuery("#wrap-actives #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");	
-				} else {
-					bybitconnect();
-					okxconnect();
-				}
-
-			} else {
+			if (tonConnectUI.wallet!==null) {
 
 				var address = tonConnectUI.wallet.account.address;
 				if (!$('#adModal').hasClass('show')) {
@@ -44,8 +41,154 @@ document.addEventListener("DOMContentLoaded", function () {
 	$(document).delegate(".ton_connect_button", "click", function(){
 		tonConnectUI.openModal();
 	});
+	*/
 
 });
+
+function getAllActive() {
+
+	tonSummActive = parseFloat(tonSummActive);
+
+	if (
+		typeof tonSummActive==="undefined" || 
+		tonSummActive===undefined || 
+		!tonSummActive || 
+		isNaN(tonSummActive) ||
+		(!isFloat(tonSummActive) && !isInt(tonSummActive))
+	) {
+		tonSummActive = 0;		
+	}	
+		
+	bybitSummActive = parseFloat(bybitSummActive);	
+	
+	if (
+		typeof bybitSummActive==="undefined" || 
+		bybitSummActive===undefined || 
+		!bybitSummActive || 
+		isNaN(bybitSummActive) ||
+		(!isFloat(bybitSummActive) && !isInt(bybitSummActive))
+	) {
+		bybitSummActive = 0;		
+	}	
+	
+	okxSummActive = parseFloat(okxSummActive);	
+	
+	if (
+		typeof okxSummActive==="undefined" || 
+		okxSummActive===undefined || 
+		!okxSummActive || 
+		isNaN(okxSummActive) ||
+		(!isFloat(okxSummActive) && !isInt(okxSummActive))
+	) {
+		okxSummActive = 0;		
+	}	
+	
+	solSummActive = parseFloat(solSummActive);	
+	
+	if (
+		typeof solSummActive==="undefined" || 
+		solSummActive===undefined || 
+		!solSummActive || 
+		isNaN(solSummActive) ||
+		(!isFloat(solSummActive) && !isInt(solSummActive))
+	) {
+		solSummActive = 0;		
+	}	
+
+	suiSummActive = parseFloat(suiSummActive);	
+
+	if (
+		typeof suiSummActive==="undefined" || 
+		suiSummActive===undefined || 
+		!suiSummActive || 
+		isNaN(suiSummActive) ||
+		(!isFloat(suiSummActive) && !isInt(suiSummActive))
+	) {
+		suiSummActive = 0;		
+	}	
+	
+	aptSummActive = parseFloat(aptSummActive);	
+
+	if (
+		typeof aptSummActive==="undefined" || 
+		aptSummActive===undefined || 
+		!aptSummActive || 
+		isNaN(aptSummActive) ||
+		(!isFloat(aptSummActive) && !isInt(aptSummActive))
+	) {
+		aptSummActive = 0;		
+	}
+
+	ethSummActive = parseFloat(ethSummActive);	
+
+	if (
+		typeof ethSummActive==="undefined" || 
+		ethSummActive===undefined || 
+		!ethSummActive || 
+		isNaN(ethSummActive) ||
+		(!isFloat(ethSummActive) && !isInt(ethSummActive))
+	) {
+		ethSummActive = 0;		
+	}
+	
+	btcSummActive = parseFloat(btcSummActive);	
+
+	if (
+		typeof btcSummActive==="undefined" || 
+		btcSummActive===undefined || 
+		!btcSummActive || 
+		isNaN(btcSummActive) ||
+		(!isFloat(btcSummActive) && !isInt(btcSummActive))
+	) {
+		btcSummActive = 0;		
+	}
+
+	var allSumm = tonSummActive + bybitSummActive + okxSummActive + solSummActive + suiSummActive + aptSummActive + ethSummActive + btcSummActive;
+	
+	if (
+		typeof allSumm==="undefined" || 
+		allSumm===undefined || 
+		!allSumm || 
+		isNaN(allSumm) ||
+		allSumm==0
+	) {
+		
+		jQuery('#all-summ-active').show();
+		jQuery('#all-summ-active>.all-summ-price').text(0);
+		
+	} else {
+	
+		if (allSumm>1) {
+			allSumm = Math.floor(allSumm * 100 ) / 100;
+		}
+
+		jQuery('#all-summ-active>.all-summ-price').text(formatValue(allSumm));
+		jQuery('#all-summ-active').show();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function formatValue(value, type=0) {
 	if (isNaN(value) || typeof value==="undefined" || value===undefined || !value) {
@@ -452,72 +595,7 @@ function calcform() {
 	jQuery("#ct-calc-sum_yield").val(sum_yield.toFixed(2));
 }
 
-function getAllActive() {
 
-	tonSummActive = parseFloat(tonSummActive);
-
-	if (
-		typeof tonSummActive==="undefined" || 
-		tonSummActive===undefined || 
-		!tonSummActive || 
-		isNaN(tonSummActive) ||
-		(!isFloat(tonSummActive) && !isInt(tonSummActive))
-	) {
-		tonSummActive = 0;		
-	}	
-		
-	bybitSummActive = parseFloat(bybitSummActive);	
-	
-	if (
-		typeof bybitSummActive==="undefined" || 
-		bybitSummActive===undefined || 
-		!bybitSummActive || 
-		isNaN(bybitSummActive) ||
-		(!isFloat(bybitSummActive) && !isInt(bybitSummActive))
-	) {
-		bybitSummActive = 0;		
-	}	
-	
-	okxSummActive = parseFloat(okxSummActive);	
-	
-	if (
-		typeof okxSummActive==="undefined" || 
-		okxSummActive===undefined || 
-		!okxSummActive || 
-		isNaN(okxSummActive) ||
-		(!isFloat(okxSummActive) && !isInt(okxSummActive))
-	) {
-		okxSummActive = 0;		
-	}	
-	
-	solSummActive = parseFloat(solSummActive);	
-	
-	if (
-		typeof solSummActive==="undefined" || 
-		solSummActive===undefined || 
-		!solSummActive || 
-		isNaN(solSummActive) ||
-		(!isFloat(solSummActive) && !isInt(solSummActive))
-	) {
-		solSummActive = 0;		
-	}	
-	
-	
-	
-		
-	var allSumm = tonSummActive + bybitSummActive + okxSummActive + solSummActive;
-	
-	if (allSumm==0) {
-		return false;
-	}
-	
-	if (allSumm>1) {
-		allSumm = Math.floor(allSumm * 100 ) / 100;
-	}
-
-	jQuery('#all-summ-active>.all-summ-price').text(formatValue(allSumm));
-	jQuery('#all-summ-active').show();
-}
 
 function getCoinsActive() {
 	
@@ -551,46 +629,9 @@ function getCoinsActive() {
 	
 }
 
-function getSettings() {
-
-	var set1 = abcpLocalStorage(10);
-	if (typeof set1!=="undefined" && set1!==undefined && set1==1) {
-
-		jQuery('#select-hsa').prop('checked', true);
-		jQuery('.small_value').hide();
-	
-	}
-	
-	return false;
-}
-
 function tonRecalculation() {
 	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
 	tonSummActive = 0;
-	getAllActive();
-}
-
-function bybitRecalculation() {
-	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
-	bybitSummActive = 0;
-	getAllActive();
-}
-
-function okxRecalculation() {
-	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
-	okxSummActive = 0;
-	getAllActive();
-}
-
-function solRecalculation() {
-	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
-	solSummActive = 0;
-	getAllActive();
-}
-
-function suiRecalculation() {
-	jQuery("#all-summ-active").hide().find(".all-sum-price").html("0");
-	suiSummActive = 0;
 	getAllActive();
 }
 
@@ -778,30 +819,6 @@ function displayBackdrop(type=0, flag=0) {
 	
 	if (type==1) {
 		elem = jQuery("#asModal #ton-wallet-connect-button .backdrop-connect-button");
-	} else if(type==2) {
-		elem = jQuery("#asModal #sol-wallet-connect-button .backdrop-connect-button");
-		send_button = jQuery("#ct-sol-api-send");
-		text_button = jQuery(send_button).text();
-	} else if(type==3) {
-		elem = jQuery("#asModal #bybit-exchange-connect-button .backdrop-connect-button");
-		send_button = jQuery("#ct-bybit-api-send");
-		text_button = jQuery(send_button).text();
-	} else if(type==4) {
-		elem = jQuery("#asModal #okx-exchange-connect-button .backdrop-connect-button");
-		send_button = jQuery("#ct-okx-api-send");
-		text_button = jQuery(send_button).text();
-	} else if(type==5) {
-		elem = jQuery("#asModal #sui-wallet-connect-button .backdrop-connect-button");
-		send_button = jQuery("#ct-sui-api-send");
-		text_button = jQuery(send_button).text();
-	} else if(type==6) {
-		elem = jQuery("#asModal #wc-wallet-connect-button .backdrop-connect-button");
-		send_button = jQuery("#ct-wc-api-send");
-		text_button = jQuery(send_button).text();
-	} else if(type==7) {
-		//elem = jQuery("#asModal #sol-wallet-connect-button .backdrop-connect-button");
-		//send_button = jQuery("#wallet-connect");
-		//text_button = jQuery(send_button).text();
 	} else {
 		return false;
 	}
@@ -832,18 +849,6 @@ function displayConnectIcon(type=0, flag=0, error=0) {
 	
 	if (type==1) {
 		elem = jQuery("#asModal #ton-wallet-connect-button .mdi");
-	} else if(type==2) {
-		elem = jQuery("#asModal #sol-wallet-connect-button .mdi");
-	} else if(type==3) {
-		elem = jQuery("#asModal #bybit-exchange-connect-button .mdi");
-	} else if(type==4) {
-		elem = jQuery("#asModal #okx-exchange-connect-button .mdi");
-	} else if(type==5) {
-		elem = jQuery("#asModal #sui-wallet-connect-button .mdi");
-	} else if(type==6) {
-		elem = jQuery("#asModal #wc-wallet-connect-button .mdi");
-	} else if(type==7) {
-		//elem = jQuery("#asModal #sol-wallet-connect-button .mdi");
 	} else {
 		return false;
 	}
@@ -852,7 +857,7 @@ function displayConnectIcon(type=0, flag=0, error=0) {
 	
 	if (flag) {
 		if (typeof error!=="undefined" && error!==undefined && error) {
-			jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off error");
+			//jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off error");
 		} else {
 			jQuery(elem).removeClass("mdi-wifi-off").addClass("mdi-wifi");
 		}
@@ -894,7 +899,7 @@ function findCoins(search) {
 	
 	search = search.toLowerCase();
 	
-	var result = $("#user_balance div.option_item[data-id^=\"" + search + "\"]");
+	var result = $("#user_balance div.option_item[data-id*=\"" + search + "\"]");
 	if (
 		typeof result!=="undefined" && 
 		result!==undefined && 
@@ -1048,21 +1053,13 @@ function changeFooter(type) {
 
 function getAsModalBlockSize() {
 	var height = $("#asModal .modal-dialog").height();	
-	jQuery("#user_balance").height(height-300);
-	jQuery("#chat-form-as").height(height-300);
+	jQuery("#user_balance").height(height-100);
 }
 
 jQuery(document).ready(function($) {
 
 	openStartPage();
-	
-	jQuery("#chat-form-as").perfectScrollbar({
-		wheelSpeed:0.3,
-		wheelPropagation: true,
-		minScrollbarLength: 20,
-		maxHeight: "300px"
-	});
-	
+
 	jQuery("#user_balance").perfectScrollbar({
 		wheelSpeed:0.3,
 		wheelPropagation: true,
@@ -1078,6 +1075,7 @@ jQuery(document).ready(function($) {
 
 	$("#search-actives").on("click", function() {
 		$("#form-search-active").show();
+		$("#search-active-input").focus();
 	});
 	
 	$("#close-search").on("click", function() {
@@ -1086,7 +1084,7 @@ jQuery(document).ready(function($) {
 	
 	$('#smart-toy-aiagent').on('click', function(){
 		$('#list-active-page, .user-actives-list>.bottom-navigation').hide();
-		$('#chat-active-page, .user-actives-chat>.bottom-chat-form').show();
+		$('#chat-active-page, .user-actives-chat>#bottom-chat-form').show();
 		$('#chat-active-page').css('marginTop', '20px');
 		$('#chat-active-page .fa-times').show();
 	});
@@ -1346,15 +1344,9 @@ jQuery(document).ready(function($) {
 		userAQUASend2 = jQuery("#adModal #inputAQUADeposit2").val();
 		userAQUASend2 = toFloatAmont(userAQUASend2);
 	});
-	
-	// Add storage data
-	abcpLocalStorage(6);
-	
+
 	// ARP calc
 	calcform();
-	
-	// Settings
-	getSettings();
 
 	// Input currency
 	$("#ti-conv-1").on("input", function() {			
@@ -1394,10 +1386,6 @@ jQuery(document).ready(function($) {
 
 	$(document).delegate(".view_address", "click", function(){
 		copyValue(this, 2);
-	});
-	
-	$("#asModal").delegate("#as-wallet-copy", "click", function() {
-		copyValue(this, 3);
 	});
 	
 	// Radio language
@@ -1444,78 +1432,6 @@ jQuery(document).ready(function($) {
 			});
 			modal.show();
 		}
-	});
-	
-	$(document).delegate(".bybit_connect_button", "click", function(){
-		if (bybitConnectedStatus==false) {
-			if (!jQuery("#bybitModal").hasClass("show")) {
-				closeAllModal();
-				getActiveButton(2);
-				var modal = new bootstrap.Modal(document.getElementById("bybitModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-			}
-		}
-	});
-	
-	$("#ct-bybit-api-send").on("click", function() {
-		bybitform();
-	});	
-
-	$(document).delegate(".okx_connect_button", "click", function(){
-		if (okxConnectedStatus==false) {
-			if (!jQuery("#okxModal").hasClass("show")) {
-				closeAllModal();
-				getActiveButton(2);
-				var modal = new bootstrap.Modal(document.getElementById("okxModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-			}
-		}
-	});
-	
-	$("#ct-okx-api-send").on("click", function() {
-		okxform();
-	});
-	
-	$(document).delegate(".sol_connect_button", "click", function(){
-		if (solConnectedStatus==false) {
-			if (!jQuery("#solModal").hasClass("show")) {
-				closeAllModal();
-				getActiveButton(2);
-				var modal = new bootstrap.Modal(document.getElementById("solModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-			}
-		}
-	});
-	
-	$("#ct-sol-api-send").on("click", function() {
-		solform();
-	});
-
-	$(document).delegate(".sui_connect_button", "click", function(){
-		if (suiConnectedStatus==false) {
-			if (!jQuery("#suiModal").hasClass("show")) {
-				closeAllModal();
-				getActiveButton(2);
-				var modal = new bootstrap.Modal(document.getElementById("suiModal"), {
-					backdrop: false,
-					keyboard: false			
-				});
-				modal.show();
-			}
-		}
-	});
-	
-	$("#ct-sui-api-send").on("click", function() {
-		suiform();
 	});
 
 	$("#target_actions-button").on("click", function() {
@@ -1627,27 +1543,12 @@ jQuery(document).ready(function($) {
 	$("#ct-calc-days").on("input", function() {
 		calcform();
 	});
-	
-	$(document).delegate(".bybit_disconnect_button","click", function(){
-		bybitdisconnect();
-	});
-	
+
 	$(document).delegate(".ton_disconnect_button","click", function(){
-		tondisconnect();
+		var address = $(this).find('.dataid').attr('id');
+		tondisconnect(address);
 	});
-	
-	$(document).delegate(".okx_disconnect_button","click", function(){
-		okxdisconnect();
-	});
-	
-	$(document).delegate(".sol_disconnect_button","click", function(){
-		soldisconnect();
-	});
-	
-	$(document).delegate(".sui_disconnect_button","click", function(){
-		suidisconnect();
-	});
-	
+
 	$("#send-invite").on("click", function() {
 		console.log('send invite');
 	});
@@ -1655,9 +1556,11 @@ jQuery(document).ready(function($) {
 	$("#select-hsa").on("click", function() {
 		if ($(this).is(":checked")){
 			jQuery('.small_value').hide();
+			jQuery('body').addClass('as-sm-hide'); 
 			abcpLocalStorage(9, 1);
 		} else {
 			jQuery('.small_value').show();
+			jQuery('body').removeClass('as-sm-hide');
 			abcpLocalStorage(9, 0);
 		}
 	});
@@ -1675,22 +1578,5 @@ jQuery(document).ready(function($) {
 			});
 			modal.show();
 		}
-	});
-	
-	document.addEventListener( 'keyup', function(event) {
-		if(event.keyCode == 13) {
-			if (jQuery("#asModal").hasClass("show")) {
-				var input = $('#chat-active-input').val();
-				if (typeof input==="undefined" || input===undefined || !input) {
-					return false;
-				}
-			
-				$('#chat-active-send').trigger('click');
-			}
-		}
-	});
-	
-	$("#asModal").delegate("#create-aiagent-wallet", "click", function() {
-		createWalletProcess();
 	});
 });

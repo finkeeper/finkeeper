@@ -110,6 +110,10 @@ $this->registerJs('
 				var end = 0;
 			}
 			
+			if (typeof str==="undefined" || str===undefined || !str || typeof str!=="string") {
+				return str;	
+			}
+			
 			var newStr = "";
 			
 			if (!str) {
@@ -258,6 +262,53 @@ $this->registerJs('
 
 			return day + "." + month + "." + year + " " + hours + ":" + minutes;
 									
+		}
+		
+		/** 
+		 * updatePopover(id="", template="", placement="bottom", trigger="click")
+		 */
+		updatePopover(id="", template="", placement="bottom", trigger="click") {
+	
+			if (typeof id==="undefined" || id===undefined || !id) {
+				return false;
+			} 
+	
+			if (typeof template==="undefined" || template===undefined || !template) {
+				return false;
+			} 
+
+			var elem = jQuery("#" + id);
+			if (!elem.length) {
+				return false;
+			}
+			
+			var popover = bootstrap.Popover.getInstance(elem);
+			popover.dispose();
+
+			elem.popover({
+				placement: placement,
+				content: " ",
+				trigger: trigger,
+				template: template,
+			});
+		}
+		
+		/**
+		 * getSettingsLS(type, value)
+		 */
+		getSettingsLS(type) {
+			
+			var key = "as2settings" + type;	
+			return localStorage.getItem(key);
+		}
+		
+		/**
+		 * setSettingsLS(type, value)
+		 */
+		setSettingsLS(type, value) {
+			
+			var key = "as2settings" + type;	
+			return localStorage.setItem(key, value);
 		}
 	}
 ', yii\web\View::POS_END);		

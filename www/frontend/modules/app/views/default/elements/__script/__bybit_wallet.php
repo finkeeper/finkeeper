@@ -38,6 +38,13 @@ $this->registerCss("
 		top:0px;
 		left:2px;
 	}
+	.as2854-wcb .mdi-eye-off {
+		color:#ccc;
+		font-size:20px;
+		position:absolute;
+		bottom:0px;
+		right:2px;
+	}
 	.as2854-wcb .fa-hourglass {
 		position:absolute;
 		top:50%;
@@ -90,6 +97,16 @@ $this->registerCss("
 		text-decoration:underline !important;
 		color:#000000;
 	}
+	.as2854-connect_popover_active {
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
+		overflow:hidden;
+		box-sizing:border-box;
+		padding:4px;
+		border-radius:16px;
+		margin-top:0px !important;
+		width:190px;
+		height:125px;
+	}
 	.as2854-connect_popover {
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
 		overflow:hidden;
@@ -98,7 +115,7 @@ $this->registerCss("
 		border-radius:16px;
 		margin-top:0px !important;
 		width:190px;
-		height:56px;
+		height:54px;
 	}
 	.as2854-disconnect_popover {
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
@@ -111,6 +128,7 @@ $this->registerCss("
 		height:80px;
 	}
 	@media (max-width: 700px) {
+		.as2854-connect_popover_active,
 		.as2854-connect_popover{
 			width:170px !important;
 			margin:auto !important;
@@ -120,11 +138,17 @@ $this->registerCss("
 			margin:auto !important;
 		}
 	}
+	.as2854-connect_popover_active>div,
 	.as2854-disconnect_popover>div,
 	.as2854-connect_popover>div {
 		width:fit-content;
 		margin:auto;
 	}
+	.as2854-connect_popover_active a,
+	.as2854-connect_popover a {
+		text-decoration:none !important;
+	}
+	.as2854-connect_popover_active  .as2854-pc,
 	.as2854-disconnect_popover .as2854-pc,
 	.as2854-connect_popover .as2854-pc {
 		background:transparent;
@@ -137,11 +161,13 @@ $this->registerCss("
 	.as2854-connect_popover .as2854-pc:hover {
 		background:#F1F3F5;
 	}
+	.as2854-connect_popover_active .as2854-pc img,
 	.as2854-disconnect_popover .as2854-pc img,
 	.as2854-connect_popover .as2854-pc img {
 		margin:8px 8px 0 10px;
 		float:left;
 	}
+	.as2854-connect_popover_active .as2854-pc .mdi,
 	.as2854-connect_popover .as2854-pc .mdi {
 		font-size:22px;
 		margin:3px 4px 0 0;
@@ -152,6 +178,7 @@ $this->registerCss("
 		margin:3px 4px 0 0;
 		float:left;
 	}
+	.as2854-connect_popover_active .as2854-pt,
 	.as2854-connect_popover .as2854-pt {
 		margin:4px 0 0 0;
 		font-size:20px !important;
@@ -243,6 +270,10 @@ $this->registerCss("
 	}
 	#as2855-wbbf #as2855-bbc .mdi-logout {
 		cursor:pointer;
+		color:#f79f4c;
+	}
+	#as2855-wbbf #as2855-bbc .copy_button {
+		cursor:pointer;
 	}
 	#as2855-wbbf #as2855-bbc .as2855-tbcb {
 		font-size:22px;
@@ -256,6 +287,11 @@ $this->registerCss("
 		color:#666666;
 		text-decoration:underline !important;
 		font-size:14px;
+	}
+	.as2854-spin-active {
+		color:#fff;
+		font-size:30px;
+		margin:0 0 0 50%;
 	}
 	
 ", ['id'=>'as2-bybit']);
@@ -274,6 +310,8 @@ $this->registerJs('
 			this.bybitSummActive = 0;
 			this.userActives = {bybit:{}};
 			this.userActivesMin = {bybit:{}};
+			this.turnBybitStatus = 0;
+			this.saveBybitActives = {};
 		}
 		
 		/**
@@ -301,6 +339,8 @@ $this->registerJs('
 				if (typeof options.connect!=="undefined" && options.connect!==undefined && options.connect) {
 					this.connect = options.connect;
 				}
+				
+				this.turnBybitStatus = this.app.getSettingsLS("bybitturn");
 			}
 		}
 		
@@ -311,6 +351,7 @@ $this->registerJs('
 			this.optionBybit(options);
 			this.createButton();
 			this.createForm();
+			this.bybitconnect(1);
 		}
 		
 		/**
@@ -323,7 +364,18 @@ $this->registerJs('
 		
 			jQuery("#" + this.button).addClass("as2854-wcb");
 			
-			button += "<span class=\"mdi mdi-wifi-off\"></span><div tabindex=\"0\" role=\"button\" id=\"as2854-becb\" class=\"as2854-acb\"></div><div class=\"as2854-bcb\" style=\"display:none\"><span class=\"far fa-hourglass fa-spin\"></span></div>";
+			var turnClass = "as2854-turn-off";
+			var turnIcon = "mdi mdi-eye-off";
+			var turnText = "'.Yii::t('Api', 'Turn off').'";
+			var visibleIcon = "";
+			if (typeof $this.turnBybitStatus!=="undefined" && $this.turnBybitStatus!==undefined && $this.turnBybitStatus==1) {
+				var turnClass = "as2854-turn-on";
+				var turnIcon = "mdi mdi-eye-outline";
+				var turnText = "'.Yii::t('Api', 'Turn on').'";
+				var visibleIcon = "<span class=\"mdi mdi-eye-off as2-eye\"></span>";
+			}
+
+			button += "<span class=\"mdi mdi-wifi-off as2-wifi\"></span><div tabindex=\"0\" role=\"button\" id=\"as2854-becb\" class=\"as2854-acb\"></div><div class=\"as2854-bcb\" style=\"display:none\"><span class=\"far fa-hourglass fa-spin\"></span></div>" + visibleIcon;
 		
 			jQuery("#" + this.button).html(button); 
 		
@@ -332,10 +384,46 @@ $this->registerJs('
 				content: " ",
 				container: "body",
 				trigger: "click",
-				template: "<div class=\"popover as2854-connect_popover\" role=\"tooltip\"><div class=\"as2854-pc\"><div class=\"as2854-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2854-pt\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</div><div class=\"clearfix\"></div></div></div></div>",
+				template: "<div class=\"popover as2854-connect_popover\" role=\"tooltip\"><div class=\"as2854-pc\"><div class=\"as2854-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2854-pt\"><a href=\"/app/connect?id=2\" alt=\"'.Yii::t('Api', 'Manage Bybit').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb  " + turnClass + "\" data-id=\"bybit\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2854-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb as2854-refresh\" data-id=\"bybit\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2854-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>",
+			});
+	
+			jQuery(document).delegate(".as2854-refresh", "click", function() {
+				var elem = jQuery("#as2854-becb");
+				var popover = bootstrap.Popover.getInstance(elem);
+				popover.hide();
+				userActives.data.bybit = {};
+				$this.bybitconnect(1);				
+			});
+			
+			jQuery(document).delegate(".as2854-turn-off", "click", function() {
+				
+				$this.app.setSettingsLS("bybitturn", 1);
+				$this.turnBybitStatus = 1;
+				$this.updateManagePopover($this.connect);
+		
+				if (typeof userActives.data.bybit!=="undefined" && userActives.data.bybit!==undefined && userActives.data.bybit) {
+					userActives.data.bybit = {};
+					bybitSummActive = 0;
+					getAllActive()
+					addListCoin(2);
+					jQuery("#" + $this.button).append("<span class=\"mdi mdi-eye-off as2-eye\"></span>");
+				}
 			});
 
-			this.bybitconnect(1);
+			jQuery(document).delegate(".as2854-turn-on", "click", function() {
+
+				$this.app.setSettingsLS("bybitturn", 0);
+				$this.turnBybitStatus = 0;
+				$this.updateManagePopover($this.connect);
+
+				if (typeof userActives.data.bybit!=="undefined" && userActives.data.bybit!==undefined && userActives.data.bybit) {
+					userActives.data.bybit = $this.saveBybitActives;
+					bybitSummActive = $this.bybitSummActive;
+					getAllActive()
+					addListCoin(2);
+					jQuery("#" + $this.button).find(".as2-eye").remove();
+				}
+			});
 		}		
 		
 		/**
@@ -423,6 +511,11 @@ $this->registerJs('
 			$("#as2855-wbbf").delegate("#as2855-cba-send", "click", function() {
 				$this.bybitconnect(2);
 			});
+			
+			$("#as2855-wbbf").delegate(".copy_button", "click", function() {
+				var address = $(this).find("input[type=hidden]").val();
+				$this.app.copyValue(address);
+			});
 		}
 		
 		/**
@@ -443,6 +536,9 @@ $this->registerJs('
 				if (!this.connect) {
 					return false;
 				}
+				
+				var spinner = "<i class=\"fas fa-spinner fa-spin as2854-spin-active\"></i>";
+				jQuery("#as2855-aba").html(spinner);
 
 			} else if(type==2) {
 
@@ -473,23 +569,6 @@ $this->registerJs('
 				
 			} else if(type==3) {
 				
-				bybitConnectedStatus = false;
-				userActives.data.bybit = {};
-				userActivesMin.bybit = {};
-				bybitSummActive = 0;
-				getAllActive();
-				
-				if (
-					!tonConnectedStatus && 
-					!okxConnectedStatus && 
-					!solConnectedStatus && 
-					!suiConnectedStatus && 
-					!aptConnectedStatus &&
-					!ethConnectedStatus
-				) {
-					jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-				}
-
 				if (typeof id==="undefined" || id===undefined || !id) {
 					$this.app.addNotify("'.Yii::t('Error', 'Missing Bybit Account ID').'", "error");
 					return false;
@@ -508,6 +587,7 @@ $this->registerJs('
 				"data": JSON.stringify({"type": type, id: id, "log_id": $this.id, sc: $this.sc, "uid": uid, "apikey": apikey, "apisecret": apisecret, exname: exname,}),
 				"success": function(response){
 	
+					$(".fa-asterisk").remove();
 					$this.displayIconBackdrop(0);
 					jQuery("#as2855-aba").html("");
 					
@@ -550,7 +630,7 @@ $this->registerJs('
 							}
 	
 							$this.createObjectsActives(response);
-							
+							$this.connect = response.connect;
 					
 						} else {	
 							$this.app.addNotify("Bybit: " + response.message, "error");
@@ -640,12 +720,14 @@ $this->registerJs('
 		 */
 		displayConnectIcon(flag=0) {
 
-			var elem = jQuery("#" + this.button + " .mdi");
+			var elem = jQuery("#" + this.button + " .as2-wifi");
 
 			if (flag) {
 				jQuery(elem).removeClass("mdi-wifi-off").addClass("mdi-wifi");
+				this.updateManagePopover(1);
 			} else {
 				jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off");
+				this.updateManagePopover(0);
 			}	
 		}
 		
@@ -711,11 +793,11 @@ $this->registerJs('
 	
 				if (typeof response.data[key].error==="undefined" || response.data[key].error===undefined || !response.data[key].error || response.data[key].error.length==0) {
 				
-					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\"><span id=\"bybit_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"bybit_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span id=\"bybit_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span></div>";
+					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\"><span id=\"bybit_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"bybit_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span class=\"copy_button\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"><input type=\"hidden\" value=\"" + response.data[key].asset + "\"></span>&nbsp;&nbsp;<span id=\"bybit_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span></div>";
 					
 				} else {
 					
-					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\" style=\"color:red\"><span id=\"bybit_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"bybit_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span id=\"bybit_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span><span class=\"error_bybit_connect\">(" + response.data[key].error + ")</span></div>";
+					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\" style=\"color:red\"><span id=\"bybit_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"bybit_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span class=\"copy_button\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"><input type=\"hidden\" value=\"" + response.data[key].asset + "\"></span>&nbsp;&nbsp;<span id=\"bybit_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span><span class=\"error_bybit_connect\">(" + response.data[key].error + ")</span></div>";
 				}
 		
 				jQuery("#as2855-aba").append(htmlConnect);
@@ -739,8 +821,9 @@ $this->registerJs('
 								"symbolid": val.symbolid,
 								"coinid": val.coinid,
 								"asset": val.asset,
-								"type": "ethactive",
+								"type": "bybitactive",
 								"connectname": response.data[key].connectname,
+								"source": "bybit",
 								"listCoin": [],
 							};
 						}
@@ -776,8 +859,9 @@ $this->registerJs('
 								"symbolid": val.symbolid,
 								"coinid": val.coinid,
 								"asset": val.asset,
-								"type": "ethactive",
+								"type": "bybitactive",
 								"connectname": response.data[key].connectname,
+								"source": "bybit",
 								"listCoin": [],
 							};
 						}
@@ -800,7 +884,45 @@ $this->registerJs('
 	
 			}
 			
-			addListCoin(2);
+			if (typeof (addListCoin) === "function") {
+				$this.saveBybitActives = userActives.data.bybit;
+				if (typeof $this.turnBybitStatus!=="undefined" && $this.turnBybitStatus!==undefined && $this.turnBybitStatus==1) {
+					userActives.data.bybit = {};
+					bybitSummActive = 0;
+					getAllActive();
+				}	
+				addListCoin(2);
+			}
+		}
+		
+		/**
+		 * updateManagePopover(connect=0)
+		 */
+		updateManagePopover(connect=0) {
+			
+			var $this = this;
+			
+			var turnClass = "as2854-turn-off";
+			var turnIcon = "mdi mdi-eye-off";
+			var turnText = "'.Yii::t('Api', 'Turn off').'";
+
+			if (typeof $this.turnBybitStatus!=="undefined" && $this.turnBybitStatus!==undefined && $this.turnBybitStatus==1) {
+				var turnClass = "as2854-turn-on";
+				var turnIcon = "mdi mdi-eye-outline";
+				var turnText = "'.Yii::t('Api', 'Turn on').'";
+			}
+
+			var template = "";
+			if (!connect) {
+				
+				template = "<div class=\"popover as2854-connect_popover\" role=\"tooltip\"><div class=\"as2854-pc\"><div class=\"as2854-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2854-pt\"><a href=\"/app/connect?id=2\" alt=\"'.Yii::t('Api', 'Manage Bybit').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb " + turnClass + "\" data-id=\"bybit\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2854-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb as2854-refresh\" data-id=\"bybit\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2854-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>";
+				
+			} else {
+				
+				template = "<div class=\"popover as2854-connect_popover_active\" role=\"tooltip\"><div class=\"as2854-pc\"><div class=\"as2854-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2854-pt\"><a href=\"/app/connect?id=2\" alt=\"'.Yii::t('Api', 'Manage Bybit').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb " + turnClass + "\" data-id=\"bybit\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2854-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2854-bycb as2854-refresh\" data-id=\"bybit\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2854-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>";
+			}
+			
+			this.app.updatePopover("as2854-becb", template);
 		}
 	}
 ', yii\web\View::POS_END);

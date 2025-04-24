@@ -38,6 +38,13 @@ $this->registerCss("
 		top:0px;
 		left:2px;
 	}
+	.as2858-wcb .mdi-eye-off {
+		color:#ccc;
+		font-size:20px;
+		position:absolute;
+		bottom:0px;
+		right:2px;
+	}
 	.as2858-wcb .fa-hourglass {
 		position:absolute;
 		top:50%;
@@ -90,6 +97,16 @@ $this->registerCss("
 		text-decoration:underline !important;
 		color:#000000;
 	}
+	.as2858-connect_popover_active {
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
+		overflow:hidden;
+		box-sizing:border-box;
+		padding:4px;
+		border-radius:16px;
+		margin-top:0px !important;
+		width:190px;
+		height:125px;
+	}
 	.as2858-connect_popover {
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
 		overflow:hidden;
@@ -98,7 +115,7 @@ $this->registerCss("
 		border-radius:16px;
 		margin-top:0px !important;
 		width:190px;
-		height:56px;
+		height:54px;
 	}
 	.as2858-disconnect_popover {
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
@@ -111,6 +128,7 @@ $this->registerCss("
 		height:80px;
 	}
 	@media (max-width: 700px) {
+		.as2858-connect_popover_active,
 		.as2858-connect_popover{
 			width:170px !important;
 			margin:auto !important;
@@ -120,11 +138,17 @@ $this->registerCss("
 			margin:auto !important;
 		}
 	}
+	.as2858-connect_popover_active>div,
 	.as2858-disconnect_popover>div,
 	.as2858-connect_popover>div {
 		width:fit-content;
 		margin:auto;
 	}
+	.as2858-connect_popover_active a,
+	.as2858-connect_popover a {
+		text-decoration:none !important;
+	}
+	.as2858-connect_popover_active  .as2858-pc,
 	.as2858-disconnect_popover .as2858-pc,
 	.as2858-connect_popover .as2858-pc {
 		background:transparent;
@@ -137,11 +161,13 @@ $this->registerCss("
 	.as2858-connect_popover .as2858-pc:hover {
 		background:#F1F3F5;
 	}
+	.as2858-connect_popover_active .as2858-pc img,
 	.as2858-disconnect_popover .as2858-pc img,
 	.as2858-connect_popover .as2858-pc img {
 		margin:8px 8px 0 10px;
 		float:left;
 	}
+	.as2858-connect_popover_active .as2858-pc .mdi,
 	.as2858-connect_popover .as2858-pc .mdi {
 		font-size:22px;
 		margin:3px 4px 0 0;
@@ -152,6 +178,7 @@ $this->registerCss("
 		margin:3px 4px 0 0;
 		float:left;
 	}
+	.as2858-connect_popover_active .as2858-pt,
 	.as2858-connect_popover .as2858-pt {
 		margin:4px 0 0 0;
 		font-size:20px !important;
@@ -243,6 +270,10 @@ $this->registerCss("
 	}
 	#as2859-wbbf #as2859-bbc .mdi-logout {
 		cursor:pointer;
+		color:#f79f4c;
+	}
+	#as2859-wbbf #as2859-bbc .copy_button {
+		cursor:pointer;
 	}
 	#as2859-wbbf #as2859-bbc .as2859-tbcb {
 		font-size:22px;
@@ -256,6 +287,11 @@ $this->registerCss("
 		color:#666666;
 		text-decoration:underline !important;
 		font-size:14px;
+	}
+	.as2858-spin-active {
+		color:#fff;
+		font-size:30px;
+		margin:0 0 0 50%;
 	}
 	
 ", ['id'=>'as2-okx']);
@@ -274,6 +310,8 @@ $this->registerJs('
 			this.okxSummActive = 0;
 			this.userActives = {okx:{}};
 			this.userActivesMin = {okx:{}};
+			this.turnOKXStatus = 0;
+			this.saveOKXActives = {};
 		}
 		
 		/**
@@ -301,6 +339,8 @@ $this->registerJs('
 				if (typeof options.connect!=="undefined" && options.connect!==undefined && options.connect) {
 					this.connect = options.connect;
 				}
+				
+				this.turnOKXStatus = this.app.getSettingsLS("okxturn");
 			}
 		}
 		
@@ -311,6 +351,7 @@ $this->registerJs('
 			this.optionOKX(options);
 			this.createButton();
 			this.createForm();
+			this.okxconnect(1);
 		}
 		
 		/**
@@ -322,8 +363,19 @@ $this->registerJs('
 			var $this = this;
 		
 			jQuery("#" + this.button).addClass("as2858-wcb");
-			
-			button += "<span class=\"mdi mdi-wifi-off\"></span><div tabindex=\"0\" role=\"button\" id=\"as2858-becb\" class=\"as2858-acb\"></div><div class=\"as2858-bcb\" style=\"display:none\"><span class=\"far fa-hourglass fa-spin\"></span></div>";
+	
+			var turnClass = "as2858-turn-off";
+			var turnIcon = "mdi mdi-eye-off";
+			var turnText = "'.Yii::t('Api', 'Turn off').'";
+			var visibleIcon = "";
+			if (typeof $this.turnOKXStatus!=="undefined" && $this.turnOKXStatus!==undefined && $this.turnOKXStatus==1) {
+				var turnClass = "as2858-turn-on";
+				var turnIcon = "mdi mdi-eye-outline";
+				var turnText = "'.Yii::t('Api', 'Turn on').'";
+				var visibleIcon = "<span class=\"mdi mdi-eye-off as2-eye\"></span>";
+			}
+
+			button += "<span class=\"mdi mdi-wifi-off as2-wifi\"></span><div tabindex=\"0\" role=\"button\" id=\"as2858-becb\" class=\"as2858-acb\"></div><div class=\"as2858-bcb\" style=\"display:none\"><span class=\"far fa-hourglass fa-spin\"></span></div>" + visibleIcon;
 		
 			jQuery("#" + this.button).html(button); 
 		
@@ -332,10 +384,46 @@ $this->registerJs('
 				content: " ",
 				container: "body",
 				trigger: "click",
-				template: "<div class=\"popover as2858-connect_popover\" role=\"tooltip\"><div class=\"as2858-pc\"><div class=\"as2858-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2858-pt\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</div><div class=\"clearfix\"></div></div></div></div>",
+				template: "<div class=\"popover as2858-connect_popover\" role=\"tooltip\"><div class=\"as2858-pc\"><div class=\"as2858-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2858-pt\"><a href=\"/app/connect?id=3\" alt=\"'.Yii::t('Api', 'Manage OKX').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb  " + turnClass + "\" data-id=\"okx\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2858-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb as2858-refresh\" data-id=\"okx\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2858-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>",
+			});
+	
+			jQuery(document).delegate(".as2858-refresh", "click", function() {
+				var elem = jQuery("#as2858-becb");
+				var popover = bootstrap.Popover.getInstance(elem);
+				popover.hide();
+				userActives.data.okx = {};
+				$this.okxconnect(1);				
+			});
+			
+			jQuery(document).delegate(".as2858-turn-off", "click", function() {
+				
+				$this.app.setSettingsLS("okxturn", 1);
+				$this.turnOKXStatus = 1;
+				$this.updateManagePopover($this.connect);
+		
+				if (typeof userActives.data.okx!=="undefined" && userActives.data.okx!==undefined && userActives.data.okx) {
+					userActives.data.okx = {};
+					okxSummActive = 0;
+					getAllActive()
+					addListCoin(2);
+					jQuery("#" + $this.button).append("<span class=\"mdi mdi-eye-off as2-eye\"></span>");
+				}
 			});
 
-			this.okxconnect(1);
+			jQuery(document).delegate(".as2858-turn-on", "click", function() {
+
+				$this.app.setSettingsLS("okxturn", 0);
+				$this.turnOKXStatus = 0;
+				$this.updateManagePopover($this.connect);
+
+				if (typeof userActives.data.okx!=="undefined" && userActives.data.okx!==undefined && userActives.data.okx) {
+					userActives.data.okx = $this.saveOKXActives;
+					okxSummActive = $this.okxSummActive;
+					getAllActive()
+					addListCoin(2);
+					jQuery("#" + $this.button).find(".as2-eye").remove();
+				}
+			});
 		}		
 		
 		/**
@@ -438,6 +526,11 @@ $this->registerJs('
 			$("#as2859-wbbf").delegate("#as2859-cba-send", "click", function() {
 				$this.okxconnect(2);
 			});
+			
+			$("#as2859-wbbf").delegate(".copy_button", "click", function() {
+				var address = $(this).find("input[type=hidden]").val();
+				$this.app.copyValue(address);
+			});
 		}
 		
 		/**
@@ -458,6 +551,9 @@ $this->registerJs('
 				if (!this.connect) {
 					return false;
 				}
+				
+				var spinner = "<i class=\"fas fa-spinner fa-spin as2858-spin-active\"></i>";
+				jQuery("#as2859-aba").html(spinner);
 
 			} else if(type==2) {
 
@@ -493,24 +589,7 @@ $this->registerJs('
 				$this.displayButtonBackdrop(1);
 		
 			} else if(type==3) {
-				
-				okxConnectedStatus = false;
-				userActives.data.okx = {};
-				userActivesMin.okx = {};
-				okxSummActive = 0;
-				getAllActive();
-				
-				if (
-					!tonConnectedStatus && 
-					!bybitConnectedStatus && 
-					!solConnectedStatus && 
-					!suiConnectedStatus && 
-					!aptConnectedStatus &&
-					!ethConnectedStatus
-				) {
-					jQuery("#asModal #title_balance").html("'.Yii::t('Api', 'Connect your wallet to see list of assets').'");
-				}
-
+	
 				if (typeof id==="undefined" || id===undefined || !id) {
 					$this.app.addNotify("'.Yii::t('Error', 'Missing OKX Account ID').'", "erro dr");
 					return false;
@@ -529,6 +608,7 @@ $this->registerJs('
 				"data": JSON.stringify({"type": type, id: id, "log_id": $this.id, sc: $this.sc, "uid": uid, "apikey": apikey, "apisecret": apisecret, "password": password, exname: exname,}),
 				"success": function(response){
 	
+					$(".fa-asterisk").remove();
 					$this.displayIconBackdrop(0);
 					jQuery("#as2859-aba").html("");
 					
@@ -574,7 +654,7 @@ $this->registerJs('
 							}
 							
 							$this.createObjectsActives(response);
-							
+							$this.connect = response.connect;
 					
 						} else {
 							$this.app.addNotify("OKX: " + response.message, "error");
@@ -664,12 +744,14 @@ $this->registerJs('
 		 */
 		displayConnectIcon(flag=0) {
 
-			var elem = jQuery("#" + this.button + " .mdi");
+			var elem = jQuery("#" + this.button + " .as2-wifi");
 
 			if (flag) {
 				jQuery(elem).removeClass("mdi-wifi-off").addClass("mdi-wifi");
+				this.updateManagePopover(1);
 			} else {
 				jQuery(elem).removeClass("mdi-wifi").addClass("mdi-wifi-off");
+				this.updateManagePopover(0);
 			}	
 		}
 		
@@ -735,11 +817,11 @@ $this->registerJs('
 	
 				if (typeof response.data[key].error==="undefined" || response.data[key].error===undefined || !response.data[key].error || response.data[key].error.length==0) {
 				
-					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\"><span id=\"okx_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"okx_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 6) + "</span>&nbsp;&nbsp;<span id=\"okx_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span></div>";
+					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\"><span id=\"okx_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"okx_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 6) + "</span>&nbsp;&nbsp;<span class=\"copy_button\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"><input type=\"hidden\" value=\"" + response.data[key].asset + "\"></span>&nbsp;&nbsp;<span id=\"okx_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span></div>";
 					
 				} else {
 					
-					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\" style=\"color:red\"><span id=\"okx_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"okx_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span id=\"okx_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span><span class=\"error_okx_connect\">(" + response.data[key].error + ")</span></div>";
+					var htmlConnect = "<div class=\"row_" + response.data[key].asset + "\" style=\"color:red\"><span id=\"okx_name_" + response.data[key].asset + "\">" + response.data[key].connectname + "</span>&nbsp;&nbsp;<span id=\"okx_uid_" + response.data[key].asset + "\">" + $this.app.stringReplace(response.data[key].asset, "...", 6, 1) + "</span>&nbsp;&nbsp;<span class=\"copy_button\"><img src=\"/images/icons/copy.svg\" alt=\"\" title=\"\"><input type=\"hidden\" value=\"" + response.data[key].asset + "\"></span>&nbsp;&nbsp;<span id=\"okx_disconnect_" + response.data[key].asset + "\" class=\"mdi mdi-logout\" data-id=\"" + response.data[key].asset + "\" title=\"'.Yii::t('Api', 'Disconnect').'\"></span><span class=\"error_okx_connect\">(" + response.data[key].error + ")</span></div>";
 				}
 		
 				jQuery("#as2859-aba").append(htmlConnect);
@@ -763,8 +845,9 @@ $this->registerJs('
 								"symbolid": val.symbolid,
 								"coinid": val.coinid,
 								"asset": val.asset,
-								"type": "ethactive",
+								"type": "okxactive",
 								"connectname": response.data[key].connectname,
+								"source": "okx",
 								"listCoin": [],
 							};
 						}
@@ -800,8 +883,9 @@ $this->registerJs('
 								"symbolid": val.symbolid,
 								"coinid": val.coinid,
 								"asset": val.asset,
-								"type": "ethactive",
+								"type": "okxactive",
 								"connectname": response.data[key].connectname,
+								"source": "okx",
 								"listCoin": [],
 							};
 						}
@@ -822,7 +906,45 @@ $this->registerJs('
 				$this.connect = 1;	
 			}
 	
-			addListCoin(2);
+			if (typeof (addListCoin) === "function") {
+				$this.saveOKXActives = userActives.data.okx;
+				if (typeof $this.turnOKXStatus!=="undefined" && $this.turnOKXStatus!==undefined && $this.turnOKXStatus==1) {
+					userActives.data.okx = {};
+					okxSummActive = 0;
+					getAllActive();
+				}	
+				addListCoin(2);
+			}
+		}
+		
+		/**
+		 * updateManagePopover(connect=0)
+		 */
+		updateManagePopover(connect=0) {
+			
+			var $this = this;
+			
+			var turnClass = "as2858-turn-off";
+			var turnIcon = "mdi mdi-eye-off";
+			var turnText = "'.Yii::t('Api', 'Turn off').'";
+
+			if (typeof $this.turnOKXStatus!=="undefined" && $this.turnOKXStatus!==undefined && $this.turnOKXStatus==1) {
+				var turnClass = "as2858-turn-on";
+				var turnIcon = "mdi mdi-eye-outline";
+				var turnText = "'.Yii::t('Api', 'Turn on').'";
+			}
+
+			var template = "";
+			if (!connect) {
+				
+				template = "<div class=\"popover as2858-connect_popover\" role=\"tooltip\"><div class=\"as2858-pc\"><div class=\"as2858-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2858-pt\"><a href=\"/app/connect?id=3\" alt=\"'.Yii::t('Api', 'Manage OKX').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb " + turnClass + "\" data-id=\"okx\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2858-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb as2858-refresh\" data-id=\"okx\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2858-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>";
+				
+			} else {
+				
+				template = "<div class=\"popover as2858-connect_popover_active\" role=\"tooltip\"><div class=\"as2858-pc\"><div class=\"as2858-bycb\"><div class=\"mdi mdi-cog-outline\"></div><div class=\"as2858-pt\"><a href=\"/app/connect?id=3\" alt=\"'.Yii::t('Api', 'Manage OKX').'\">'.addslashes(str_replace(["\n", "\r"], "", Yii::t('Api', 'Manage'))).'</a></div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb " + turnClass + "\" data-id=\"okx\" data-status=\"0\"><div class=\"" + turnIcon + "\"></div><div class=\"as2858-pt\">" + turnText + "</div><div class=\"clearfix\"></div></div><div class=\"as2858-bycb as2858-refresh\" data-id=\"okx\"><div class=\"mdi mdi-refresh\"></div><div class=\"as2858-pt\">'.Yii::t('Api', 'Refresh').'</div><div class=\"clearfix\"></div></div></div></div>";
+			}
+			
+			this.app.updatePopover("as2858-becb", template);
 		}
 	}
 ', yii\web\View::POS_END);

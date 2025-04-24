@@ -67,7 +67,7 @@ class APTApi {
 				if ($this->parseCoin($val['token'])) {
 					$val['asset'] = $this->parseCoin($val['token']);
 				}
-				
+	
 				$value = 0;
 				$price = [];
 				$symbol = $val['asset'];
@@ -133,6 +133,7 @@ class APTApi {
 
 				$data[] = [
 					'balance' => $balance,
+					'negative' => 0,
 					'name' => $val['provider'],
 					'currency' => $currency,
 					'sort' => $value,
@@ -236,6 +237,11 @@ class APTApi {
 					
 					$protocol_icon = '/images/logos/joule2.png';
 					$protocol_link = 'https://app.joule.finance/rewards?tabId=referral&referralAddress=0x56ff2fc971deecd286314fe99b8ffd6a5e72e62eacdc46ae9b234c5282985f97';
+					
+				} else if ($val['protocol']=='Aries') {
+					
+					$protocol_icon = '/images/logos/aries2.png';
+					$protocol_link = 'https://app.ariesmarkets.xyz/lending';
 	
 				} 
 
@@ -260,7 +266,7 @@ class APTApi {
 					'network' => Yii::t('Frontend', 'Wallet').' Aptos',
 					'network_icon' => $protocol_icon,
 					'network_link' => $protocol_link,
-					'apr' => Yii::t('Api', 'APR').' '.$apr.'%',
+					'apr' => !empty($apr) ? Yii::t('Api', 'APR').' '.$apr.'%' : '',
 					'asset' => $address,
 					'protocol' => Yii::t('Api', 'Protocol').': '.$val['protocol'],
 				];	

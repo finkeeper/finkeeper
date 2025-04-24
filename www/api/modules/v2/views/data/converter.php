@@ -21,6 +21,7 @@ $lang = 'en';
 </div>
 
 <div class="auth_page" id="auth-page">
+	<?=Alert::widget()?>
 	<div class="auth_title"><?=Yii::t('Api', 'Account verified')?></div>
 	<div class="auth_button">
 		<button id="auth-in-website" class="btn btn-primary btn-xl">
@@ -28,7 +29,7 @@ $lang = 'en';
 		</button>
 	</div>
 	<div class="auth_tg_link">
-		<a href="https://t.me/finkeeper_test_bot" alt="" title="">
+		<a href="https://t.me/finkeeper_app_bot" alt="" title="">
 			<?=Yii::t('Api', 'Stay in Telegram')?>
 		</a>
 	</div>

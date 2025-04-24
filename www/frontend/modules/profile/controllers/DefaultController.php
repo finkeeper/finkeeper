@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\profile\controllers;
+namespace frontend\modules\profile\controllers;
 
 use Yii;
 use Imagine\Image\Box;
@@ -12,8 +12,8 @@ use Imagine\Image\BoxInterface;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use app\modules\profile\models\Profile;
-use app\modules\profile\components\ProfileController;
+use frontend\modules\profile\models\Profile;
+use frontend\modules\profile\components\ProfileController;
 use yii\web\Cookie;
 
 use frontend\components\SchoolToken;

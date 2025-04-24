@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\profile;
+namespace frontend\modules\profile;
 
 use yii\base\BootstrapInterface;
  

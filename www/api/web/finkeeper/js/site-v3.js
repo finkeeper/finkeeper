@@ -503,10 +503,19 @@ function getAllActive() {
 		solSummActive = 0;		
 	}	
 	
+	suiSummActive = parseFloat(suiSummActive);	
+
+	if (
+		typeof suiSummActive==="undefined" || 
+		suiSummActive===undefined || 
+		!suiSummActive || 
+		isNaN(suiSummActive) ||
+		(!isFloat(suiSummActive) && !isInt(suiSummActive))
+	) {
+		suiSummActive = 0;		
+	}	
 	
-	
-		
-	var allSumm = tonSummActive + bybitSummActive + okxSummActive + solSummActive;
+	var allSumm = tonSummActive + bybitSummActive + okxSummActive + solSummActive + suiSummActive;
 	
 	if (allSumm==0) {
 		return false;

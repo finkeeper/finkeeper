@@ -111,6 +111,32 @@ use yii\bootstrap5\Html;
 					
 					<div class="clearfix"></div>
 				</div>
+				
+				<div class="settings-info mt-20">
+			
+					<div class="top-settings-icon">
+						<span class="mdi mdi-cellphone-cog"></span>						
+					</div> 
+					
+					<div class="top-settings-text">
+						<?=Yii::t('Api', 'General settings')?>
+					</div>
+					
+					<div class="clearfix"></div>
+			
+				</div>
+				
+				<div id="lg-verify-web" class="option_item">
+					<div class="currency_name_block ml-10">
+						<span class="mdi mdi-open-in-new"></span>
+					</div>
+	
+					<div class="currency_price_block ml-10">
+						<span><?=Yii::t('Api', 'Continue in website')?></span>
+					</div>
+					
+					<div class="clearfix"></div>
+				</div>
 	
 			</div>	
 		</div>

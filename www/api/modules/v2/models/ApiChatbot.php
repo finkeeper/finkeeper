@@ -735,6 +735,7 @@ class ApiChatbot extends Model
 		$modelClient = new Clients;
 		
 		$modelClient->tg_chat_id = $chat['id'];
+		$modelClient->tg_subscribed = $chat['subscribed'];
 
 		if (!empty($chat['first_name'])) {
 			$modelClient->name = $chat['first_name'];
@@ -742,6 +743,10 @@ class ApiChatbot extends Model
 		
 		if (!empty($chat['last_name'])) {
 			$modelClient->surname = $chat['last_name'];
+		}
+		
+		if (!empty($chat['language_code'])) {
+			$modelClient->lang = $chat['language_code'];
 		}
 		
 		$modelClient->generateAuthKey();
@@ -937,13 +942,17 @@ class ApiChatbot extends Model
 			$data['chat_id'] = $modelChatbotLog->chat_id;
 			$data['id_client'] = $modelChatbotLog->id_client;
 			
-			$modelChatbot = Chatbot::findOne([
-				'id_bot' => $modelChatbotLog->bot_id, 
-			]);
-			
-			if (!empty($modelChatbot)) {
-				$data['bot_token'] = $modelChatbot->bot_token;
-				$data['bot_name'] = $modelChatbot->bot_name;
+			$modelClient = Clients::findOne(['id' => $modelChatbotLog->id_client, 'tg_subscribed' => 1, 'deleted' => Clients::STATUS_NOT_DELETED]);
+			if (!empty($modelClient)) {
+
+				$modelChatbot = Chatbot::findOne([
+					'id_bot' => $modelChatbotLog->bot_id, 
+				]);
+				
+				if (!empty($modelChatbot)) {
+					$data['bot_token'] = $modelChatbot->bot_token;
+					$data['bot_name'] = $modelChatbot->bot_name;
+				}
 			}
 		}
 		
@@ -1392,6 +1401,8 @@ class ApiChatbot extends Model
 			
 			Yii::$app->session->set('lang', $lang); 			
 		}
+		
+		return $lang;
 	}
 	
 	/**
@@ -1753,6 +1764,7 @@ class ApiChatbot extends Model
 		}
 		
 		$modelClient->tg_auth_token = $token;
+		$modelClient->tg_auth_token_create = time();
 		return $modelClient->save();
 	}	
 }

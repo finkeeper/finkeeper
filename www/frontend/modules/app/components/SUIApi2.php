@@ -200,6 +200,7 @@ class SUIApi2 {
 
 			$data[] = [
 				'balance' => $balance,
+				'negative' => 0,
 				'name' =>$name,
 				'currency' => $currency,
 				'sort' => $value,

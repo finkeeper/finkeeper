@@ -18,9 +18,7 @@ class FinkeeperAppAsset extends AssetBundle
 		'css/font-awesome5.min.css',
 		'css/materialdesignicons.min.css',
 		'css/scroll/perfect-scrollbar.min.css',
-		'css/suikit/suikit.css?36999',	
-		'css/aptos/aptos.css?19',
-		'css/site.css?46676',
+		'css/site.css?2',
 		//YII_ENV_DEV ? 'finkeeper/css/site.css?12555' : 'finkeeper/css/site.min.css?12666'
     ];
 	
@@ -34,10 +32,7 @@ class FinkeeperAppAsset extends AssetBundle
 		'js/jquery.custom.js',
 		'js/header-scroll.js',
 		'js/scroll/perfect-scrollbar.jquery.min.js',
-		'/js/appkit/bundle.js?10008',
-		'/js/aptos/bundle.js?10051',
-		'/js/aptos/637.bundle.js',		
-		'js/site.js?50236',
+		'js/site.js?8',
 		//YII_ENV_DEV ? 'js/site.js?222' : 'finkeeper/js/site.min.js?222'
     ];
 	
@@ -56,7 +51,6 @@ class FinkeeperAppAsset extends AssetBundle
 			$lang='ru';			
 		}
 		
-		$this->js[] = ['/js/bundle.js?22111', 'data-id'=>'bundle', 'data-lang'=>$lang];
-		$this->js[] = ['/js/suikit/bundle.js?26555', 'data-id'=>'suikit', 'data-lang'=>$lang];
+		//$this->js[] = ['/js/bundle.js?22111', 'data-id'=>'bundle', 'data-lang'=>$lang];
 	}
 }

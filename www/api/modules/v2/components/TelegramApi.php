@@ -599,7 +599,7 @@ class TelegramApi {
 				$modelChatbotLog->from_language_code = $data['from']['language_code'];
 			}
 		}
-		
+
 		$modelChatbotLog->chat_id = 0;
 		$modelChatbotLog->chat_first_name = '';
 		$modelChatbotLog->chat_last_name = '';
@@ -609,7 +609,7 @@ class TelegramApi {
 		if (!empty($data['chat']) && is_array($data['chat'])) {
 			
 			if (!empty($data['chat']['id'])) {
-
+				
 				$modelClients = ApiChatbot::getClient($data['chat']['id']);
 				if (empty($modelClients)) {
 					$modelClients = ApiChatbot::addClient($data['chat']);

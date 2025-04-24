@@ -143,6 +143,7 @@ class SUIApi {
 			
 			$data[] = [
 				'balance' => $balance,
+				'negative' => 0,
 				'name' =>$coin['name'],
 				'currency' => $currency,
 				'sort' => $value,

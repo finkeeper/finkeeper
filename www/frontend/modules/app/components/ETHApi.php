@@ -170,9 +170,15 @@ class ETHApi {
 			}
 			
 			$address = $this->getAddressParse($this->address);
-
+			
+			$position_type = '';
+			if (!empty($val['attributes']['position_type'])) {
+				$position_type = '<br>'.Yii::t('Api', 'Position type').': '.$val['attributes']['position_type'];
+			}
+			
 			$data[] = [
 				'balance' => $balance,
+				'negative' => 0,
 				'name' => $name,
 				'currency' => $currency,
 				'sort' => $value,
@@ -184,12 +190,176 @@ class ETHApi {
 				'grafema' => $grafema,
 				'class' => $class,
 				'price' => $price['data'],
-				'network' => Yii::t('Frontend', 'Wallet').' ETH',
+				'network' => Yii::t('Frontend', 'Wallet').' ETH | '.Yii::t('Api', 'Network').': '.$network.$position_type,
 				'network_icon' => $network_icon,
 				'network_link' => '',
 				'apr' => '',
 				'asset' => $address,
-				'protocol' => Yii::t('Api', 'Network').': '.$network,
+				'protocol' => '',
+			];		
+		}
+		
+		// Position Loan
+		$sort = 'value';
+		$filter=[
+			'positions' => 'only_complex',
+			'trash' => 'only_non_trash',
+		];
+		
+		$result = $this->getEthBalance($currency, $sort, $filter);
+		if (!empty($result['error'])) {
+			return [
+				'error' => 1,
+				'message' => $result['message'],
+				'data' => $data,
+			];
+		}
+		
+		foreach ($result['data'] as $key=>$val) {
+
+			if (
+				empty($val['attributes']) || 
+				!is_array($val['attributes']) ||
+				empty($val['attributes']['quantity']) || 
+				!is_array($val['attributes']['quantity']) ||
+				empty($val['attributes']['quantity']['float']) || 
+				empty($val['attributes']['fungible_info']) || 
+				!is_array($val['attributes']['fungible_info']) ||
+				empty($val['attributes']['fungible_info']['flags']) || 
+				!is_array($val['attributes']['fungible_info']['flags']) ||
+				empty($val['attributes']['fungible_info']['flags']['verified']) ||
+				empty($val['attributes']['fungible_info']['symbol']) ||
+				empty($val['relationships']) ||
+				!is_array($val['relationships']) ||
+				empty($val['relationships']['chain']) ||
+				!is_array($val['relationships']['chain']) ||
+				empty($val['relationships']['chain']['data']) ||
+				!is_array($val['relationships']['chain']['data'])
+			) {
+				continue;
+			}
+
+			$negative = 0;
+			if ($val['attributes']['position_type']=='loan') {
+				$negative = 1;
+			}
+
+			$value = 0;
+			$price = [];
+			$symbol = $val['attributes']['fungible_info']['symbol'];
+			$symbolid = strtolower($symbol);
+			$coinid = strtolower($symbolid).$key;
+			$balance = number_format($val['attributes']['quantity']['float'], 12, '.', '');
+			
+			if (!empty($balance)) {
+				if (is_float($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else if (is_int($balance)) {
+					$balance = number_format($balance, 12, '.', '');
+				} else {
+					$balance = $balance*1;
+					$balance = number_format($balance, 12, '.', '');
+				}
+			}
+
+			if (empty($val['attributes']['price'])) {
+				$price = ApiChatbot::getPrice($symbolid, $currency, 1);
+				if (!empty($price['error']) || empty($price['data'])) {
+					$price['data'] = 0;
+				}
+			} else {
+				$price['data'] = $val['attributes']['price'];
+			}
+
+			if (empty($val['attributes']['value'])) {
+				$value = $price['data']*$balance;	
+			} else {	
+				$value = $val['attributes']['value'];
+			}
+			
+			if (!empty($value)) {
+				if (is_float($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else if (is_int($value)) {
+					$value = number_format($value, 12, '.', '');
+				} else {
+					$value = $value*1;
+					$value = number_format($value, 12, '.', '');
+				}
+			}
+
+			$img = '/images/cryptologo/default_coin.webp';
+			if (!empty($val['attributes']['fungible_info']['icon']) && !empty($val['attributes']['fungible_info']['icon']['url'])) {
+				$img = $val['attributes']['fungible_info']['icon']['url'];
+			} else {
+				$img_name = strtolower($val['attributes']['fungible_info']['symbol']).'.webp';
+				$path = getcwd().'/images/cryptologo/'.$img_name;
+				if (file_exists($path)) {
+					$img = '/images/cryptologo/'.$img_name;
+				}
+			}
+
+			$name = strtoupper($val['attributes']['fungible_info']['symbol']);
+			if (!empty($val['attributes']['fungible_info']['name'])) {
+				$name = $val['attributes']['fungible_info']['name'];
+			}
+			
+			if (!empty($val['id'])) {
+				//if ($this->parseCoin($value['id'])) {
+					//$symbol = $this->parseCoin($value['id']);
+				//}
+			}
+
+			$network = '';
+			$network_icon = '';
+			if (!empty($val['relationships']['chain']['data']['id'])) {
+				$network = $val['relationships']['chain']['data']['id'];
+				$network_icon = $this->getIconParse($val['relationships']['chain']['data']['id']);
+			}
+			
+			$currency_value = Exchange::formatValue($value);
+			$class = 'middle_value';
+			if ($currency_value<1) {
+				$class = 'small_value';
+			}
+			
+			$address = $this->getAddressParse($this->address);
+			
+			$position_type = '';
+			if (!empty($val['attributes']['position_type'])) {
+				$position_type = '<br>'.Yii::t('Api', 'Position type').': '.$val['attributes']['position_type'];
+			}
+			
+			$network_link = '';
+			if (!empty($val['attributes']['application_metadata']['url'])) {	
+				$network_link = $val['attributes']['application_metadata']['url'];	
+			}
+			
+			$protocol_name = '';
+			if (!empty($val['attributes']['application_metadata']['name'])) {	
+				$protocol_name = Yii::t('Api', 'Position protocol').': '.$val['attributes']['application_metadata']['name'];	
+			}
+
+			$data[] = [
+				'balance' => $balance,
+				'negative' => $negative,
+				'name' => $name,
+				'currency' => $currency,
+				'sort' => $value,
+				'currency_value' => $currency_value,
+				'img' => $img,
+				'symbol' => $symbol,
+				'symbolid' => $symbolid,
+				'coinid' => $coinid,
+				'grafema' => $grafema,
+				'class' => $class,
+				'price' => $price['data'],
+				'network' => Yii::t('Frontend', 'Wallet').' ETH | '.Yii::t('Api', 'Network').': '.$network.$position_type,
+				'network_icon' => $network_icon,
+				'network_link' => $network_link,
+				'apr' => '',
+				'asset' => $address,
+				'protocol' => $protocol_name,
 			];		
 		}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\profile;
+namespace frontend\modules\profile;
 
 use Yii;
 use yii\web\HttpException;
@@ -13,7 +13,7 @@ class ProfileModule extends \yii\base\Module
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'app\modules\profile\controllers';
+    public $controllerNamespace = 'frontend\modules\profile\controllers';
 
     /**
      * @inheritdoc

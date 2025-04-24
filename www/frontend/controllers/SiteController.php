@@ -64,6 +64,7 @@ class SiteController extends Controller
 							'terms',
 							'privacy',
 							'help',
+							'loginsecure'
 						],
                         'allow' => true,
                         'roles' => ['@'],
@@ -258,6 +259,7 @@ class SiteController extends Controller
 		if (!Yii::$app->user->isGuest) {
 			return $this->redirect('/app');
 		}
+		
 		if (empty($sc)) {
 			throw new NotFoundHttpException();
 		}

@@ -1,12 +1,12 @@
 <?php
 
-use app\modules\profile\models\Profile;
+use frontend\modules\profile\models\Profile;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use common\widgets\Alert;
 use yii\bootstrap5\ActiveForm;
 use mihaildev\ckeditor\CKEditor;
-use app\modules\profile\ProfileModule;
+use frontend\modules\profile\ProfileModule;
 
 $this->title = $title; 
 

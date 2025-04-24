@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\profile\models;
+namespace frontend\modules\profile\models;
 
 use Yii;
 use yii\base\Model;
 use yii\base\View;
 use common\models\Clients;
 
-use app\modules\certificate\models\CertificateWork;
+use frontend\modules\certificate\models\CertificateWork;
 use common\models\Certificate;
 use frontend\components\SchoolToken;
 use yii\helpers\Url;

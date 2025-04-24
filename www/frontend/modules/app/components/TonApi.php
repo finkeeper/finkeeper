@@ -106,6 +106,7 @@ class TonApi {
 		
 		$data[] = [
 			'balance' => $balance,
+			'negative' => 0,
 			'name' => 'Ton',
 			'currency' => $currency,
 			'sort' => $value,
@@ -448,7 +449,7 @@ class TonApi {
 	/**
 	 * getAddressParse()
 	 */ 
-	public function getAddressParse($address='')
+	public function getAddressParse($address='', $type=0)
 	{
 		if (empty($address)) {
 			return [
@@ -491,17 +492,31 @@ class TonApi {
 			];
 		}
 		
-		if (
-			empty($array['non_bounceable']) || 
-			empty($array['non_bounceable']['b64url'])
-		) {
-			return [
-				'error' => 1,
-				'message' => Yii::t('Error', 'Error Parse'),
-			];
-		}
+		if (empty($type)) {
 		
-		return $array['non_bounceable']['b64url'];
+			if (
+				empty($array['non_bounceable']) || 
+				empty($array['non_bounceable']['b64url'])
+			) {
+				return [
+					'error' => 1,
+					'message' => Yii::t('Error', 'Error Parse b64url'),
+				];
+			}
+
+			return $array['non_bounceable']['b64url'];
+		
+		} else if ($type==1) {
+			
+			if (empty($array['raw_form'])) {
+				return [
+					'error' => 1,
+					'message' => Yii::t('Error', 'Error Parse raw'),
+				];
+			}
+
+			return $array['raw_form'];
+		}
 	}	
 	
 	/**

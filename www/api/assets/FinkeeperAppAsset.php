@@ -37,7 +37,7 @@ class FinkeeperAppAsset extends AssetBundle
 		'/finkeeper/js/appkit/dist/vendors-node_modules_reown_appkit-scaffold-ui_dist_esm_exports_w3m-modal_js.bundle.js',
 		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_metamask-sdk_lib_esm_index_js.bundle.js',
 		'/finkeeper/js/appkit/dist/vendors-node_modules_solflare-wallet_sdk_lib_esm_index_js.bundle.js',
-		'finkeeper/js/site.js?39999',
+		'finkeeper/js/site.js?41444',
 		//YII_ENV_DEV ? 'finkeeper/js/site.js?222' : 'finkeeper/js/site.min.js?222'
     ];
 	
@@ -56,6 +56,6 @@ class FinkeeperAppAsset extends AssetBundle
 			$lang='ru';			
 		}
 		
-		$this->js[] = ['/finkeeper/js/bundle.js?13888', 'data-id'=>'bundle', 'data-lang'=>$lang];
+		$this->js[] = ['/finkeeper/js/bundle.js?14111', 'data-id'=>'bundle', 'data-lang'=>$lang];
 	}
 }
